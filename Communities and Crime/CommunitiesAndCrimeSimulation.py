@@ -20,7 +20,7 @@ initial=pd.read_csv('Communities and Crime/communities-crime-clean.csv')
 initial = initial.drop('communityname', axis=1)
 initial = initial.drop('fold', axis=1)
 initial = initial.drop('state', axis=1)
-y = initial['ViolentCrimesPerPop'].values - 0.48088582168965543
+y = initial['ViolentCrimesPerPop'].values - 0.2368477192289871
 initial = initial.drop('ViolentCrimesPerPop', axis=1)
 X = initial.values
 
@@ -31,8 +31,7 @@ X = initial.values
 
 scaler = StandardScaler()
 X = scaler.fit_transform(X)
-y = scaler.fit_transform(y.reshape(-1, 1))
-# y = y-0.48088582168965543
+# y = scaler.fit_transform(y.reshape(-1, 1))
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
