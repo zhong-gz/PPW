@@ -215,8 +215,8 @@ def est_varepsilon(X,y,X_new,y_new,w_arr,norm_w_w):
 
     if len(w_arr) == 1:
         norm_w_w.append(w_t.norm())
-    else:
-        norm_w_w.append(model_sub_norm(w_arr[-1],w_arr[-2]))
+    # else:
+        # norm_w_w.append(model_sub_norm(w_arr[-1],w_arr[-2]))
 
     if norm_w_w[-1] == 0:
         norm_w_w[-1] = 1e-4
