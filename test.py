@@ -1,23 +1,22 @@
 import numpy as np
 
-def transform_array(arr):
-    # 计算最大值和最小值
-    # max_val = np.max(arr)
-    # min_val = np.min(arr)
-    mean_val = np.mean(arr)
+def transform_arrays(a, b, alpha):
+    # 将数组 a 归一化到 [0, 1]
+    mean_a = np.mean(a)
+
+    b_transformed = b - alpha*(a-mean_a)
+    print(alpha*(a-mean_a))
     
-    # 设定变换的幅度
-    scale_factor = 0.1  # 控制变换的强度，0 < scale_factor < 1
-    shift = 0.1  # 设定一个小的偏移量
-    
-    # 进行变换
-    transformed_arr = (1 - scale_factor) * arr + scale_factor * mean_val / 2 
-    
-    return transformed_arr
+    return b_transformed
 
 # 示例数组
-array = np.array([1, 3, 5, 7, 9, 2, 4, 6, 8, 0])
-transformed_array = transform_array(array)
+a = np.array([10, 20, 30, 40, 50])
+b = np.array([1, 2, 3, 4, 5])
 
-print("原数组:", array)
-print("变换后的数组:", transformed_array)
+# 变换数组，调整 alpha 控制变化幅度
+alpha = 0.01  # 你可以根据需要调整 alpha 的值
+b_transformed = transform_arrays(a, b, alpha)
+
+print("原始数组 a:", a)
+print("原始数组 b:", b)
+print("变换后的数组 b:", b_transformed)

@@ -22,22 +22,22 @@ initial = initial.drop('fold', axis=1)
 initial = initial.drop('state', axis=1)
 y = initial['ViolentCrimesPerPop'].values - 0.48088582168965543
 initial = initial.drop('ViolentCrimesPerPop', axis=1)
-X = initial.values 
+X = initial.values
 
 # n = X.shape[0]
 # d = X.shape[1]
 # print('Sample number : ',n)
 # print('Sample dimension : ',d)
 
-scaler = MinMaxScaler()
-# X = scaler.fit_transform(X)
-# y = scaler.fit_transform(y.reshape(-1, 1))
+scaler = StandardScaler()
+X = scaler.fit_transform(X)
+y = scaler.fit_transform(y.reshape(-1, 1))
 # y = y-0.48088582168965543
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # 4. 创建岭回归模型
-ridge_model = Ridge(alpha=2, fit_intercept=False)  # alpha 是正则化参数，可以根据需要调整
+ridge_model = Ridge(alpha=1, fit_intercept=False)  # alpha 是正则化参数，可以根据需要调整
 
 # 5. 训练模型
 ridge_model.fit(X_train, y_train)
