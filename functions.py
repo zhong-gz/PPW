@@ -1,5 +1,4 @@
 import numpy as np
-import kernel
 import random
 from sklearn.linear_model import LogisticRegression
 import matplotlib.pyplot as plt
@@ -185,40 +184,6 @@ def accuracy(y_true, y_pred):
     
     accuracy = correct / total
     return accuracy
-
-def model_sub_norm(w_1,w_2):
-
-    # if w_1.kernelType == 'linear':
-    d = w_1.support_vector.shape[1]
-    term1 = w_1.norm()**2 + w_2.norm()**2
-    temp  = kernel.compute_kernel_matrix(w_1.support_vector,w_2.support_vector,kernel=w_2.kernelType,parameter=w_2.gamma) + min(w_1.R,w_2.R)
-    temp1 = w_1.support_alpha * w_1.support_label
-    temp2 = w_2.support_alpha * w_2.support_label
-    term2 = np.dot(np.dot(temp1.T,temp),temp2)
-    if (term1-2*term2) < 0:
-        result = 1e-4
-    else:
-        result = np.sqrt(term1-2*term2)
-    return result
-    # else:
-    #     n = 1000
-    #     d = w_1.support_vector.shape[1]
-    #     max_val = np.max([w_1.support_vector.max(), w_2.support_vector.max()])
-    #     min_val = np.min([w_1.support_vector.min(), w_2.support_vector.min()])
-    #     q = max_val - min_val
-    #     random_vector = np.random.uniform(min_val-1.5*q, max_val+1.5*q, size=(n*d, d))
-    #     score1,_ = w_1.predict(random_vector)
-    #     score2,_ = w_2.predict(random_vector)
-    #     w1_w2_x = np.abs(score1-score2)
-
-    #     # norms = np.diag(kernel.compute_kernel_matrix(random_vector,random_vector,kernel=w_2.kernelType,parameter=w_2.gamma)) + max(w_1.R,w_2.R)
-
-    #     norms = np.linalg.norm(random_vector,axis=1)**2 + max(w_1.R,w_2.R)
-
-    #     norms = np.sqrt(norms)
-    #     w1_w2 = w1_w2_x / norms
-    #     result = max(w1_w2)
-        # print('result - max(w1_w2) = ',result - max(w1_w2))
     
 
 def est_varepsilon(X,y,X_new,y_new,w_arr,norm_w_w):
