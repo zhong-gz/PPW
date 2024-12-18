@@ -32,7 +32,7 @@ for t in range(num_iters):
         y_new = data_distribution_map(mu,X,y,model)
 
     # 创建线性回归模型
-    model = Ridge(alpha = 2) #, fit_intercept=False
+    model = Ridge(alpha = 20) #, fit_intercept=False
     model.fit(X, y_new)  # 拟合模型
 
     X_plot = np.array([[-2], [2]])  # 用于绘制预测线
