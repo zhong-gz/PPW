@@ -14,24 +14,25 @@ def data_distribution_map(mu,X,y,model):
 
 # 生成线性回归数据集
 np.random.seed(0)  # 为了可重复性
-X = 2 * np.random.rand(100, 1)  # 生成100个随机数作为自变量
-y = 3 * X + np.random.randn(100, 1)  # 生成因变量，添加一些噪声
 
 num_iters = 100
-scaler = StandardScaler()
-X = scaler.fit_transform(X)
-y = scaler.fit_transform(y.reshape(-1, 1))
+
 
 mu = 1
 
 for t in range(num_iters):
+    X = 2 * np.random.rand(100, 1)  # 生成100个随机数作为自变量
+    y = 3 * X + 0.5*np.random.randn(100, 1)  # 生成因变量，添加一些噪声
+    scaler = StandardScaler()
+    X = scaler.fit_transform(X)
+    y = scaler.fit_transform(y.reshape(-1, 1))
     if t==0:
         y_new = y
     else:
         y_new = data_distribution_map(mu,X,y,model)
 
     # 创建线性回归模型
-    model = Ridge(alpha = 20) #, fit_intercept=False
+    model = Ridge(alpha = 2) #, fit_intercept=False
     model.fit(X, y_new)  # 拟合模型
 
     X_plot = np.array([[-2], [2]])  # 用于绘制预测线
@@ -44,6 +45,8 @@ for t in range(num_iters):
     plt.xlabel('X')
     plt.ylabel('y')
     plt.title('ridge regression')
+    plt.xlim(-2, 2)  # 替换 x_min 和 x_max 为你想要的范围
+    plt.ylim(-2, 2)
     # plt.legend()
     plt.pause(0.2) 
 plt.show() 
