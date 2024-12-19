@@ -6,6 +6,7 @@ from sklearn import preprocessing
 import scipy.stats as st
 from sklearn.datasets import make_classification
 from sklearn.datasets import make_moons,make_circles
+from sklearn.preprocessing import StandardScaler
 
 # D(w) = X - mu * w
 def data_distribution_map1(X,y, mu = 0, model = None, strat_features = None):
@@ -35,30 +36,14 @@ def data_distribution_map1(X,y, mu = 0, model = None, strat_features = None):
         y_strat = np.copy(y)
     return X_strat,y_strat
 
-# D(w) in crime place prediction
+# D(w) in crime rate prediction
 def data_distribution_map2(X,y, mu = 0, model = None):
-    if model is not None:
-        y_strat = np.zeros_like(y)
-        score,_ = model.predict(X)
-        score_larger_0 = score[score > 0]
-        score_less_0 = score[score < 0]
-        max_score = max(score)
-        max_min_score = 0
-        min_score = min(score)
-        min_max_score = 0
-        for i in range(y.shape[0]):
-            if score[i]*y[i] < 0:
-                y_strat[i] = np.copy(y[i])
-            else:
-                if y[i] ==1:
-                    p = (score[i]-max_min_score)/(max_score-max_min_score)
-                else:
-                    p = (score[i]-min_max_score)/(min_score-min_max_score)
-                p = np.exp(mu * p) / (1 + np.exp(mu * p))
-                if random.random() < p:
-                    y_strat[i] = np.copy(y[i])
-                else:
-                    y_strat[i] = -1*y[i]
+    scaler = StandardScaler()
+    y_strat = np.zeros_like(y)
+    hat_y = model.predict(X)
+    scaled_hat_y = scaler.fit_transform(hat_y)
+    mean_scaled_hat_y = np.mean(scaled_hat_y)
+    y_strat = y - mu*(scaled_hat_y-mean_scaled_hat_y)
     return X,y_strat
 
 # D(w) = X - mu * w
@@ -265,10 +250,10 @@ def plot_step(i, offset, start_list, end_list, method_name, colors,markers,num_i
     if i < num_iters-1:
         plt.plot([i+offset, i+1], [end_list[c,i], start_list[c,i+1]], 'g:')
 
-def plot_acc(acc_list_start,acc_list_start_std,colors,markers,linestyles,method_name,std=1):
-    plt.plot(range(len(acc_list_start)),acc_list_start,color=colors, marker=markers, linestyle=linestyles,label=method_name, linewidth=1, markersize=6)
+def plot_mse(mse_list_start,mse_list_start_std,colors,markers,linestyles,method_name,std=1):
+    plt.plot(range(len(mse_list_start)),mse_list_start,color=colors, marker=markers, linestyle=linestyles,label=method_name, linewidth=1, markersize=6)
     if std == 1:
-        plt.fill_between(range(len(acc_list_start)), acc_list_start - acc_list_start_std, acc_list_start + acc_list_start_std, color= colors, alpha=0.2, linewidth=0)
+        plt.fill_between(range(len(mse_list_start)), mse_list_start - mse_list_start_std, mse_list_start + mse_list_start_std, color= colors, alpha=0.2, linewidth=0)
 
 def plot_model_gap(model_gaps_avg,model_gaps_std,colors,markers,linestyles,method_name,std=1):
     plt.plot(range(len(model_gaps_avg)),model_gaps_avg,color=colors, marker=markers, linestyle=linestyles,label=method_name, linewidth=1, markersize=6)
