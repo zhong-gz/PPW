@@ -43,7 +43,7 @@ def data_distribution_map2(X,y, mu = 0, model = None):
     hat_y = model.predict(X)
     scaled_hat_y = scaler.fit_transform(hat_y)
     mean_scaled_hat_y = np.mean(scaled_hat_y)
-    y_strat = y - mu*(scaled_hat_y-mean_scaled_hat_y)
+    y_strat = y - mu*(scaled_hat_y-mean_scaled_hat_y) + np.random.normal(0, 0.1, size=y.shape)
     return X,y_strat
 
 # D(w) = X - mu * w
@@ -145,13 +145,13 @@ def est_varepsilon(X,y,X_new,y_new,w_arr,norm_w_w):
     # gradient of x
     n = X.shape[0]
     y_pred = ridge_model.predict(X)
-    gradient = - (X.T.dot(y - y_pred)) + 2*ridge_model.alpha * ridge_model.coef_
+    gradient = - (X.T.dot(y - y_pred)) + 2*ridge_model.alpha * ridge_model.coef_.T
     mean_value = gradient/n
 
     # gradient of x_new
     n_new = X_new.shape[0]
     y_pred_new = ridge_model.predict(X_new)
-    gradient_new = - (X_new.T.dot(y_new - y_pred_new)) + 2*ridge_model.alpha * ridge_model.coef_
+    gradient_new = - (X_new.T.dot(y_new - y_pred_new)) + 2*ridge_model.alpha * ridge_model.coef_.T
     mean_value_new = gradient_new/n_new
 
     if len(w_arr) == 1:

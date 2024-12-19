@@ -11,7 +11,7 @@ import random
 import time
 
 def method_1(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,s = 0.05,\
-             strat_features = None,num_experiments = 10,seed_value = 42,alpha = 0.49):
+             strat_features = None,num_experiments = 10,seed_value = 42,alpha = 2.1):
 
     X = np.c_[np.ones((X.shape[0], 1)), X]
     method_name = 'PPW-AVG'
@@ -38,7 +38,7 @@ def method_1(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,s = 0.05,\
             ridge_model = copy.deepcopy(model_int)
             norm_w_w = []
             varepsilon = []
-            varepsilon_temp = n/alpha
+            varepsilon_temp = 1
             X_old = np.copy(X)
             y_old = np.copy(y)
 
@@ -78,7 +78,7 @@ def method_1(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,s = 0.05,\
                 mse_list_start[i,k,t] = mse
 
                 # # learn on induced distribution
-                gamma = alpha*(1/varepsilon_temp)
+                gamma = alpha*varepsilon_temp
                 ridge_model_new = Ridge(alpha = gamma/2, fit_intercept=False)
                 ridge_model_new.fit(X_strat, y_strat)
 

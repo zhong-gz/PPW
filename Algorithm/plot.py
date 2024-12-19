@@ -15,8 +15,8 @@ d_list = [10,1000,10000]
 def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/'):
     num_d  = len(d_list)
     data_dict = {}
-    # methods = ['method_1','RRM_Logistic_Regression']
-    methods = ['PPW-AVG']
+    methods = ['PPW-AVG','RRM_Ridge_Regression']
+    # methods = ['PPW-AVG']
     # methods = ['method_1', 'method_2','SVM_with_fix_C']
     # methods = ['method_1', 'method_2','RRM_Logistic_Regression','RGD_Logistic_Regression',\
     #            'Outside_the_echo_chamber','PerGD','Performative_Prediction_with_Neural_Network']
@@ -93,7 +93,7 @@ def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/'):
             max_element = max(max_element,np.max(np.maximum.reduce(mse_list_start_avg[c])))
             min_element = min(min_element,np.min(np.minimum.reduce(mse_list_start_avg[c])))
         plt.xlabel('Iteration', fontsize = 18)
-        plt.ylabel('Accuracy', fontsize = 18)
+        plt.ylabel('MSE', fontsize = 18)
         plt.tick_params(labelsize=18)
         # plt.ylim(0.3, 1)
         # plt.ylim(min(0.5,min_element), max_element)
