@@ -12,15 +12,14 @@ from Algorithm.plot import plot_fig
 from Algorithm.alg_method_1 import method_1
 
 # problems parameters
-threshold = 0.1
 seed_value = 42
 num_iters = 100
-d_list = [0.1,1]
+d_list = [0.1,0.5]
 num_experiments = 10
 map = 2
 np.random.seed(seed_value)
 random.seed(seed_value)
-folder_path = 'result/'
+folder_path = 'Communities and Crime/result/'
 
 initial=pd.read_csv('Communities and Crime/communities-crime-clean.csv')
 initial = initial.drop('communityname', axis=1)
@@ -34,6 +33,7 @@ X = initial.values
 model_gaps_avg,model_gaps_std,mse_list_start_avg,mse_list_start_std,mse_list_end_avg,mse_list_end_std,method_name = \
     method_1(X,y,num_iters,d_list,map = map,num_experiments = num_experiments,seed_value = seed_value)
 file_name_npy = f"{folder_path}{method_name}.npz"
+print(file_name_npy)
 np.savez(file_name_npy, model_gaps_avg = model_gaps_avg, model_gaps_std = model_gaps_std,\
             mse_list_start_avg = mse_list_start_avg, mse_list_start_std = mse_list_start_std,\
             mse_list_end_avg = mse_list_end_avg, mse_list_end_std = mse_list_end_std)

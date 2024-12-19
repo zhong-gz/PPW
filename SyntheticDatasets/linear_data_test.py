@@ -23,9 +23,7 @@ for t in range(num_iters):
     X = 2 * np.random.rand(200, 1)  # 生成100个随机数作为自变量
     X_b = np.c_[np.ones((X.shape[0], 1)), X]
     y = 4 + 3 * X + 0.2*np.random.randn(200, 1)  # 生成因变量，添加一些噪声
-    # scaler = StandardScaler()
-    # X = scaler.fit_transform(X)
-    # y = scaler.fit_transform(y.reshape(-1, 1))
+
     if t==0:
         y_new = y
     else:

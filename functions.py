@@ -63,11 +63,6 @@ def data_distribution_map3(X,y, mu = 0, model = None, strat_features = None,t = 
         random_point = np.zeros([n,X.shape[1]])
         random_point[:, strat_features] = random_features_point
         for i in range(X.shape[0]):
-            # if pre_label[i] == -1 :
-            # random_point = np.zeros([n,X.shape[1]])
-            # random_point[:, strat_features] = random_features_point
-            # for j in range(m):
-            #     random_point[:,strat_features[j]] = random_features_point[:,j]
             x_temp = random_point + X[i]
             scorei,_ = model.predict(x_temp)
             min_index = np.argmin(scorei) # np.argmax(score)
@@ -94,19 +89,6 @@ def data_distribution_map3(X,y, mu = 0, model = None, strat_features = None,t = 
     return X_strat,y_strat
 
 def linear_data_generation(n = 100):
-    # # np.random.seed(0)
-    # cov = [[1, 0], [0, 1]]
-
-    # # 生成类别1的数据
-    # class1_center = [0, 0]
-    # class1_samples = np.random.multivariate_normal(class1_center, cov, int(n/2))
-
-    # # 生成类别2的数据
-    # class2_center = [-5, 5]
-    # class2_samples = np.random.multivariate_normal(class2_center, cov, int(n/2))
-
-    # X = np.concatenate((class1_samples, class2_samples), axis=0)
-    # y = np.concatenate((-1*np.ones(int(n/2)), np.ones(int(n/2))))
 
     X, y = make_classification(n_samples=n, n_features=50, n_informative=40, n_redundant=0, random_state=42)
     y[y != 1] = -1
@@ -127,21 +109,7 @@ def non_linear_data_generation(n = 100):
     X,y = make_circles(n_samples=n, noise=0.2,factor = 0.1)
 
     y[y != 1] = -1
-    # # 生成类别1的半圆数据点（上半圆）
-    # radius = 10
-    # width = 2
-    # x1, y1 = generate_half_moon(int(n/2), radius, width)
 
-    # # 生成类别2的半圆数据点（下半圆）
-    # x2, y2 = generate_half_moon(int(n/2), radius, width)
-    # x2 = x2 + 10  
-    # y2 = -y2 + 2
-
-    # class1_samples = np.vstack((x1, y1)).T
-    # class2_samples = np.vstack((x2, y2)).T
-
-    # X = np.concatenate((class1_samples, class2_samples), axis=0)
-    # y = np.concatenate((-1*np.ones(int(n/2)), np.ones(int(n/2))))
     return X,y
 
 def generate_random_points_in_circle(mu, num_points,d):
@@ -172,37 +140,30 @@ def accuracy(y_true, y_pred):
     
 
 def est_varepsilon(X,y,X_new,y_new,w_arr,norm_w_w):
-    mean_value = [0,0]
     ridge_model = w_arr[-1]
     
-    
-
     # gradient of x
     n = X.shape[0]
     y_pred = ridge_model.predict(X)
-    gradient = - (X.T.dot(y - y_pred)) + 2*ridge_model.alpha * ridge_model.codf_
-    mean_value[0] = gradient/n
+    gradient = - (X.T.dot(y - y_pred)) + 2*ridge_model.alpha * ridge_model.coef_
+    mean_value = gradient/n
 
     # gradient of x_new
     n_new = X_new.shape[0]
     y_pred_new = ridge_model.predict(X_new)
-    gradient_new = - (X_new.T.dot(y_new - y_pred_new)) + 2*ridge_model.alpha * ridge_model.codf_
-    mean_value[1] = gradient_new/n_new
-
-    w_t_norm = w_t.norm()
+    gradient_new = - (X_new.T.dot(y_new - y_pred_new)) + 2*ridge_model.alpha * ridge_model.coef_
+    mean_value_new = gradient_new/n_new
 
     if len(w_arr) == 1:
-        norm_w_w.append(w_t.norm())
-    # else:
-        # norm_w_w.append(model_sub_norm(w_arr[-1],w_arr[-2]))
+        norm_w_w.append(np.linalg.norm(w_arr[-1].coef_))
+    else:
+        norm_w_w.append(np.linalg.norm(w_arr[-1].coef_-w_arr[-2].coef_))
 
     if norm_w_w[-1] == 0:
         norm_w_w[-1] = 1e-4
-    if w_t_norm == 0:
-        w_t_norm = 1e-4
 
-    est_epsilon = (np.abs(mean_value[0]-mean_value[1]))/(norm_w_w[-1]*w_t_norm)
-    if est_epsilon == 0:
+    est_epsilon = np.linalg.norm(mean_value-mean_value_new)/(norm_w_w[-1])
+    if est_epsilon < 1e-4:
         est_epsilon = 1e-4
 
     return est_epsilon,norm_w_w
