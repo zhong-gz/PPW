@@ -21,6 +21,7 @@ mu = 1
 
 for t in range(num_iters):
     X = 2 * np.random.rand(200, 1)  # 生成100个随机数作为自变量
+    X_b = np.c_[np.ones((X.shape[0], 1)), X]
     y = 4 + 3 * X + 0.2*np.random.randn(200, 1)  # 生成因变量，添加一些噪声
     # scaler = StandardScaler()
     # X = scaler.fit_transform(X)
@@ -28,14 +29,15 @@ for t in range(num_iters):
     if t==0:
         y_new = y
     else:
-        y_new = data_distribution_map(mu,X,y,model)
+        y_new = data_distribution_map(mu,X_b,y,model)
 
     # 创建线性回归模型
-    model = Ridge(alpha = 0.1) #, fit_intercept=False
-    model.fit(X, y_new)  # 拟合模型
+    model = Ridge(alpha = 20, fit_intercept=False) 
+    model.fit(X_b, y_new)  # 拟合模型
 
     X_plot = np.array([[-2], [2]])  # 用于绘制预测线
-    y_plot = model.predict(X_plot)
+    X_b_plot = np.c_[np.ones((X_plot.shape[0], 1)), X_plot]
+    y_plot = model.predict(X_b_plot)
 
     plt.clf()
     # 绘制数据点和回归线

@@ -13,13 +13,14 @@ import time
 def method_1(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,s = 0.05,\
              strat_features = None,num_experiments = 10,seed_value = 42,alpha = 0.49):
 
+    X = np.c_[np.ones((X.shape[0], 1)), X]
     method_name = 'PPW-AVG'
     num_d  = len(d_list)
 
     n = X.shape[0]
     m = X.shape[1]
     C = n
-    model_int = Ridge(alpha = 1)
+    model_int = Ridge(alpha = 1, fit_intercept=False)
     model_int.fit(X, y)
     print('Method 1:')
     model_list         = [[[model_int] for _ in range(num_d)] for _ in range(num_experiments)]
@@ -72,13 +73,13 @@ def method_1(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,s = 0.05,\
                     X_strat,y_strat = data_distribution_map2(X, y,mu = d, model = ridge_model)
                     
                 # evaluate initial loss on the current distribution
-                _,hat_y = ridge_model.predict(X_strat)
+                hat_y = ridge_model.predict(X_strat)
                 mse = mean_squared_error(y_strat, hat_y)
                 mse_list_start[i,k,t] = mse
 
                 # # learn on induced distribution
                 gamma = alpha*(1/varepsilon_temp)
-                ridge_model_new = Ridge(alpha = gamma/2)
+                ridge_model_new = Ridge(alpha = gamma/2, fit_intercept=False)
                 ridge_model_new.fit(X_strat, y_strat)
 
                 # evaluate final loss on the current distribution

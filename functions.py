@@ -172,30 +172,23 @@ def accuracy(y_true, y_pred):
     
 
 def est_varepsilon(X,y,X_new,y_new,w_arr,norm_w_w):
-    n = X.shape[0]
-    n_new = X_new.shape[0]
-
     mean_value = [0,0]
-    w_t = w_arr[-1]
-    # w_{t} x_{t-1}
-    score,_ = w_t.predict(X)
-    y_score = y*score
-    mask = y_score < 1
-    new_arr = np.copy(y_score[mask])
-    if new_arr.size == 0:
-        mean_value[0] = 0
-    else:
-        mean_value[0] = np.sum(new_arr)/(n)
+    ridge_model = w_arr[-1]
+    
+    
 
-    # w_{t} x_{t}
-    score,_ = w_t.predict(X_new)
-    y_score = y_new*score
-    mask = y_score < 1
-    new_arr = np.copy(y_score[mask])
-    if new_arr.size == 0:
-        mean_value[1] = 0
-    else:
-        mean_value[1] = np.sum(new_arr)/(n_new)
+    # gradient of x
+    n = X.shape[0]
+    y_pred = ridge_model.predict(X)
+    gradient = - (X.T.dot(y - y_pred)) + 2*ridge_model.alpha * ridge_model.codf_
+    mean_value[0] = gradient/n
+
+    # gradient of x_new
+    n_new = X_new.shape[0]
+    y_pred_new = ridge_model.predict(X_new)
+    gradient_new = - (X_new.T.dot(y_new - y_pred_new)) + 2*ridge_model.alpha * ridge_model.codf_
+    mean_value[1] = gradient_new/n_new
+
     w_t_norm = w_t.norm()
 
     if len(w_arr) == 1:
