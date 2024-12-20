@@ -11,9 +11,9 @@ import random
 import time
 
 def method_1(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,s = 0.05,\
-             strat_features = None,num_experiments = 10,seed_value = 42,alpha = 2.1):
+             strat_features = None,num_experiments = 10,seed_value = 42,alpha_1 = 10):
 
-    X = np.c_[np.ones((X.shape[0], 1)), X]
+    # X = np.c_[np.ones((X.shape[0], 1)), X]
     method_name = 'PPW-AVG'
     num_d  = len(d_list)
 
@@ -78,8 +78,8 @@ def method_1(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,s = 0.05,\
                 mse_list_start[i,k,t] = mse
 
                 # # learn on induced distribution
-                gamma = alpha*varepsilon_temp
-                ridge_model_new = Ridge(alpha = gamma/2, fit_intercept=False)
+                gamma = alpha_1*varepsilon_temp
+                ridge_model_new = Ridge(alpha = gamma/2)#, fit_intercept=False)
                 ridge_model_new.fit(X_strat, y_strat)
 
                 # evaluate final loss on the current distribution
@@ -91,12 +91,11 @@ def method_1(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,s = 0.05,\
                 model_list[i][k].append(ridge_model_new)
                 varepsilon_star,norm_w_w = est_varepsilon(X_old,y_old,X_strat,y_strat,model_list[i][k],norm_w_w)
                 varepsilon.append(varepsilon_star)
-                varepsilon_no_outlier = remove_outliers_iqr(varepsilon)
-                varepsilon_temp = np.mean(varepsilon_no_outlier) #max((0.1*f)/n,np.mean(varepsilon_no_outlier))
+                # varepsilon_no_outlier = remove_outliers_iqr(varepsilon)
+                # varepsilon_temp = np.mean(varepsilon_no_outlier) #max((0.1*f)/n,np.mean(varepsilon_no_outlier))
+                varepsilon_temp = np.max(varepsilon)
 
-                theta_t = model_list[i][k][-1]
-                theta_t_1 = model_list[i][k][-2]
-                model_gaps[i,k,t] = np.linalg.norm(theta_t.coef_-theta_t_1.coef_)
+                model_gaps[i,k,t] = np.linalg.norm(ridge_model_new.coef_-ridge_model.coef_)
 
                 X_old = np.copy(X_strat)
                 y_old = np.copy(y_strat)

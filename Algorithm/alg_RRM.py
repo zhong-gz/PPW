@@ -12,14 +12,14 @@ import copy
 def RRM(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,strat_features = np.array([1, 6, 8])-1,\
         num_experiments = 10,seed_value = 42):
     
-    X = np.c_[np.ones((X.shape[0], 1)), X]
+    # X = np.c_[np.ones((X.shape[0], 1)), X]
     method_name = 'RRM_Ridge_Regression'
     num_d  = len(d_list)
     n = X.shape[0]
     d = X.shape[1]
 
     print('RRM Logistic Regression')
-    RR = Ridge(alpha = 1, fit_intercept=False)
+    RR = Ridge(alpha = 0, fit_intercept=False)
     RR.fit(X, y)
 
     RR_int = RR
@@ -62,11 +62,11 @@ def RRM(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,strat_features = np.
                     X_strat,y_strat = data_distribution_map2(X, y,mu = d, model = RR)
                 # evaluate initial loss on the current distribution
                 pred_label = RR.predict(X_strat)
-                mse = accuracy(y_strat, pred_label)
+                mse = mean_squared_error(y_strat, pred_label)
                 mse_list_start[i,k,t] = mse
 
                 # learn on induced distribution
-                RR_new = Ridge(alpha = 1, fit_intercept=False)
+                RR_new = Ridge(alpha = 0) #, fit_intercept=False)
                 RR_new.fit(X_strat, y_strat)
                 model_gaps[i,k,t] = np.linalg.norm(RR_new.coef_-RR.coef_)
 
