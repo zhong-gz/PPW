@@ -15,7 +15,7 @@ from Algorithm.alg_RRM import RRM
 # problems parameters
 seed_value = 42
 num_iters = 100
-d_list = [0.1,0.2,0.3,0.4,0.5]
+d_list = [0.8]
 num_experiments = 10
 map = 2
 np.random.seed(seed_value)
@@ -26,7 +26,7 @@ initial=pd.read_csv('Communities and Crime/communities-crime-clean.csv')
 initial = initial.drop('communityname', axis=1)
 initial = initial.drop('fold', axis=1)
 initial = initial.drop('state', axis=1)
-y = initial['ViolentCrimesPerPop'].values.reshape(-1, 1)
+y = initial['ViolentCrimesPerPop'].values.reshape(-1, 1) * 10
 initial = initial.drop('ViolentCrimesPerPop', axis=1)
 X = initial.values
 

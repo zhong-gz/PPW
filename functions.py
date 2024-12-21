@@ -38,12 +38,17 @@ def data_distribution_map1(X,y, mu = 0, model = None, strat_features = None):
 
 # D(w) in crime rate prediction
 def data_distribution_map2(X,y, mu = 0, model = None):
+    # scaler = StandardScaler()
+    # y_strat = np.zeros_like(y)
+    # hat_y = model.predict(X)
+    # scaled_hat_y = scaler.fit_transform(hat_y)
+    # mean_scaled_hat_y = np.mean(scaled_hat_y)
+    # y_strat = y - mu*(scaled_hat_y-mean_scaled_hat_y) + np.random.normal(0, 0.1, size=y.shape)
     scaler = StandardScaler()
     y_strat = np.zeros_like(y)
     hat_y = model.predict(X)
-    scaled_hat_y = scaler.fit_transform(hat_y)
-    mean_scaled_hat_y = np.mean(scaled_hat_y)
-    y_strat = y - mu*(scaled_hat_y-mean_scaled_hat_y) + np.random.normal(0, 0.1, size=y.shape)
+    mean_hat_y = np.mean(hat_y)
+    y_strat = y - mu*(hat_y-mean_hat_y) + np.random.normal(0, 0.1, size=y.shape)
     return X,y_strat
 
 # D(w) = X - mu * w

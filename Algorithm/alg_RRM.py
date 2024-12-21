@@ -61,8 +61,8 @@ def RRM(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,strat_features = np.
                     X,y = non_linear_data_generation(n = n)
                     X_strat,y_strat = data_distribution_map2(X, y,mu = d, model = RR)
                 # evaluate initial loss on the current distribution
-                pred_label = RR.predict(X_strat)
-                mse = mean_squared_error(y_strat, pred_label)
+                pred_label_old = RR.predict(X_strat)
+                mse = mean_squared_error(y_strat, pred_label_old)
                 mse_list_start[i,k,t] = mse
 
                 # learn on induced distribution
