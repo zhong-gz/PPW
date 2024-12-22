@@ -5,27 +5,54 @@ from functions import accuracy,data_distribution_map1,data_distribution_map2,dat
 from datetime import datetime
 from functions import CustomLogisticRegression as LogisticRegression
 import random
+from sklearn.metrics import mean_squared_error
+import copy
 
 # problems parameters
 num_iters = 25
 d_list = [10,1000,10000]
 
+class LinearRegression_one_iter_gd:
+    def __init__(self, learning_rate=0.01):
+        self.learning_rate = learning_rate
+        self.theta = None  # 参数，包括截距项
+
+    def fit(self, X, y,model = None):
+        # 添加截距项
+        X_b = np.c_[np.ones((X.shape[0], 1)), X]  # 在X的第一列添加1
+        m = X_b.shape[0]  # 样本数量
+
+        if model == None:
+            self.theta = np.random.randn(X_b.shape[1], 1)  # 随机初始化参数，确保是列向量
+
+        gradients = (2/m) * X_b.T.dot(X_b.dot(self.theta) - y)  # 计算梯度
+        self.theta -= self.learning_rate * gradients  # 更新参数
+
+    def predict(self, X):
+        X_b = np.c_[np.ones((X.shape[0], 1)), X]  # 添加截距项
+        return X_b.dot(self.theta)  # 预测值
+    
+
 def RGD(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,strat_features = np.array([1, 6, 8])-1,\
         num_experiments = 10,seed_value = 42):
-    
-    method_name = 'RGD Logistic Regression'
+
+    method_name = 'RGD_Linear_Regression'
     num_d  = len(d_list)
     n = X.shape[0]
     d = X.shape[1]
 
-    print('RGD_Logistic_Regression')
-    LR = LogisticRegression()
-    LR.fit(X, y)
-    theta_int = np.hstack((LR.coef_, LR.intercept_.reshape(-1, 1)))
-    # theta_int = np.copy(LR.coef_)
+    print('RGD Linear Regression')
+    num_d  = len(d_list)
+    n = X.shape[0]
+    d = X.shape[1]
+    RR = LinearRegression_one_iter_gd(learning_rate=0.1)
+    RR.fit(X, y)
+
+    RR_int = RR
     model_gaps         = np.zeros((num_experiments, num_d, num_iters)) #[[[] for _ in range(num_d)] for _ in range(num_experiments)]
-    acc_list_start     = np.zeros((num_experiments, num_d, num_iters)) #[[[] for _ in range(num_d)] for _ in range(num_experiments)]
-    acc_list_end       = np.zeros((num_experiments, num_d, num_iters)) #[[[] for _ in range(num_d)] for _ in range(num_experiments)]
+    mse_list_start     = np.zeros((num_experiments, num_d, num_iters)) #[[[] for _ in range(num_d)] for _ in range(num_experiments)]
+    mse_list_end       = np.zeros((num_experiments, num_d, num_iters)) #[[[] for _ in range(num_d)] for _ in range(num_experiments)]
+    
 
     for i in range(num_experiments):
         print('  Running {} th times'.format(i))
@@ -33,69 +60,61 @@ def RGD(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,strat_features = np.
         random.seed(seed_value  + i)
         for k, d in enumerate(d_list):
             print('    Running epsilon =  {}'.format(d))
-            theta = np.copy(theta_int)
-            
+            RR = copy.deepcopy(RR_int)
+
             for t in range(num_iters):
                 # adjust distribution to current theta
                 if map == 1:
                     X,y = linear_data_generation(n = n)
-                    X_strat,y_strat = data_distribution_map1(X, y,mu = d, model = LR, strat_features = strat_features)
+                    X_strat,y_strat = data_distribution_map1(X, y,mu = d, model = RR, strat_features = strat_features)
                     # X_strat = preprocess_data_shift(X_strat, X, strat_features, n)
                 
                 if map == 2:
-                    X_strat,y_strat = data_distribution_map2(X, y,mu = d, model = LR)
+                    X_strat,y_strat = data_distribution_map2(X, y,mu = d, model = RR)
 
                 if map == 3:
-                    X_strat,y_strat = data_distribution_map3(X, y,mu = d, model = LR, strat_features = strat_features,t = t)
+                    X_strat,y_strat = data_distribution_map3(X, y,mu = d, model = RR, strat_features = strat_features,t = t)
                     X_strat = preprocess_data_shift(X_strat, X, strat_features, n)
-                
+
                 if map == 4:
                     X,y = non_linear_data_generation(n = n)
-                    X_strat,y_strat = data_distribution_map1(X, y,mu = d, model = LR, strat_features = strat_features)
+                    X_strat,y_strat = data_distribution_map1(X, y,mu = d, model = RR, strat_features = strat_features)
                     # X_strat = preprocess_data_shift(X_strat, X, strat_features, n)
                 if map == 5:
                     X,y = linear_data_generation(n = n)
-                    X_strat,y_strat = data_distribution_map2(X, y,mu = d, model = LR)    
-
+                    X_strat,y_strat = data_distribution_map2(X, y,mu = d, model = RR)
                 if map == 6:
                     X,y = non_linear_data_generation(n = n)
-                    X_strat,y_strat = data_distribution_map2(X, y,mu = d, model = LR)
+                    X_strat,y_strat = data_distribution_map2(X, y,mu = d, model = RR)
+
                 # evaluate initial loss on the current distribution
-                _,pred_label = LR.predict(X_strat)
-                acc = accuracy(y_strat, pred_label)
-                acc_list_start[i,k,t] = acc
+                pred_label_old = RR.predict(X_strat)
+                mse = mean_squared_error(y_strat, pred_label_old)
+                mse_list_start[i,k,t] = mse
 
                 # learn on induced distribution
-                LR_new = LogisticRegression(solver='sag',max_iter=50000)
-                LR_new.fit(X_strat, y_strat)
-                theta_new = np.hstack((LR_new.coef_, LR_new.intercept_.reshape(-1, 1)))
-                # theta_new = np.copy(LR_new.coef_)
-                if np.linalg.norm(theta_new) == 0:
-                    theta_new = theta_new + 1e-5
-                if np.linalg.norm(theta) == 0:
-                    theta = theta + 1e-5
-                model_gaps[i,k,t] = np.dot(theta_new,theta.T)/(np.linalg.norm(theta_new)*np.linalg.norm(theta))
-                # model_gaps[i,k,t] = np.linalg.norm(theta_new - theta)
-                theta = np.copy(theta_new)
+                theta_old = RR.theta
+                RR.fit(X_strat, y_strat)
+                theta_new = RR.theta
+                model_gaps[i,k,t] = np.linalg.norm(theta_new-theta_old)
 
                 # evaluate final loss on the current distribution
-                _,pred_label = LR_new.predict(X_strat)
-                acc = accuracy(y_strat, pred_label)
-                acc_list_end[i,k,t] = acc
-                
-                LR = LR_new
+                pred_label = RR.predict(X_strat)
+                mse = mean_squared_error(y_strat, pred_label)
+                mse_list_end[i,k,t] = mse
+
         print('-'*50)
 
     for k, d in enumerate(d_list):
         model_gaps_avg = np.mean(model_gaps, axis=0)
         model_gaps_std = np.std(model_gaps, axis=0)
-        acc_list_start_avg = np.mean(acc_list_start, axis=0)
-        acc_list_start_std = np.std(acc_list_start, axis=0)
-        acc_list_end_avg = np.mean(acc_list_end, axis=0)
-        acc_list_end_std = np.std(acc_list_end, axis=0)
+        mse_list_start_avg = np.mean(mse_list_start, axis=0)
+        mse_list_start_std = np.std(mse_list_start, axis=0)
+        mse_list_end_avg = np.mean(mse_list_end, axis=0)
+        mse_list_end_std = np.std(mse_list_end, axis=0)
 
     current_time = datetime.now()
     current_time_str = current_time.strftime("%Y-%m-%d %H:%M:%S")
     print("Completion Time:", current_time_str)
 
-    return model_gaps_avg,model_gaps_std,acc_list_start_avg,acc_list_start_std,acc_list_end_avg,acc_list_end_std,method_name
+    return model_gaps_avg,model_gaps_std,mse_list_start_avg,mse_list_start_std,mse_list_end_avg,mse_list_end_std,method_name

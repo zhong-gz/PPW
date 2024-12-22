@@ -10,7 +10,7 @@ from datetime import datetime
 import random
 import time
 
-def method_1(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,s = 0.05,\
+def method_1(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,\
              strat_features = None,num_experiments = 10,seed_value = 42,alpha_1 = 2.1):
 
     # X = np.c_[np.ones((X.shape[0], 1)), X]
@@ -91,9 +91,9 @@ def method_1(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,s = 0.05,\
                 model_list[i][k].append(ridge_model_new)
                 varepsilon_star,norm_w_w = est_varepsilon(X_old,y_old,X_strat,y_strat,model_list[i][k],norm_w_w)
                 varepsilon.append(varepsilon_star)
-                # varepsilon_no_outlier = remove_outliers_iqr(varepsilon)
-                # varepsilon_temp = np.mean(varepsilon_no_outlier) #max((0.1*f)/n,np.mean(varepsilon_no_outlier))
-                varepsilon_temp = np.max(varepsilon)
+                varepsilon_no_outlier = remove_outliers_iqr(varepsilon)
+                varepsilon_temp = np.mean(varepsilon_no_outlier) #max((0.1*f)/n,np.mean(varepsilon_no_outlier))
+                # varepsilon_temp = np.max(varepsilon)
 
                 model_gaps[i,k,t] = np.linalg.norm(ridge_model_new.coef_-ridge_model.coef_)
 

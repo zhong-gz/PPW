@@ -15,7 +15,7 @@ d_list = [10,1000,10000]
 def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/'):
     num_d  = len(d_list)
     data_dict = {}
-    methods = ['PPW-AVG','RRM_Linear_Regression']
+    methods = ['PPW-AVG','PPW-EMA','RRM_Linear_Regression','RGD_Linear_Regression']
     # methods = ['PPW-AVG']
     # methods = ['method_1', 'method_2','SVM_with_fix_C']
     # methods = ['method_1', 'method_2','RRM_Logistic_Regression','RGD_Logistic_Regression',\
@@ -51,7 +51,8 @@ def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/'):
         plt.xlabel('Iteration', fontsize = 18)
         plt.ylabel('MSE', fontsize = 18)
         plt.tick_params(labelsize=18)
-        # plt.ylim(0.3, 1)
+        # plt.ylim(0, 10)
+        plt.yscale('log')
         # plt.ylim(min(0.5,min_element), max_element)
         plt.legend(loc='lower right')
         # plt.title('Accuracy, d={}'.format(d_list[c]), fontsize = 18)
@@ -73,7 +74,8 @@ def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/'):
         plt.xlabel('Iteration', fontsize = 18)
         plt.ylabel('MSE', fontsize = 18)
         plt.tick_params(labelsize=18)
-        # plt.ylim(0.3, 1)
+        # plt.ylim(0, 10)
+        plt.yscale('log')
         # plt.ylim(min(0.5,min_element), max_element)
         plt.legend(loc='lower right')
         # plt.title('Accuracy after data distribution shift, d={}'.format(d_list[c]), fontsize = 18)
@@ -95,7 +97,8 @@ def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/'):
         plt.xlabel('Iteration', fontsize = 18)
         plt.ylabel('MSE', fontsize = 18)
         plt.tick_params(labelsize=18)
-        # plt.ylim(0.3, 1)
+        # plt.ylim(0, 10)
+        plt.yscale('log')
         # plt.ylim(min(0.5,min_element), max_element)
         plt.legend(loc='lower right')
         # plt.title('Accuracy after data distribution shift, d={}'.format(d_list[c]), fontsize = 18)
@@ -114,7 +117,8 @@ def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/'):
         plt.ylabel(r'$\|\theta_t - \theta_{t-1}\|$', fontsize = 18)
         plt.tick_params(labelsize=18)
         plt.legend(loc='lower right')
-        # plt.ylim(-1,1)
+        # plt.ylim(0, 10)
+        plt.yscale('log')
         # plt.yscale('log')
         # plt.title('Model Consistency, d={}'.format(d_list[c]), fontsize = 18)
         file_name = f'Model_gap_d = {d_list[c]}.pdf'
@@ -132,7 +136,8 @@ def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/'):
         plt.ylabel(r'$\|\theta_t - \theta_{t-1}\|$', fontsize = 18)
         plt.tick_params(labelsize=18)
         plt.legend(loc='lower right')
-        # plt.ylim(-1,1)
+        # plt.ylim(0, 10)
+        plt.yscale('log')
         # plt.yscale('log')
         # plt.title('Model Consistency, d={}'.format(d_list[c]), fontsize = 18)
         file_name = f'Model_gap_d = {d_list[c]}_no_std.pdf'

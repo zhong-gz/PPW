@@ -150,16 +150,16 @@ def est_varepsilon(X,y,X_new,y_new,w_arr,norm_w_w):
     # gradient of x
     n = X.shape[0]
     y_pred = ridge_model.predict(X)
-    gradient = - (X.T.dot(y - y_pred)) + 2*ridge_model.alpha * ridge_model.coef_.T
-    mean_value = gradient/n
+    gradient = - (X.T.dot(y - y_pred)) # + 2*ridge_model.alpha * ridge_model.coef_.T
+    mean_value = gradient #/n
 
     # gradient of x_new
     n_new = X_new.shape[0]
     y_pred_new = ridge_model.predict(X_new)
-    gradient_new = - (X_new.T.dot(y_new - y_pred_new)) + 2*ridge_model.alpha * ridge_model.coef_.T
-    mean_value_new = gradient_new/n_new
+    gradient_new = - (X_new.T.dot(y_new - y_pred_new)) # + 2*ridge_model.alpha * ridge_model.coef_.T
+    mean_value_new = gradient_new #/n_new
 
-    if len(w_arr) == 1:
+    if len(w_arr) == 2:
         norm_w_w.append(np.linalg.norm(w_arr[-1].coef_))
     else:
         norm_w_w.append(np.linalg.norm(w_arr[-1].coef_-w_arr[-2].coef_))

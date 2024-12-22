@@ -18,7 +18,7 @@ def RRM(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,strat_features = np.
     n = X.shape[0]
     d = X.shape[1]
 
-    print('RRM Logistic Regression')
+    print('RRM Linear Regression')
     RR = Ridge(alpha = 0, fit_intercept=False)
     RR.fit(X, y)
 
