@@ -1,3 +1,3 @@
-,d = 0.8
-PPW-AVG,0.929 $\pm$ 0.023
-RRM_Ridge_Regression,3.325 $\pm$ 0.233
+,d = 0.8,d = 1
+PPW-AVG,0.929 $\pm$ 0.023,2.001 $\pm$ 0.029
+RRM_Ridge_Regression,3.325 $\pm$ 0.233,19.266 $\pm$ 3.321

@@ -13,7 +13,7 @@ def RRM(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,strat_features = np.
         num_experiments = 10,seed_value = 42):
     
     # X = np.c_[np.ones((X.shape[0], 1)), X]
-    method_name = 'RRM_Ridge_Regression'
+    method_name = 'RRM_Linear_Regression'
     num_d  = len(d_list)
     n = X.shape[0]
     d = X.shape[1]

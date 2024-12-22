@@ -15,7 +15,7 @@ from Algorithm.alg_RRM import RRM
 # problems parameters
 seed_value = 42
 num_iters = 100
-d_list = [0.8]
+d_list = [0.8,1]
 num_experiments = 10
 map = 2
 np.random.seed(seed_value)

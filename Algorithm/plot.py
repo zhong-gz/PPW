@@ -15,7 +15,7 @@ d_list = [10,1000,10000]
 def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/'):
     num_d  = len(d_list)
     data_dict = {}
-    methods = ['PPW-AVG','RRM_Ridge_Regression']
+    methods = ['PPW-AVG','RRM_Linear_Regression']
     # methods = ['PPW-AVG']
     # methods = ['method_1', 'method_2','SVM_with_fix_C']
     # methods = ['method_1', 'method_2','RRM_Logistic_Regression','RGD_Logistic_Regression',\
