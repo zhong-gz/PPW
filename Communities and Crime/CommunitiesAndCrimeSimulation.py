@@ -26,7 +26,9 @@ initial=pd.read_csv('Communities and Crime/communities-crime-clean.csv')
 initial = initial.drop('communityname', axis=1)
 initial = initial.drop('fold', axis=1)
 initial = initial.drop('state', axis=1)
-y = initial['ViolentCrimesPerPop'].values.reshape(-1, 1) * 10
+y = initial['ViolentCrimesPerPop'].values.reshape(-1, 1)
+scaler = StandardScaler()
+y = scaler.fit_transform(y)
 initial = initial.drop('ViolentCrimesPerPop', axis=1)
 X = initial.values
 
