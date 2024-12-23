@@ -8,29 +8,31 @@ class two_stage_algo:
         self.y_base[self.y_base != 1] = 0
         self.theta = None
         self.tol = tol
-        self.mu = np.zeros_like(X_base[0,:])
+        self.mu_x = None
+        self.mu_y = None
         self.X_shift = None # np.zeros_like(X_base)
+        self.y_shift = None
         self.theta_list = np.zeros_like(X_base)
 
     def calculate_performative_effect(self):
-        d = self.X_base.shape[1]
-        for i in range(d):
-            x = self.X_shift[:, i]
-            y = self.theta_list[:, i]
-            if not np.all(x == 0):
-                self.mu[i] = np.sum(x * y) / np.sum(x**2)
-        self.mu = np.nan_to_num(self.mu, nan=0)
+        n = len(self.y_base)
+        repeat_theta = np.repeat(self.theta_list, n, axis=0)
+
+        self.mu_x = np.linalg.inv(self.X_shift.T @ self.X_shift) @ self.X_shift.T @ repeat_theta
+        self.mu_y = np.linalg.inv(self.y_shift.T @ self.y_shift) @ self.y_shift.T @ repeat_theta
+
 
     def train(self,X,y_ture):
         y = np.copy(y_ture)
-        y[y != 1] = 0
         n = len(y)
         d = self.X_base.shape[1]
 
         if self.X_shift is None:
-            self.X_shift = X - self.X_base
+            self.X_shift = X
+            self.y_shift = y
         else:
-            self.X_shift = np.concatenate((self.X_shift, X - self.X_base), axis=0)
+            self.X_shift = np.concatenate((self.X_shift, X), axis=0)
+            self.y_shift = np.concatenate((self.y_shift, y), axis=0)
 
         self.calculate_performative_effect()
 
@@ -38,7 +40,7 @@ class two_stage_algo:
         theta_init = np.random.randn(d+1)
         learning_rate = 0.01
         num_iterations = 10000
-        theta_final, cost_history = self.gradient_descent(X_b, y, self.mu, theta_init, learning_rate, num_iterations)
+        theta_final, cost_history = self.gradient_descent(X_b, y, self.mu_x,self.mu_y, theta_init, learning_rate, num_iterations)
         # if np.isnan(theta_final).any():
         #     theta_final = self.theta_list[-1] + np.random.normal(loc=0, scale=1, size=len(self.theta_list[-1]))
         self.theta = np.copy(theta_final)
