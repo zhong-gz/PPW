@@ -6,7 +6,7 @@ from sklearn import preprocessing
 import scipy.stats as st
 from sklearn.datasets import make_classification
 from sklearn.datasets import make_moons,make_circles
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler,MinMaxScaler
 
 # D(w) = X - mu * w
 def data_distribution_map1(X,y, mu = 0, model = None, strat_features = None):
@@ -44,15 +44,15 @@ def data_distribution_map2(X,y, mu = 0, model = None):
     # scaled_hat_y = scaler.fit_transform(hat_y)
     # mean_scaled_hat_y = np.mean(scaled_hat_y)
     # y_strat = y - mu*(scaled_hat_y-mean_scaled_hat_y) + np.random.normal(0, 0.1, size=y.shape)
-    # scaler = StandardScaler()
-    # y_strat = np.zeros_like(y)
-    # hat_y = model.predict(X)
-    # mean_hat_y = np.mean(hat_y)
-    # y_strat = y - mu*(hat_y-mean_hat_y) + np.random.normal(0, 0.1, size=y.shape)
+    scaler = MinMaxScaler()
+    y_strat = np.zeros_like(y)
     hat_y = model.predict(X)
-    scaler = StandardScaler()
-    scaled_hat_y = scaler.fit_transform(hat_y)
-    y_strat = (1 / (1 + np.exp(-(y - mu*(hat_y-scaled_hat_y))))) + np.random.normal(0, 0.1, size=y.shape)
+    mean_hat_y = np.mean(hat_y)
+    y_strat = np.clip(y - mu*(hat_y-mean_hat_y), a_min=0, a_max=1.2) + np.random.normal(0, 0.1, size=y.shape)
+    # hat_y = model.predict(X)
+    # scaler = StandardScaler()
+    # scaled_hat_y = scaler.fit_transform(hat_y)
+    # y_strat = (1 / (1 + np.exp(-(y - mu*(hat_y-scaled_hat_y))))) + np.random.normal(0, 0.1, size=y.shape)
     
     return X,y_strat
 

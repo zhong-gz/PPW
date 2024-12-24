@@ -18,7 +18,7 @@ from Algorithm.alg_Outside import TSA
 # problems parameters
 seed_value = 42
 num_iters = 100
-d_list = [0.5,0.8,1,1.2,1.5]
+d_list = [3] #
 num_experiments = 10
 map = 2
 np.random.seed(seed_value)

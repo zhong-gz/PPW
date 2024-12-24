@@ -99,6 +99,8 @@ def method_2(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,kerneltype = 'l
                 X_old = np.copy(X_strat)
                 y_old = np.copy(y_strat)
                 ridge_model = copy.deepcopy(ridge_model_new)
+            print('')
+            print('       gamma = ',gamma,'\n')
         print('-'*50)
 
     for k, d in enumerate(d_list):
