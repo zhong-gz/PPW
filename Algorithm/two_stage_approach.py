@@ -18,9 +18,8 @@ class two_stage_algo:
         n = len(self.y_base)
         repeat_theta = np.repeat(self.theta_list, n, axis=0)
 
-        self.mu_x = np.linalg.inv(self.X_shift.T @ self.X_shift) @ self.X_shift.T @ repeat_theta
-        self.mu_y = np.linalg.inv(self.y_shift.T @ self.y_shift) @ self.y_shift.T @ repeat_theta
-
+        self.mu_x = np.linalg.inv(repeat_theta @ repeat_theta.T) @ self.X_shift.T @ repeat_theta
+        self.mu_y = np.linalg.inv(repeat_theta @ repeat_theta.T) @ self.y_shift.T @ repeat_theta
 
     def train(self,X,y_ture):
         y = np.copy(y_ture)
