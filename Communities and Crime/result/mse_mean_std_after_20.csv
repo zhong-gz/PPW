@@ -1,5 +1,5 @@
-,d = 3
-PPW-AVG,0.044 $\pm$ 0.003
-PPW-EMA,0.061 $\pm$ 0.001
-RRM_Linear_Regression,1.196 $\pm$ 0.016
-RGD_Linear_Regression,114.631 $\pm$ 48.064
+,d = 2,d = 4,d = 6,d = 8
+PPW-AVG,0.058 $\pm$ 0.002,0.059 $\pm$ 0.001,0.059 $\pm$ 0.001,0.059 $\pm$ 0.001
+PPW-EMA,0.064 $\pm$ 0.0,0.064 $\pm$ 0.0,0.064 $\pm$ 0.0,0.064 $\pm$ 0.0
+RRM_Linear_Regression,0.062 $\pm$ 0.004,0.073 $\pm$ 0.004,0.079 $\pm$ 0.009,0.087 $\pm$ 0.012
+RGD_Linear_Regression,112.709 $\pm$ 47.9,106.456 $\pm$ 40.378,116.272 $\pm$ 49.696,109.033 $\pm$ 44.824
