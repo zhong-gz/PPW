@@ -8,8 +8,8 @@ def data_distribution_map(mu,X,y,model):
     # 将数组 a 归一化到 [0, 1]
     hat_y = model.predict(X)
     mean_hat_y = np.mean(hat_y)
-
-    y_transformed = y - mu*(hat_y-mean_hat_y) + np.random.normal(0, 0.1, size=y.shape)
+    scaler = MinMaxScaler()
+    y_transformed = scaler.fit_transform(y - mu*(hat_y-mean_hat_y)) + np.random.normal(0, 0.1, size=y.shape)
     # y_transformed = y + mu*(hat_y-mean_hat_y) + np.random.normal(0, 0.1, size=y.shape)
     
     return y_transformed
@@ -19,12 +19,14 @@ np.random.seed(0)  # 为了可重复性
 
 num_iters = 100
 
-mu = 1.5
+mu = 0.8
 
 for t in range(num_iters):
     X = 2 * np.random.rand(200, 1)  # 生成100个随机数作为自变量
     # X_b = np.c_[np.ones((X.shape[0], 1)), X]
+    scaler = MinMaxScaler()
     y = 4 + 3 * X + 0.2*np.random.randn(200, 1)  # 生成因变量，添加一些噪声
+    y = scaler.fit_transform(y)
     # percentage_to_shuffle = 0.2
     # num_elements_to_shuffle = int(len(y) * percentage_to_shuffle)
     # indices = np.random.choice(len(y), num_elements_to_shuffle, replace=False)
@@ -38,10 +40,10 @@ for t in range(num_iters):
         y_new = data_distribution_map(mu,X,y,model)
         hat_y = model.predict(X)
         mse_start = mean_squared_error(hat_y,y_new)
-        print('mse start:',mse_start)
+        # print('mse start:',mse_start)
 
     # 创建线性回归模型
-    model = Ridge(alpha = 100) #, fit_intercept=False) 
+    model = Ridge(alpha = 0) #, fit_intercept=False) 
     model.fit(X, y_new)  # 拟合模型
 
     hat_y = model.predict(X)
@@ -62,7 +64,7 @@ for t in range(num_iters):
     plt.ylabel('y')
     plt.title('ridge regression')
     plt.xlim(-0.5, 2.5)  # 替换 x_min 和 x_max 为你想要的范围
-    plt.ylim(3, 10)
+    plt.ylim(-0.1, 1.1)
     # plt.legend()
     plt.pause(0.2) 
 plt.show() 
