@@ -39,10 +39,10 @@ def TSA(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,strat_features = np.
                     X,y = linear_data_generation(n = n)
                     X_strat,y_strat = data_distribution_map1(X, y,mu = d, model = model, strat_features = strat_features)
                     # X_strat = preprocess_data_shift(X_strat, X, strat_features, n)
-                
+                    
                 if map == 2:
                     X_strat,y_strat = data_distribution_map2(X, y,mu = d, model = model)
-                
+
                 if map == 3:
                     X_strat,y_strat = data_distribution_map3(X, y,mu = d, model = model, strat_features = strat_features,t = t)
                     X_strat = preprocess_data_shift(X_strat, X, strat_features, n)
@@ -51,12 +51,15 @@ def TSA(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,strat_features = np.
                     X,y = non_linear_data_generation(n = n)
                     X_strat,y_strat = data_distribution_map1(X, y,mu = d, model = model, strat_features = strat_features)
                     # X_strat = preprocess_data_shift(X_strat, X, strat_features, n)
+
                 if map == 5:
                     X,y = linear_data_generation(n = n)
-                    X_strat,y_strat = data_distribution_map2(X, y,mu = d, model = model)     
+                    X_strat,y_strat = data_distribution_map2(X, y,mu = d, model = model)
+
                 if map == 6:
                     X,y = non_linear_data_generation(n = n)
                     X_strat,y_strat = data_distribution_map2(X, y,mu = d, model = model)
+
                 # evaluate initial loss on the current distribution
                 _,pred_label = model.predict(X_strat)
                 acc = accuracy(y_strat, pred_label)

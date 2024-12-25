@@ -49,11 +49,7 @@ class two_stage_algo:
 
     def predict(self,X):
         score = np.dot(X, self.theta)
-        if np.isnan(score).any():
-            score = np.random.normal(loc=0, scale=0.1, size=len(score))
-        h = self.sigmoid(score)
-        predictions = (h >= 0.5).astype(int)
-        predictions[predictions != 1] = -1
+        predictions = score
         return score,predictions
 
     def compute_cost(self,X, y, theta):
