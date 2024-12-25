@@ -16,10 +16,13 @@ class two_stage_algo:
 
     def calculate_performative_effect(self):
         n = len(self.y_base)
-        repeat_theta = np.repeat(self.theta_list, n, axis=0)
+        repeat_theta = self.theta_list
 
-        self.mu_x = np.linalg.inv(repeat_theta.T @ repeat_theta) @ repeat_theta.T @ self.X_shift
-        self.mu_y = np.linalg.inv(repeat_theta.T @ repeat_theta) @ repeat_theta.T @ self.y_shift 
+        theta_theta_inv = np.linalg.inv(repeat_theta.T @ repeat_theta)
+        theta_theta_inv = theta_theta_inv + 0.0001*np.eye(theta_theta_inv.shape[0])
+
+        self.mu_x = theta_theta_inv @ repeat_theta.T @ self.X_shift
+        self.mu_y = theta_theta_inv @ repeat_theta.T @ self.y_shift 
 
     def train(self,X,y_ture):
         y = np.copy(y_ture)
@@ -35,13 +38,11 @@ class two_stage_algo:
 
         self.calculate_performative_effect()
 
-        X_b = np.c_[np.ones((len(self.X_base), 1)),self.X_base]
-        theta_init = np.random.randn(d+1)
+        theta_init = np.random.randn(d)
         learning_rate = 0.01
         num_iterations = 10000
-        theta_final, cost_history = self.gradient_descent(X_b, y, self.mu_x,self.mu_y, theta_init, learning_rate, num_iterations)
-        # if np.isnan(theta_final).any():
-        #     theta_final = self.theta_list[-1] + np.random.normal(loc=0, scale=1, size=len(self.theta_list[-1]))
+        theta_final, cost_history = self.gradient_descent(self.X_base, y, self.mu_x,self.mu_y, theta_init, learning_rate, num_iterations)
+
         self.theta = np.copy(theta_final)
         self.theta_list = np.concatenate((self.theta_list, np.tile(theta_final,(n, 1))), axis=0)
         return theta_final
@@ -55,15 +56,11 @@ class two_stage_algo:
         predictions[predictions != 1] = -1
         return score,predictions
 
-    def sigmoid(self,z):
-        z[z < -700] = -700
-        return 1 / (1 + np.exp(-z))
-
     def compute_cost(self,X, y, theta):
         m = len(y)
-        h = self.sigmoid(np.dot(X, theta))
-        epsilon = 1e-8
-        cost = (-1/m) * np.sum(y*np.log(h+ epsilon) + (1-y)*np.log(1-h+ epsilon))
+        theta_mu_y = np.repeat(theta @ self.mu_y, m, axis=0)
+        theta_mu_x = np.repeat(theta @ self.mu_x, m, axis=0)
+        cost = np.linalg(y+theta_mu_y - (X + theta_mu_x).T @ theta)
         return cost
 
     def gradient_descent(self,X, y,mu , theta, learning_rate, num_iterations):
@@ -72,12 +69,16 @@ class two_stage_algo:
         mu = np.insert(mu, 0, 0)
 
         for i in range(num_iterations):
-            h = self.sigmoid(np.dot(X + mu*theta, theta))
-            gradient = np.dot((X+2*mu*theta).T, (h - y)) / m
+            gradient = np.zeros_like(theta)
+            for i in range(m):
+                gradient = gradient + y[i]@self.mu_y + theta @self.mu_y@self.mu_y - X[i,:].T @ theta @ self.mu_y + self.mu_x.T@theta.T@theta@self.mu_y\
+                                    - y[i] @ X[i,:].T - theta@self.mu_y@X[i,:].T + X[i,:].T @ theta @X[i,:].T - self.mu_x.T@theta.T@theta@X[i,:].T\
+                                    + y[i] @self.mu_x.T@theta.T + theta@self.mu_y@self.mu_x.T@theta.T - X[i,:].T @ theta @self.mu_x.T@theta.T + self.mu_x.T@theta.T@theta@self.mu_x.T@theta.T
+            gradient = 2 * gradient
             theta -= learning_rate * gradient
-            cost = self.compute_cost(X+ mu*theta, y, theta)
+            cost = self.compute_cost(X, y, theta)
             cost_history.append(cost)
             if (i > 2) and (np.abs(cost_history[-1] - cost_history[-2]) < 1e-3/m):
-                return theta[1:], cost_history
+                return theta, cost_history
 
-        return theta[1:], cost_history
+        return theta, cost_history
