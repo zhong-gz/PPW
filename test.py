@@ -1,26 +1,23 @@
 import numpy as np
-import matplotlib.pyplot as plt
 
-def sigmoid(x, k=1, b=0):
-    return 1 / (1 + np.exp(-k * (x - b)))
+# 创建一个 2x3 的矩阵
+matrix = np.array([[1, 2, 3], 
+                   [4, 5, 6]])
 
-# 生成 x 值
-x = np.linspace(-10, 10, 100)
+# 在矩阵的每个元素上重复 2 次
+repeated_matrix = np.repeat(matrix, repeats=2)
 
-# 不同参数的 Sigmoid 函数
-y1 = sigmoid(x)          # k=1, b=0
-y2 = sigmoid(x, k=2)     # k=2, b=0 (更陡)
-y3 = sigmoid(x, k=0.5)   # k=0.5, b=0 (更平)
-y4 = sigmoid(x, k=10)   # k=0.5, b=0 (更平)
+print("原始矩阵:")
+print(matrix)
+print("\n重复后的矩阵（展平为一维）:")
+print(repeated_matrix)
 
-# 绘图
-plt.plot(x, y1, label='k=1, b=0')
-plt.plot(x, y2, label='k=2, b=0')
-plt.plot(x, y3, label='k=0.5, b=0')
-plt.plot(x, y4, label='k=10, b=0')
-plt.title('Adjusted Sigmoid Functions')
-plt.xlabel('hat_y')
-plt.ylabel('sigmoid(hat_y)')
-plt.legend()
-plt.grid()
-plt.show()
+# 在轴 0（行）上重复
+repeated_matrix_axis0 = np.repeat(matrix, repeats=2, axis=0)
+print("\n在轴 0 上重复的矩阵:")
+print(repeated_matrix_axis0)
+
+# 在轴 1（列）上重复
+repeated_matrix_axis1 = np.repeat(matrix, repeats=2, axis=1)
+print("\n在轴 1 上重复的矩阵:")
+print(repeated_matrix_axis1)
