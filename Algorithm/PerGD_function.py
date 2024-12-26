@@ -109,8 +109,8 @@ def gradient(X, Y, theta):
     return grad
 
 def approx_f(X, Y):
-    print(np.mean(X[Y == 1][:, 1]))
-    print(np.mean(X))
+    # print(np.mean(X[Y == 1][:, 1]))
+    # print(np.mean(X))
     return np.mean(X[Y == 1][:, 1]) # np.mean(X)
 
 def approx_grad_f(means, thetas):

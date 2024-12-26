@@ -150,16 +150,16 @@ def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/'):
     for i, methods_name in enumerate(methods):
         inner_dict = data_dict[methods_name]
         model_gaps_avg = inner_dict.get('model_gaps_avg')
-        means = np.mean(model_gaps_avg[:,20:], axis=1)
-        stds = np.std(model_gaps_avg[:,20:], axis=1)
+        means = np.mean(model_gaps_avg[:,5:], axis=1)
+        stds = np.std(model_gaps_avg[:,5:], axis=1)
         data = [f"{np.round(mean, decimals=3)} $\\pm$ {np.round(std, decimals=3)}" for mean, std in zip(means, stds)]
         df[methods_name] = data
     df.insert(0, ' ', descriptions)
-    # df.rename(index={0: 'Mean and Standard diviation of Model Gap after 20 steps'}, inplace=True)
+    # df.rename(index={0: 'Mean and Standard diviation of Model Gap after 5 steps'}, inplace=True)
     df_1 = df.T
     df_1.columns = df_1.iloc[0]  # 将第一行作为列名
     df_1 = df_1.drop(df_1.index[0])  # 删除原先的第一行
-    df_1.to_csv(folder_path+'gap_mean_std_after_20.csv')
+    df_1.to_csv(folder_path+'gap_mean_std_after_5.csv')
 
     df = pd.DataFrame()
     descriptions = []
@@ -168,16 +168,16 @@ def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/'):
     for i, methods_name in enumerate(methods):
         inner_dict = data_dict[methods_name]
         mse_list_start_avg = inner_dict.get('mse_list_start_avg')
-        means = np.mean(mse_list_start_avg[:,20:], axis=1)
-        stds = np.std(mse_list_start_avg[:,20:], axis=1)
+        means = np.mean(mse_list_start_avg[:,5:], axis=1)
+        stds = np.std(mse_list_start_avg[:,5:], axis=1)
         data = [f"{np.round(mean, decimals=3)} $\\pm$ {np.round(std, decimals=3)}" for mean, std in zip(means, stds)]
         df[methods_name] = data
     df.insert(0, ' ', descriptions)
-    # df.rename(index={0: 'Mean and Standard diviation of Accuracy after 20 steps'}, inplace=True)
+    # df.rename(index={0: 'Mean and Standard diviation of Accuracy after 5 steps'}, inplace=True)
     df_1 = df.T
     df_1.columns = df_1.iloc[0]  # 将第一行作为列名
     df_1 = df_1.drop(df_1.index[0])  # 删除原先的第一行
-    df_1.to_csv(folder_path+'mse_mean_std_after_20.csv') #, index=False
+    df_1.to_csv(folder_path+'mse_mean_std_after_5.csv') #, index=False
 
     current_time = datetime.now()
     current_time_str = current_time.strftime("%Y-%m-%d %H:%M:%S")

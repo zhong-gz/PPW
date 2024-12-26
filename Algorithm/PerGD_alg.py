@@ -24,10 +24,10 @@ class PerGD:
             self.thetas.append(self.theta.copy())
         Y = np.copy(y_ture)
         if len(self.thetas) < 2:
-            model = Ridge(fit_intercept=False)
-            model.fit(X_b, Y)
-            self.theta = model.coef_.T
-            # self.thetas.append(self.theta.copy())
+            # model = Ridge(alpha = 0, fit_intercept=False)
+            # model.fit(X_b, Y)
+            # self.theta = model.coef_.T #+ np.random.normal(0, 0.05, size=model.coef_.T.shape)
+            self.theta = np.random.randn(X_b.shape[1], 1) # 随机初始化参数，确保是列向量
         else:
             if len(self.thetas) < 2:
                 self.means.append(approx_f(X_b, Y))

@@ -7,13 +7,14 @@ from functions import CustomLogisticRegression as LogisticRegression
 import random
 from sklearn.metrics import mean_squared_error
 import copy
+from sklearn.linear_model import Ridge
 
 # problems parameters
 num_iters = 25
 d_list = [10,1000,10000]
 
 class LinearRegression_one_iter_gd:
-    def __init__(self, learning_rate=0.01):
+    def __init__(self, learning_rate=0.1):
         self.learning_rate = learning_rate
         self.theta = None  # 参数，包括截距项
 
@@ -23,8 +24,10 @@ class LinearRegression_one_iter_gd:
         m = X_b.shape[0]  # 样本数量
 
         if model == None:
-            self.theta = np.random.randn(X_b.shape[1], 1)  # 随机初始化参数，确保是列向量
-
+            # RR = Ridge(alpha = 0, fit_intercept=False)
+            # RR.fit(X_b, y)
+            # self.theta = RR.coef_.T #+ np.random.normal(0, 0.05, size=RR.coef_.T.shape) #np.random.randn(X_b.shape[1], 1)  
+            self.theta = np.random.randn(X_b.shape[1], 1) # 随机初始化参数，确保是列向量
         gradients = (2/m) * X_b.T.dot(X_b.dot(self.theta) - y)  # 计算梯度
         self.theta -= self.learning_rate * gradients  # 更新参数
 
