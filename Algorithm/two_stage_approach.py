@@ -40,7 +40,7 @@ class two_stage_algo:
 
         theta_init = np.random.randn(d)
         learning_rate = 0.01
-        num_iterations = 10000
+        num_iterations = 1000
         theta_final, cost_history = self.gradient_descent(self.X_base, self.y_base, theta_init, learning_rate, num_iterations)
 
         self.theta = np.copy(theta_final)
@@ -49,8 +49,7 @@ class two_stage_algo:
 
     def predict(self,X):
         score = np.dot(X, self.theta)
-        predictions = score
-        return score,predictions
+        return score.reshape(-1, 1)
 
     def compute_cost(self,X, y, theta):
         m = len(y)
@@ -63,16 +62,14 @@ class two_stage_algo:
         m = len(y)
         cost_history = []
         for j in range(num_iterations):
-            gradient = np.zeros_like(theta)
-            for i in range(m):
-                gradient = gradient + (y[i]*self.mu_y + theta @self.mu_y * self.mu_y - X[i,:].T @ theta * self.mu_y + self.mu_x.T@theta.T@theta*self.mu_y).reshape(-1)\
-                                    - y[i] * X[i,:].T - theta@self.mu_y*X[i,:].T + X[i,:].T @ theta *X[i,:].T - self.mu_x.T@theta.T@theta*X[i,:].T\
-                                    + y[i] *self.mu_x.T@theta.T + theta@self.mu_y*self.mu_x.T@theta.T - X[i,:].T @ theta *self.mu_x.T@theta.T + self.mu_x.T@theta.T@theta*self.mu_x.T@theta.T
-            gradient = 2 * gradient
+            gradient = (np.sum(y[:, np.newaxis] * self.mu_y, axis=0)+ theta @self.mu_y * self.mu_y * m - np.sum(X * theta, axis=0).reshape(-1, 1) * self.mu_y + self.mu_x.T@theta.T@theta*self.mu_y * m).reshape(-1)\
+                      - (X.T@y).reshape(-1) - np.sum(theta@self.mu_y*X, axis=0) + X @ theta @ X - np.sum(self.mu_x.T@theta.T@theta*X, axis=0)\
+                      + np.sum(self.mu_x.T@theta.T*y, axis=0) + theta@self.mu_y*self.mu_x.T@theta.T * m - np.sum(theta *self.mu_x.T@theta.T*X, axis=0) + self.mu_x.T@theta.T@theta*self.mu_x.T@theta.T * m
+            gradient = 2 * gradient / m
             theta -= learning_rate * gradient
             cost = self.compute_cost(X, y, theta)
             cost_history.append(cost)
-            if (i > 2) and (np.abs(cost_history[-1] - cost_history[-2]) < 1e-3/m):
+            if (j > 2) and (np.abs(cost_history[-1] - cost_history[-2]) < 1e-3):
                 return theta, cost_history
 
         return theta, cost_history
