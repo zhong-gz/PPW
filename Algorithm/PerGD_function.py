@@ -74,12 +74,14 @@ def ce_grad(x, y, theta):
     return (h(x, theta) - y) * x + reg * theta
 
 def grad1(X, Y, theta):
-    n = len(Y)
-    d = X.shape[1]
-    grad = np.zeros(d)
-    for x, y in zip(X, Y):
-        grad += ce_grad(x, y, theta)
-    return grad / n
+    m = len(Y)
+    grad = 2/m * X.T.dot(X.dot(theta) - Y)
+    
+    # d = X.shape[1]
+    # grad = np.zeros(d)
+    # for x, y in zip(X, Y):
+    #     grad += ce_grad(x, y, theta)
+    return grad
 
 def hessian(X, theta, reg):
     """
