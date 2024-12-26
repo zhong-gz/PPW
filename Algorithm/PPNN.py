@@ -11,29 +11,33 @@ class PerPreNN(nn.Module):
 
     def forward(self, x):
         x = torch.relu(self.fc1(x))
-        x = torch.sigmoid(self.fc2(x))
-        return x
-    
-    def forward_no_sigmoid(self, x):
-        x = torch.relu(self.fc1(x))
         x = self.fc2(x)
         return x
     
+    # def forward_no_sigmoid(self, x):
+    #     x = torch.relu(self.fc1(x))
+    #     x = self.fc2(x)
+    #     return x
+    
     def train(self,X,y_ture):
-        y = np.copy(y_ture)
-        y[y != 1] = 0
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+        # y = np.copy(y_ture)
+        # y[y != 1] = 0
         # 将数据转换为 PyTorch 张量
-        X_tensor = torch.tensor(X, dtype=torch.float32)
-        y_tensor = torch.tensor(y, dtype=torch.float32).view(-1, 1)
+        X_tensor = torch.tensor(X, dtype=torch.float32).to(device)
+        y_tensor = torch.tensor(y_ture, dtype=torch.float32).view(-1, 1).to(device)
         d = X.shape[1]
-        self.fc1 = nn.Linear(d, 8)  # 输入层到隐藏层
-        self.fc2 = nn.Linear(8, 1)  # 隐藏层到输出层
+        self.fc1 = nn.Linear(d, 8).to(device)  # 输入层到隐藏层
+        self.fc2 = nn.Linear(8, 1).to(device)  # 隐藏层到输出层
         # 定义损失函数和优化器
         criterion = nn.MSELoss()
         optimizer = optim.Adam(self.parameters(), lr=0.1)
         patience = 5  # 设置提前停止的耐心值
         best_loss = float('inf')  # 初始化最佳损失为无穷大
         counter = 0  # 初始化计数器
+        self.to(device)
+
         for epoch in range(self.max_iter):
             optimizer.zero_grad()
             outputs = self.forward(X_tensor)
@@ -57,14 +61,18 @@ class PerPreNN(nn.Module):
                 self.theta.append(weight.detach().clone().numpy())
 
     def predict(self, x):
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         # 将输入数据 x 转换为张量
-        x_tensor = torch.tensor(x, dtype=torch.float32)
-        # 使用训练好的模型进行预测
+        x_tensor = torch.tensor(x, dtype=torch.float32).to(device)
         with torch.no_grad():
             prediction = self.forward(x_tensor)
-            score = self.forward_no_sigmoid(x_tensor)
-        prediction = prediction.numpy()
-        prediction[prediction>0.5] = 1
-        prediction[prediction <= 0.5] = -1
-        prediction = prediction.astype(int)
-        return score.numpy(),prediction
+        return prediction.numpy()  # For regression, return the continuous output directly
+        # # 使用训练好的模型进行预测
+        # with torch.no_grad():
+        #     prediction = self.forward(x_tensor)
+        #     score = self.forward_no_sigmoid(x_tensor)
+        # prediction = prediction.numpy()
+        # prediction[prediction>0.5] = 1
+        # prediction[prediction <= 0.5] = -1
+        # prediction = prediction.astype(int)
+        # return score.numpy(),prediction

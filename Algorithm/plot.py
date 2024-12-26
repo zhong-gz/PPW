@@ -15,13 +15,9 @@ d_list = [10,1000,10000]
 def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/'):
     num_d  = len(d_list)
     data_dict = {}
-    methods = ['PPW-AVG','PPW-EMA','RRM_Linear_Regression','RGD_Linear_Regression','Two-Stage Approach']
-    # methods = ['PPW-AVG']
-    # methods = ['method_1', 'method_2','SVM_with_fix_C']
-    # methods = ['method_1', 'method_2','RRM_Logistic_Regression','RGD_Logistic_Regression',\
-    #            'Outside_the_echo_chamber','PerGD','Performative_Prediction_with_Neural_Network']
-    # methods = ['PPW-AVG', 'PPW-EMA','RRM Logistic Regression','RGD Logistic Regression',\
-    #            'RRM with Neural Networks','Two-Stage Approach','PerGD']
+    # methods = ['PPW-AVG','PPW-EMA','RRM_Linear_Regression','RGD_Linear_Regression','RRM with Neural Networks','Two-Stage Approach','PerGD']
+    methods = ['PPW-AVG','PPW-EMA','RRM_Linear_Regression','RGD_Linear_Regression','RRM with Neural Networks','PerGD']
+
     for methods_name in methods:
         data = np.load(folder_path+methods_name + '.npz')
     
