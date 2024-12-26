@@ -61,11 +61,18 @@ class two_stage_algo:
     def gradient_descent(self,X, y,theta, learning_rate, num_iterations):
         m = len(y)
         cost_history = []
+        max_grad_norm = 10* self.X_base.shape[1]
         for j in range(num_iterations):
             gradient = (np.sum(y[:, np.newaxis] * self.mu_y, axis=0)+ theta @self.mu_y * self.mu_y * m - np.sum(X * theta, axis=0).reshape(-1, 1) * self.mu_y + self.mu_x.T@theta.T@theta*self.mu_y * m).reshape(-1)\
                       - (X.T@y).reshape(-1) - np.sum(theta@self.mu_y*X, axis=0) + X @ theta @ X - np.sum(self.mu_x.T@theta.T@theta*X, axis=0)\
                       + np.sum(self.mu_x.T@theta.T*y, axis=0) + theta@self.mu_y*self.mu_x.T@theta.T * m - np.sum(theta *self.mu_x.T@theta.T*X, axis=0) + self.mu_x.T@theta.T@theta*self.mu_x.T@theta.T * m
             gradient = 2 * gradient / m
+            grad_norm = np.linalg.norm(gradient)
+            if grad_norm > max_grad_norm:
+                gradient = (gradient / grad_norm) * max_grad_norm
+            
+            if np.isnan(gradient).any():
+                print("Nan in the gradient")
             theta -= learning_rate * gradient
             cost = self.compute_cost(X, y, theta)
             cost_history.append(cost)
