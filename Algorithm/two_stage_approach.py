@@ -3,7 +3,7 @@ from numpy.linalg import lstsq
 
 class two_stage_algo:
     def __init__(self,X_base,y_base,tol = 1e-6):
-        self.X_base = np.copy(X_base)
+        self.X_base = np.copy(np.c_[np.ones((X_base.shape[0], 1)), X_base] )
         self.y_base = np.copy(y_base)
         self.theta = None
         self.tol = tol
@@ -11,7 +11,7 @@ class two_stage_algo:
         self.mu_y = None
         self.X_shift = None # np.zeros_like(X_base)
         self.y_shift = None
-        self.theta_list = np.zeros_like(X_base)
+        self.theta_list = np.zeros_like(np.c_[np.ones((X_base.shape[0], 1)), X_base])
 
     def calculate_performative_effect(self):
         n = len(self.y_base)
@@ -27,8 +27,8 @@ class two_stage_algo:
     def train(self,X,y_ture):
         y = np.copy(y_ture)
         n = len(y)
-        d = self.X_base.shape[1]
-
+        X = np.c_[np.ones((X.shape[0], 1)), X] 
+        
         if self.X_shift is None:
             self.X_shift = X
             self.y_shift = y
@@ -38,17 +38,15 @@ class two_stage_algo:
 
         self.calculate_performative_effect()
 
-        theta_init = np.random.randn(d)
-        learning_rate = 0.01
-        num_iterations = 1000
-        theta_final, cost_history = self.gradient_descent(self.X_base, self.y_base, theta_init, learning_rate, num_iterations)
+        theta_final, cost_history = self.gradient_descent(self.X_base, self.y_base)
 
         self.theta = np.copy(theta_final)
         self.theta_list = np.concatenate((self.theta_list, np.tile(theta_final,(n, 1))), axis=0)
         return theta_final
 
     def predict(self,X):
-        score = np.dot(X, self.theta)
+        X_b = np.c_[np.ones((X.shape[0], 1)), X] 
+        score = np.dot(X_b, self.theta)
         return score.reshape(-1, 1)
 
     def compute_cost(self,X, y, theta):
@@ -58,13 +56,20 @@ class two_stage_algo:
         cost = np.linalg.norm(y+theta_mu_y - ((X + theta_mu_x) @ theta).reshape(-1, 1))
         return cost
 
-    def gradient_descent(self,X, y,theta, learning_rate, num_iterations):
+    def gradient_descent(self,X, y):
         m = len(y)
         cost_history = []
-        max_grad_norm = 10* self.X_base.shape[1]
+        d = X.shape[1]
+        theta = np.random.randn(d)
+        learning_rate = 0.01
+        num_iterations = 1000
+        max_grad_norm = 10*d
+
+        XTY = (X.T@y).reshape(-1)
+        y_muy = np.sum(y[:, np.newaxis] * self.mu_y, axis=0)
         for j in range(num_iterations):
-            gradient = (np.sum(y[:, np.newaxis] * self.mu_y, axis=0)+ theta @self.mu_y * self.mu_y * m - np.sum(X * theta, axis=0).reshape(-1, 1) * self.mu_y + self.mu_x.T@theta.T@theta*self.mu_y * m).reshape(-1)\
-                      - (X.T@y).reshape(-1) - np.sum(theta@self.mu_y*X, axis=0) + X @ theta @ X - np.sum(self.mu_x.T@theta.T@theta*X, axis=0)\
+            gradient = (y_muy+ theta @self.mu_y * self.mu_y * m - np.sum(X * theta, axis=0).reshape(-1, 1) * self.mu_y + self.mu_x.T@theta.T@theta*self.mu_y * m).reshape(-1)\
+                      - XTY - np.sum(theta@self.mu_y*X, axis=0) + X @ theta @ X - np.sum(self.mu_x.T@theta.T@theta*X, axis=0)\
                       + np.sum(self.mu_x.T@theta.T*y, axis=0) + theta@self.mu_y*self.mu_x.T@theta.T * m - np.sum(theta *self.mu_x.T@theta.T*X, axis=0) + self.mu_x.T@theta.T@theta*self.mu_x.T@theta.T * m
             gradient = 2 * gradient / m
             grad_norm = np.linalg.norm(gradient)

@@ -35,6 +35,7 @@ def TSA(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,strat_features = np.
             theta = np.copy(model.theta)
             
             for t in range(num_iters):
+                print(f'       Current iteration =  {t+1}, there are still {num_iters - t -1} iterations left', end='\r')
                 # adjust distribution to current theta
                 if map == 1:
                     X,y = linear_data_generation(n = n)
