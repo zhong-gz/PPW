@@ -1,23 +1,19 @@
+from sklearn.linear_model import LinearRegression
 import numpy as np
 
-# 创建一个 2x3 的矩阵
-matrix = np.array([[1, 2, 3], 
-                   [4, 5, 6]])
+# 生成示例数据
+np.random.seed(0)
+X = 2 * np.random.rand(100, 3)  # 输入矩阵 (100, 3)
+true_W = np.array([[4, 5], [3, 2], [1, 3], [2, 4]])  # 参数矩阵 (4, 2) 包括截距项
+Y = X.dot(true_W[1:, :]) + true_W[0, :] + np.random.randn(100, 2)  # 输出矩阵 (100, 2)
 
-# 在矩阵的每个元素上重复 2 次
-repeated_matrix = np.repeat(matrix, repeats=2)
+# 使用 scikit-learn 进行线性回归
+lin_reg = LinearRegression(fit_intercept=False)
+lin_reg.fit(X, Y)
 
-print("原始矩阵:")
-print(matrix)
-print("\n重复后的矩阵（展平为一维）:")
-print(repeated_matrix)
+print("权重矩阵:", lin_reg.coef_)
 
-# 在轴 0（行）上重复
-repeated_matrix_axis0 = np.repeat(matrix, repeats=2, axis=0)
-print("\n在轴 0 上重复的矩阵:")
-print(repeated_matrix_axis0)
-
-# 在轴 1（列）上重复
-repeated_matrix_axis1 = np.repeat(matrix, repeats=2, axis=1)
-print("\n在轴 1 上重复的矩阵:")
-print(repeated_matrix_axis1)
+# 测试预测
+X_new = np.array([[1, 2, 3], [4, 5, 6]])
+Y_predict = lin_reg.predict(X_new)
+print("预测值:", Y_predict)
