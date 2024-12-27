@@ -55,22 +55,6 @@ def method_2(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,kerneltype = 'l
                 if map == 2:
                     X_strat,y_strat = data_distribution_map2(X, y,mu = d, model = ridge_model)
 
-                if map == 3:
-                    X_strat,y_strat = data_distribution_map3(X, y,mu = d, model = ridge_model, strat_features = strat_features,t = t)
-                    X_strat = preprocess_data_shift(X_strat, X, strat_features, n)
-
-                if map == 4:
-                    X,y = non_linear_data_generation(n = n)
-                    X_strat,y_strat = data_distribution_map1(X, y,mu = d, model = ridge_model, strat_features = strat_features)
-                    # X_strat = preprocess_data_shift(X_strat, X, strat_features, n)
-
-                if map == 5:
-                    X,y = linear_data_generation(n = n)
-                    X_strat,y_strat = data_distribution_map2(X, y,mu = d, model = ridge_model)
-
-                if map == 6:
-                    X,y = non_linear_data_generation(n = n)
-                    X_strat,y_strat = data_distribution_map2(X, y,mu = d, model = ridge_model)
                 # evaluate initial loss on the current distribution
                 hat_y = ridge_model.predict(X_strat)
                 mse = mean_squared_error(y_strat, hat_y)
