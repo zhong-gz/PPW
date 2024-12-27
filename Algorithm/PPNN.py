@@ -58,7 +58,8 @@ class PerPreNN(nn.Module):
 
         with torch.no_grad():
             for weight in self.parameters():
-                self.theta.append(weight.detach().clone().numpy())
+                # self.theta.append(weight.detach().clone().numpy())
+                self.theta.append(weight.detach().cpu().clone().numpy())
 
     def predict(self, x):
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -66,7 +67,7 @@ class PerPreNN(nn.Module):
         x_tensor = torch.tensor(x, dtype=torch.float32).to(device)
         with torch.no_grad():
             prediction = self.forward(x_tensor)
-        return prediction.numpy()  # For regression, return the continuous output directly
+        return prediction.cpu().numpy()  # For regression, return the continuous output directly
         # # 使用训练好的模型进行预测
         # with torch.no_grad():
         #     prediction = self.forward(x_tensor)

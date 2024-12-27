@@ -1,58 +1,46 @@
 import numpy as np
-import pandas as pd
-from sklearn.metrics import mean_squared_error
-from sklearn.linear_model import Ridge
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
 
-class LinearRegressionGD:
-    def __init__(self, learning_rate=0.1):
-        self.learning_rate = learning_rate
-        self.theta = None
+# 生成二维数据X和标签y
+np.random.seed(0)
+num_samples = 100
+num_features = 2
 
-    def fit(self, X, y, model=None):
-        X_b = np.c_[np.ones((X.shape[0], 1)), X]  # 在X的第一列添加1
-        m = X_b.shape[0]  # 样本数量
+X = np.random.rand(num_samples, num_features)
+true_weights = np.array([1.5, -2.0])
+true_bias = 3.0
+noise = np.random.randn(num_samples) * 0.1
+y = X.dot(true_weights) + true_bias + noise
 
-        if model is None and self.theta is None:
-            LR = Ridge(alpha=0, fit_intercept=False)
-            LR.fit(X_b, y)
-            self.theta = LR.coef_.T.copy()
-        # elif model is not None:
-        #     self.theta = model
+# 创建线性回归模型
+model = LinearRegression()
+model.fit(X, y)
 
-        gradients = (2 / m) * X_b.T.dot(X_b.dot(self.theta) - y)  # 计算梯度
-        self.theta -= self.learning_rate * gradients  # 更新参数
+# 模型的权重和偏置
+print("Learned weights:", model.coef_)
+print("Learned intercept:", model.intercept_)
 
-    def predict(self, X):
-        X_b = np.c_[np.ones((X.shape[0], 1)), X]  # 在X的第一列添加1
-        return X_b.dot(self.theta)
+# 绘制原始数据和模型的预测结果
+plt.figure(figsize=(10, 5))
 
-seed_value = 42
-num_iters = 100
-d_list = [0] #
-num_experiments = 10
-map = 2
-np.random.seed(seed_value)
-folder_path = 'Communities and Crime/result/'
+# 绘制第一个特征与标签的关系
+plt.subplot(1, 2, 1)
+plt.scatter(X[:, 0], y, color='blue', label='Original data')
+plt.scatter(X[:, 0], model.predict(X), color='red', label='Fitted data')
+plt.xlabel('Feature 1')
+plt.ylabel('Label')
+plt.title('Feature 1 vs Label')
+plt.legend()
 
-initial=pd.read_csv('Communities and Crime/communities-crime-clean.csv')
-initial = initial.drop('communityname', axis=1)
-initial = initial.drop('fold', axis=1)
-initial = initial.drop('state', axis=1)
-y = initial['ViolentCrimesPerPop'].values.reshape(-1, 1)
-initial = initial.drop('ViolentCrimesPerPop', axis=1)
-X = initial.values
+# 绘制第二个特征与标签的关系
+plt.subplot(1, 2, 2)
+plt.scatter(X[:, 1], y, color='blue', label='Original data')
+plt.scatter(X[:, 1], model.predict(X), color='red', label='Fitted data')
+plt.xlabel('Feature 2')
+plt.ylabel('Label')
+plt.title('Feature 2 vs Label')
+plt.legend()
 
-# 创建线性回归模型实例
-model = LinearRegressionGD(learning_rate=0.01)
-
-# 拟合模型并显示每次更新后的参数
-n_iter = 1000
-for i in range(n_iter):
-    model.fit(X, y)
-    y = y + np.random.normal(0, 0.1, size=y.shape)
-    # print(f"Iteration {i+1}: theta = {model.theta.ravel()}")
-
-# 预测
-predictions = model.predict(X)
-
-print(mean_squared_error(y, predictions))
+plt.tight_layout()
+plt.show()
