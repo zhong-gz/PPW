@@ -78,6 +78,7 @@ def TSA(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,strat_features = np.
                 pred_label_new = model.predict(X_strat)
                 mse = mean_squared_error(y_strat, pred_label_new)
                 mse_list_end[i,k,t] = mse
+            print('')
         print('-'*50)
 
     for k, d in enumerate(d_list):
