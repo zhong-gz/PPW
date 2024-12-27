@@ -44,11 +44,13 @@ def data_distribution_map2(X,y, mu = 0, model = None):
     # scaled_hat_y = scaler.fit_transform(hat_y)
     # mean_scaled_hat_y = np.mean(scaled_hat_y)
     # y_strat = y - mu*(scaled_hat_y-mean_scaled_hat_y) + np.random.normal(0, 0.1, size=y.shape)
+
     scaler = MinMaxScaler()
     y_strat = np.zeros_like(y)
     hat_y = model.predict(X)
     mean_hat_y = np.mean(hat_y)
     y_strat = scaler.fit_transform(y - mu*(hat_y-mean_hat_y)) + np.random.normal(0, 0.1, size=y.shape)
+
     # y_strat = np.clip(y - mu*(hat_y-mean_hat_y), a_min=0, a_max=1.2) + np.random.normal(0, 0.1, size=y.shape)
     # hat_y = model.predict(X)
     # scaler = StandardScaler()

@@ -9,26 +9,27 @@ from sklearn.metrics import mean_squared_error
 import copy
 from sklearn.linear_model import Ridge
 
-# problems parameters
-num_iters = 25
-d_list = [10,1000,10000]
+# # problems parameters
+# num_iters = 25
+# d_list = [10,1000,10000]
 
 class LinearRegression_one_iter_gd:
-    def __init__(self, learning_rate=0.1):
+    def __init__(self, learning_rate=0.01):
         self.learning_rate = learning_rate
         self.theta = None  # 参数，包括截距项
 
     def fit(self, X, y,model = None):
-        # 添加截距项
         X_b = np.c_[np.ones((X.shape[0], 1)), X]  # 在X的第一列添加1
         m = X_b.shape[0]  # 样本数量
+        if y.ndim == 1:
+            y = y.reshape(-1, 1)
 
-        if model == None:
-            # RR = Ridge(alpha = 0, fit_intercept=False)
-            # RR.fit(X_b, y)
-            # self.theta = RR.coef_.T #+ np.random.normal(0, 0.05, size=RR.coef_.T.shape) #np.random.randn(X_b.shape[1], 1)  
-            self.theta = np.random.randn(X_b.shape[1], 1) # 随机初始化参数，确保是列向量
-        gradients = (2/m) * X_b.T.dot(X_b.dot(self.theta) - y)  # 计算梯度
+        if model is None and self.theta is None:
+            # LR = Ridge(alpha = 0, fit_intercept=False)
+            # LR.fit(X_b, y)
+            # self.theta = LR.coef_.T.copy() #+ np.random.normal(0, 0.05, size=RR.coef_.T.shape) #np.random.randn(X_b.shape[1], 1)  
+            self.theta = np.random.randn(X_b.shape[1], 1) # 随机初始化参数
+        gradients = (2 / m) * X_b.T.dot(X_b.dot(self.theta) - y)  # 计算梯度
         self.theta -= self.learning_rate * gradients  # 更新参数
 
     def predict(self, X):
@@ -48,10 +49,9 @@ def RGD(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,strat_features = np.
     num_d  = len(d_list)
     n = X.shape[0]
     d = X.shape[1]
-    RR = LinearRegression_one_iter_gd(learning_rate=0.1)
-    RR.fit(X, y)
+    RR_int = LinearRegression_one_iter_gd()
+    RR_int.fit(X, y)
 
-    RR_int = RR
     model_gaps         = np.zeros((num_experiments, num_d, num_iters)) #[[[] for _ in range(num_d)] for _ in range(num_experiments)]
     mse_list_start     = np.zeros((num_experiments, num_d, num_iters)) #[[[] for _ in range(num_d)] for _ in range(num_experiments)]
     mse_list_end       = np.zeros((num_experiments, num_d, num_iters)) #[[[] for _ in range(num_d)] for _ in range(num_experiments)]
@@ -75,30 +75,15 @@ def RGD(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,strat_features = np.
                 if map == 2:
                     X_strat,y_strat = data_distribution_map2(X, y,mu = d, model = RR)
 
-                if map == 3:
-                    X_strat,y_strat = data_distribution_map3(X, y,mu = d, model = RR, strat_features = strat_features,t = t)
-                    X_strat = preprocess_data_shift(X_strat, X, strat_features, n)
-
-                if map == 4:
-                    X,y = non_linear_data_generation(n = n)
-                    X_strat,y_strat = data_distribution_map1(X, y,mu = d, model = RR, strat_features = strat_features)
-                    # X_strat = preprocess_data_shift(X_strat, X, strat_features, n)
-                if map == 5:
-                    X,y = linear_data_generation(n = n)
-                    X_strat,y_strat = data_distribution_map2(X, y,mu = d, model = RR)
-                if map == 6:
-                    X,y = non_linear_data_generation(n = n)
-                    X_strat,y_strat = data_distribution_map2(X, y,mu = d, model = RR)
-
                 # evaluate initial loss on the current distribution
                 pred_label_old = RR.predict(X_strat)
                 mse = mean_squared_error(y_strat, pred_label_old)
                 mse_list_start[i,k,t] = mse
 
                 # learn on induced distribution
-                theta_old = RR.theta
+                theta_old = RR.theta.copy()
                 RR.fit(X_strat, y_strat)
-                theta_new = RR.theta
+                theta_new = RR.theta.copy()
                 model_gaps[i,k,t] = np.linalg.norm(theta_new-theta_old)
 
                 # evaluate final loss on the current distribution

@@ -5,7 +5,7 @@ from PerGD_function import shift_dist,approx_f,grad1,clip,grad2,est_performative
 from sklearn.linear_model import LogisticRegression, Ridge
 
 class PerGD:
-    def __init__(self,H = 50, lr = 0.1):
+    def __init__(self,H = 50, lr = 0.01):
         self.s1 = 0.5
         self.H  = H
         self.lr = lr # learning rate
@@ -34,6 +34,7 @@ class PerGD:
                 grad = grad1(X_b, Y, self.theta)
 
                 self.theta = clip(self.theta - self.lr * grad).copy()
+                # self.theta = (self.theta - self.lr * grad).copy()
                 # self.history.append(self.theta.copy())
                 self.thetas.append(self.theta.copy())
             else:
@@ -44,6 +45,7 @@ class PerGD:
                 # self.g2s.append(g2)
 
                 self.theta = clip(self.theta - self.lr * grad).copy()
+                # self.theta = (self.theta - self.lr * grad).copy()
                 # self.history.append(self.theta.copy())
                 self.thetas.append(self.theta.copy())
             

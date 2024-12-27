@@ -69,8 +69,7 @@ def PerformativeGD(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,strat_fea
                     theta_new = theta_new + 1e-5
                 if np.linalg.norm(theta) == 0:
                     theta = theta + 1e-5
-                # model_gaps[i,k,t] = np.linalg.norm(theta_new - theta)
-                model_gaps[i,k,t] = np.dot(theta_new.T,theta)/(np.linalg.norm(theta_new)*np.linalg.norm(theta))
+                model_gaps[i,k,t] = np.linalg.norm(theta_new-theta)
                 theta = np.copy(theta_new)
 
                 # evaluate final loss on the current distribution

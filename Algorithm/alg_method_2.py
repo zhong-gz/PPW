@@ -19,7 +19,7 @@ def method_2(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,kerneltype = 'l
     n = X.shape[0]
     m = X.shape[1]
     gamma = 2
-    model_int = Ridge(alpha = gamma, fit_intercept=False)
+    model_int = Ridge(alpha = gamma) #, fit_intercept=False)
     model_int.fit(X, y)
     print('Method 2:')
     model_list         = [[[model_int] for _ in range(num_d)] for _ in range(num_experiments)]
