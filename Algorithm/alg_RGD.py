@@ -1,7 +1,7 @@
 import sys
 sys.path.insert(0, sys.path[0]+"/../") # add parent directory to path
 import numpy as np
-from functions import accuracy,data_distribution_map1,data_distribution_map2,data_distribution_map3,preprocess_data_shift,linear_data_generation,non_linear_data_generation
+from functions import est_varepsilon,data_distribution_map1,data_distribution_map2,remove_outliers_iqr,linear_data_generation
 from datetime import datetime
 from functions import CustomLogisticRegression as LogisticRegression
 import random
@@ -16,7 +16,8 @@ from sklearn.linear_model import Ridge
 class LinearRegression_one_iter_gd:
     def __init__(self, learning_rate=0.01):
         self.learning_rate = learning_rate
-        self.theta = None  # 参数，包括截距项
+        self.theta = None
+        self.coef_ = None  # 参数，包括截距项
 
     def fit(self, X, y,model = None):
         X_b = np.c_[np.ones((X.shape[0], 1)), X]  # 在X的第一列添加1
@@ -27,10 +28,11 @@ class LinearRegression_one_iter_gd:
         if model is None and self.theta is None:
             # LR = Ridge(alpha = 0, fit_intercept=False)
             # LR.fit(X_b, y)
-            # self.theta = LR.coef_.T.copy() #+ np.random.normal(0, 0.05, size=RR.coef_.T.shape) #np.random.randn(X_b.shape[1], 1)  
+            # self.theta = LR.theta.T.copy() #+ np.random.normal(0, 0.05, size=RR.theta.T.shape) #np.random.randn(X_b.shape[1], 1)  
             self.theta = np.random.randn(X_b.shape[1], 1) # 随机初始化参数
         gradients = (2 / m) * X_b.T.dot(X_b.dot(self.theta) - y)  # 计算梯度
         self.theta -= self.learning_rate * gradients  # 更新参数
+        self.coef_ = self.theta[1:]  # 参数，不包括截距项
 
     def predict(self, X):
         X_b = np.c_[np.ones((X.shape[0], 1)), X]  # 添加截距项
@@ -81,9 +83,9 @@ def RGD(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,strat_features = np.
                 mse_list_start[i,k,t] = mse
 
                 # learn on induced distribution
-                theta_old = RR.theta.copy()
+                theta_old = RR.coef_.copy()
                 RR.fit(X_strat, y_strat)
-                theta_new = RR.theta.copy()
+                theta_new = RR.coef_.copy()
                 model_gaps[i,k,t] = np.linalg.norm(theta_new-theta_old)
 
                 # evaluate final loss on the current distribution

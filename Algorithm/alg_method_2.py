@@ -3,8 +3,7 @@ sys.path.insert(0, sys.path[0]+"/../") # add parent directory to path
 import numpy as np
 from sklearn.linear_model import Ridge
 from sklearn.metrics import mean_squared_error
-from functions import accuracy,est_varepsilon,data_distribution_map1,data_distribution_map2,data_distribution_map3,\
-    remove_outliers_iqr,preprocess_data_shift,linear_data_generation,non_linear_data_generation
+from functions import est_varepsilon,data_distribution_map1,data_distribution_map2,remove_outliers_iqr,linear_data_generation
 import copy
 from datetime import datetime
 import random

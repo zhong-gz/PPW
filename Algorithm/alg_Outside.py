@@ -2,11 +2,10 @@ import sys
 sys.path.insert(0, sys.path[0]+"/../") # add parent directory to path
 import numpy as np
 from sklearn.metrics import mean_squared_error
-from functions import accuracy,data_distribution_map1,data_distribution_map2,data_distribution_map3,\
-    preprocess_data_shift,linear_data_generation,non_linear_data_generation
+from functions import est_varepsilon,data_distribution_map1,data_distribution_map2,remove_outliers_iqr,linear_data_generation
 from datetime import datetime
 import random
-from two_stage_approach import two_stage_algo
+from Algorithm.two_stage_approach import two_stage_algo
 
 def TSA(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,strat_features = np.array([1, 6, 8])-1,\
         num_experiments = 10,seed_value = 42):
@@ -32,7 +31,7 @@ def TSA(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,strat_features = np.
             print('    Running epsilon =  {}'.format(d))
             model = two_stage_algo(X_base = X,y_base = y)
             model.train(X, y)
-            theta = np.copy(model.theta)
+            theta = np.copy(model.coef_)
             
             for t in range(num_iters):
                 print(f'       Current iteration =  {t+1}, there are still {num_iters - t -1} iterations left', end='\r')
@@ -52,7 +51,7 @@ def TSA(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,strat_features = np.
                 
                 # # learn on induced distribution
                 model.train(X_strat, y_strat)
-                theta_new = np.copy(model.theta)
+                theta_new = np.copy(model.coef_)
                 model_gaps[i,k,t] = np.linalg.norm(theta_new-theta)
                 # model_gaps[i,k,t] = np.linalg.norm(theta_new - theta)
                 theta = np.copy(theta_new)

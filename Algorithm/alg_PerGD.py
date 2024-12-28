@@ -2,10 +2,10 @@ import sys
 sys.path.insert(0, sys.path[0]+"/../") # add parent directory to path
 import numpy as np
 from sklearn.metrics import mean_squared_error
-from functions import accuracy,data_distribution_map1,data_distribution_map2,preprocess_data_shift,data_distribution_map3,linear_data_generation,non_linear_data_generation
+from functions import est_varepsilon,data_distribution_map1,data_distribution_map2,remove_outliers_iqr,linear_data_generation
 from datetime import datetime
 import random
-from PerGD_alg import PerGD
+from Algorithm.PerGD_alg import PerGD
 
 def PerformativeGD(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,strat_features = np.array([1, 6, 8])-1,\
         num_experiments = 10,seed_value = 42):
@@ -29,7 +29,7 @@ def PerformativeGD(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,strat_fea
             print('    Running epsilon =  {}'.format(d))
             model = PerGD()
             model.train(X, y)
-            theta = np.copy(model.theta)
+            theta = np.copy(model.coef_)
             
             for t in range(num_iters):
                 # adjust distribution to current theta
@@ -48,7 +48,7 @@ def PerformativeGD(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,strat_fea
                 
                 # learn on induced distribution
                 model.train(X_strat, y_strat)
-                theta_new = np.copy(model.theta)
+                theta_new = np.copy(model.coef_)
                 if np.linalg.norm(theta_new) == 0:
                     theta_new = theta_new + 1e-5
                 if np.linalg.norm(theta) == 0:

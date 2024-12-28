@@ -3,34 +3,13 @@ import random
 from sklearn.linear_model import LogisticRegression
 import matplotlib.pyplot as plt
 from sklearn import preprocessing
-import scipy.stats as st
-from sklearn.datasets import make_classification
-from sklearn.datasets import make_moons,make_circles
 from sklearn.preprocessing import StandardScaler,MinMaxScaler
 
 # D(w) = X - mu * w
 def data_distribution_map1(X,y, mu = 0, model = None, strat_features = None):
     if model is not None:
-        y_strat = np.copy(y)
-        if strat_features is None:
-            strat_features = np.arange(X.shape[1])
-        m = len(strat_features)
-
-        # the number of generating random points
-        n = 100
-        X_strat = np.zeros_like(X)
-        _,pre_label = model.predict(X)
-        random_features_point = generate_random_points_in_circle(mu, n,m)
-        random_point = np.zeros([n,X.shape[1]])
-        random_point[:, strat_features] = random_features_point
-        for i in range(X.shape[0]):
-            # if y[i] == 1 :
-            #     X_strat[i] = np.copy(X[i])
-            # else:
-            x_temp = random_point + X[i]
-            score,_ = model.predict(x_temp)
-            min_index = np.argmin(score)
-            X_strat[i] = np.copy(x_temp[min_index])
+        X_strat = X + mu * (model.coef_** 2) + np.random.normal(0, 0.1, size=model.coef_.shape)
+        y_strat = y + mu * np.sqrt(X @ model.coef_) + np.random.normal(0, 0.1, size=y.shape)
     else:
         X_strat = np.copy(X)
         y_strat = np.copy(y)
@@ -59,98 +38,11 @@ def data_distribution_map2(X,y, mu = 0, model = None):
     
     return X,y_strat
 
-# D(w) = X - mu * w
-def data_distribution_map3(X,y, mu = 0, model = None, strat_features = None,t = 0):
-    if model is not None:
-        y_strat = np.copy(y)
-        if strat_features is None:
-            strat_features = np.arange(X.shape[1])
-        d = -0.01 * mu + 15  #-2.5 * np.log10(mu) + 17.5
-        # d = 20
-        m = len(strat_features)
-        # the number of generating random points
-        n = 100
-        X_strat = np.zeros_like(X)
-        score,pre_label = model.predict(X)
-        random_features_point = generate_random_points_in_circle(mu, n,m)
-        random_point = np.zeros([n,X.shape[1]])
-        random_point[:, strat_features] = random_features_point
-        for i in range(X.shape[0]):
-            x_temp = random_point + X[i]
-            scorei,_ = model.predict(x_temp)
-            min_index = np.argmin(scorei) # np.argmax(score)
-            X_strat[i] = np.copy(x_temp[min_index])
-
-            if (y[i] == 1) and (t > 1):
-                # score_larger_0 = score[score > 0]
-                max_score = max(score) #score
-                max_min_score = 0
-                min_score = min(score)
-                min_max_score = 0
-                if pre_label[i] == 1:
-                    p = (score[i]-max_min_score)/(max_score-max_min_score)
-                else:
-                    p = (score[i]-min_max_score)/(min_score-min_max_score)
-                p = np.exp(d * p) / (1 + np.exp(d * p))
-                if random.random() < p:
-                    y_strat[i] = np.copy(y[i])
-                else:
-                    y_strat[i] = -1*np.copy(y[i])
-    else:
-        X_strat = np.copy(X)
-        y_strat = np.copy(y)
-    return X_strat,y_strat
-
-def linear_data_generation(n = 100):
-
-    X, y = make_classification(n_samples=n, n_features=50, n_informative=40, n_redundant=0, random_state=42)
-    y[y != 1] = -1
+def linear_data_generation(n = 100,n_features = 20):
+    X = np.random.rand(n, n_features)
+    true_coefficients = [0.8, 0.5, 0.5, 0.3, 0.6, 0.3, 0.6, 0.2, 0.2, 0.4, 0.4, 0.3, 0.1, 0.0, 0.0, 0.3, 0.5, 0.7, 0.5, 0.9]
+    y = X @ true_coefficients + np.random.randn(n) * 0.1  
     return X,y
-
-def generate_half_moon(n_samples, radius, width):
-    angles = np.linspace(0, np.pi, n_samples)
-    noise = np.random.uniform(-width, width, n_samples)
-    
-    x = (radius + noise) * np.cos(angles)
-    y = (radius + noise) * np.sin(angles)
-    
-    return x, y
-
-def non_linear_data_generation(n = 100):
-    # X,y = make_moons(n_samples=n, noise=0.2)
-    
-    X,y = make_circles(n_samples=n, noise=0.2,factor = 0.1)
-
-    y[y != 1] = -1
-
-    return X,y
-
-def generate_random_points_in_circle(mu, num_points,d):
-    data = []
-    for _ in range(num_points):
-        # 生成d-1维球面的坐标
-        angles = np.random.uniform(0, 2*np.pi, d)  # 生成d-1维均匀分布的角度
-        radius = np.random.uniform(0, mu)  # 生成[0, mu^(1/d))范围内的随机半径
-
-        # 构建d维球面坐标
-        coords = [mu * np.prod(np.sin(angles[:i])) * np.cos(angles[i]) for i in range(d-1)]
-        coords.append(mu * np.prod(np.sin(angles[:d])))
-
-        data.append(coords)
-    
-    return np.array(data)
-
-def accuracy(y_true, y_pred):
-    correct = 0
-    total = len(y_true)
-    
-    for true, pred in zip(y_true, y_pred):
-        if true == pred:
-            correct += 1
-    
-    accuracy = correct / total
-    return accuracy
-    
 
 def est_varepsilon(X,y,X_new,y_new,w_arr,norm_w_w):
     ridge_model = w_arr[-1]

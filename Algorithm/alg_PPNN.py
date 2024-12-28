@@ -2,10 +2,10 @@ import sys
 sys.path.insert(0, sys.path[0]+"/../") # add parent directory to path
 import numpy as np
 from sklearn.metrics import mean_squared_error
-from functions import accuracy,data_distribution_map1,data_distribution_map2,data_distribution_map3,preprocess_data_shift,linear_data_generation,non_linear_data_generation
+from functions import est_varepsilon,data_distribution_map1,data_distribution_map2,remove_outliers_iqr,linear_data_generation
 from datetime import datetime
 import random
-from PPNN import PerPreNN
+from Algorithm.PPNN import PerPreNN
 import copy
 
 def PPNN(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,strat_features = np.array([1, 6, 8])-1,\

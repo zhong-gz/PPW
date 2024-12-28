@@ -8,7 +8,7 @@ class two_stage_algo:
     def __init__(self,X_base,y_base,tol = 1e-6):
         self.X_base = np.copy(np.c_[np.ones((X_base.shape[0], 1)), X_base] )
         self.y_base = np.copy(y_base)
-        self.theta = None
+        self.coef_ = None
         self.tol = tol
         self.mu_x = None
         self.mu_y = None
@@ -51,13 +51,13 @@ class two_stage_algo:
 
         theta_final, cost_history = self.gradient_descent(self.X_base, self.y_base)
 
-        self.theta = np.copy(theta_final)
+        self.coef_ = np.copy(theta_final)
         self.theta_list = np.concatenate((self.theta_list, np.tile(theta_final,(n, 1))), axis=0)
         return theta_final
 
     def predict(self,X):
         X_b = np.c_[np.ones((X.shape[0], 1)), X] 
-        score = np.dot(X_b, self.theta)
+        score = np.dot(X_b, self.coef_)
         return score.reshape(-1, 1)
 
     def compute_cost(self,X, y, theta):
