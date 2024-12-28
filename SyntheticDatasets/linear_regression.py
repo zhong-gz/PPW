@@ -17,7 +17,7 @@ from functions import linear_data_generation
 # problems parameters
 seed_value = 42
 num_iters = 100
-d_list = [0.1,0.5,1] #,1000,10000 10,100,1000,60,80,100
+d_list = [2,4,8,16] #,1000,10000 10,100,1000,60,80,100
 num_experiments = 10
 map = 1
 folder_path = 'SyntheticDatasets/result/'
@@ -80,22 +80,22 @@ print(f"Data saved to {file_name_npy}")
 #             mse_list_end_avg = mse_list_end_avg, mse_list_end_std = mse_list_end_std)
 # print(f"Data saved to {file_name_npy}")
 
-# # outside the echo chamber
-# model_gaps_avg,model_gaps_std,mse_list_start_avg,mse_list_start_std,mse_list_end_avg,mse_list_end_std,method_name = \
-#     TSA(X,y,num_iters,d_list,map = map,num_experiments = num_experiments,seed_value = seed_value)
-# file_name_npy = f"{folder_path}{method_name}.npz"
-# np.savez(file_name_npy, model_gaps_avg = model_gaps_avg, model_gaps_std = model_gaps_std,\
-#             mse_list_start_avg = mse_list_start_avg, mse_list_start_std = mse_list_start_std,\
-#             mse_list_end_avg = mse_list_end_avg, mse_list_end_std = mse_list_end_std)
-# print(f"Data saved to {file_name_npy}")
+# outside the echo chamber
+model_gaps_avg,model_gaps_std,mse_list_start_avg,mse_list_start_std,mse_list_end_avg,mse_list_end_std,method_name = \
+    TSA(X,y,num_iters,d_list,map = map,num_experiments = num_experiments,seed_value = seed_value)
+file_name_npy = f"{folder_path}{method_name}.npz"
+np.savez(file_name_npy, model_gaps_avg = model_gaps_avg, model_gaps_std = model_gaps_std,\
+            mse_list_start_avg = mse_list_start_avg, mse_list_start_std = mse_list_start_std,\
+            mse_list_end_avg = mse_list_end_avg, mse_list_end_std = mse_list_end_std)
+print(f"Data saved to {file_name_npy}")
 
-# # PerformativeGD
-# model_gaps_avg,model_gaps_std,mse_list_start_avg,mse_list_start_std,mse_list_end_avg,mse_list_end_std,method_name = \
-#     PerformativeGD(X,y,num_iters,d_list,map = map,num_experiments = num_experiments,seed_value = seed_value)
-# file_name_npy = f"{folder_path}{method_name}.npz"
-# np.savez(file_name_npy, model_gaps_avg = model_gaps_avg, model_gaps_std = model_gaps_std,\
-#             mse_list_start_avg = mse_list_start_avg, mse_list_start_std = mse_list_start_std,\
-#             mse_list_end_avg = mse_list_end_avg, mse_list_end_std = mse_list_end_std)
-# print(f"Data saved to {file_name_npy}")
+# PerformativeGD
+model_gaps_avg,model_gaps_std,mse_list_start_avg,mse_list_start_std,mse_list_end_avg,mse_list_end_std,method_name = \
+    PerformativeGD(X,y,num_iters,d_list,map = map,num_experiments = num_experiments,seed_value = seed_value)
+file_name_npy = f"{folder_path}{method_name}.npz"
+np.savez(file_name_npy, model_gaps_avg = model_gaps_avg, model_gaps_std = model_gaps_std,\
+            mse_list_start_avg = mse_list_start_avg, mse_list_start_std = mse_list_start_std,\
+            mse_list_end_avg = mse_list_end_avg, mse_list_end_std = mse_list_end_std)
+print(f"Data saved to {file_name_npy}")
 
 plot_fig(num_iters,d_list,folder_path)

@@ -38,6 +38,7 @@ def method_2(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,kerneltype = 'l
             norm_w_w = []
             varepsilon = []
             varepsilon_temp = 1
+            gamma = 1
             X_old = np.copy(X)
             y_old = np.copy(y)
 

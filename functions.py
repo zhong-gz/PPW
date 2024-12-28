@@ -8,8 +8,12 @@ from sklearn.preprocessing import StandardScaler,MinMaxScaler
 # D(w) = X - mu * w
 def data_distribution_map1(X,y, mu = 0, model = None, strat_features = None):
     if model is not None:
-        X_strat = X + mu * (model.coef_** 2) + np.random.normal(0, 0.1, size=model.coef_.shape)
-        y_strat = y + mu * np.sqrt(X @ model.coef_) + np.random.normal(0, 0.1, size=y.shape)
+        X_strat = X + mu * model.coef_ + np.random.normal(0, 0.1, size=model.coef_.shape)
+        y_strat = y + mu * X @ (model.coef_.T**2) + np.random.normal(0, 0.1, size=y.shape)
+        if np.any(y_strat > 2):
+            # y_strat = np.clip(y_strat, -10, 10)
+            scaler = MinMaxScaler()
+            y_strat = scaler.fit_transform(y_strat.reshape(-1, 1))*2
     else:
         X_strat = np.copy(X)
         y_strat = np.copy(y)
@@ -41,7 +45,11 @@ def data_distribution_map2(X,y, mu = 0, model = None):
 def linear_data_generation(n = 100,n_features = 20):
     X = np.random.rand(n, n_features)
     true_coefficients = [0.8, 0.5, 0.5, 0.3, 0.6, 0.3, 0.6, 0.2, 0.2, 0.4, 0.4, 0.3, 0.1, 0.0, 0.0, 0.3, 0.5, 0.7, 0.5, 0.9]
-    y = X @ true_coefficients + np.random.randn(n) * 0.1  
+    y = X @ true_coefficients + np.random.randn(n) * 0.1
+    scaler = MinMaxScaler()
+    y = scaler.fit_transform(y.reshape(-1, 1))
+    # scaler = MinMaxScaler()
+    # y = scaler.fit_transform(y.reshape(-1, 1))
     return X,y
 
 def est_varepsilon(X,y,X_new,y_new,w_arr,norm_w_w):

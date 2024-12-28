@@ -30,9 +30,14 @@ class LinearRegression_one_iter_gd:
             # LR.fit(X_b, y)
             # self.theta = LR.theta.T.copy() #+ np.random.normal(0, 0.05, size=RR.theta.T.shape) #np.random.randn(X_b.shape[1], 1)  
             self.theta = np.random.randn(X_b.shape[1], 1) # 随机初始化参数
-        gradients = (2 / m) * X_b.T.dot(X_b.dot(self.theta) - y)  # 计算梯度
-        self.theta -= self.learning_rate * gradients  # 更新参数
-        self.coef_ = self.theta[1:]  # 参数，不包括截距项
+        gradients = (2 / m) * X_b.T.dot(X_b.dot(self.theta) - y)
+        threshold = 100  # 设置阈值
+        norm = np.linalg.norm(gradients)
+        if norm > threshold:
+            gradients = gradients * (threshold / norm)
+
+        self.theta -= self.learning_rate * gradients  
+        self.coef_ = self.theta[1:].T  # 参数，不包括截距项
 
     def predict(self, X):
         X_b = np.c_[np.ones((X.shape[0], 1)), X]  # 添加截距项
