@@ -19,8 +19,9 @@ class PerGD:
     def train(self,X,y_ture):
         X_b = np.c_[np.ones((X.shape[0], 1)), X]
         d = X_b.shape[1]
-        self.theta = 2 * np.random.rand(d) - 1
+        
         if len(self.thetas) == 0:
+            self.theta = np.random.rand(d)
             self.thetas.append(self.theta.copy())
         Y = np.copy(y_ture)
         if len(self.thetas) < 2:
@@ -40,7 +41,7 @@ class PerGD:
             else:
                 self.means.append(approx_f(X_b, Y))
                 g2, grad_f = grad2(X_b, Y, self.means, self.thetas, self.s1)
-                grad = grad1(X_b, Y, self.theta) + g2
+                grad = grad1(X_b, Y, self.theta) + 0.01*g2
                 self.grad_fs.append(grad_f)
                 # self.g2s.append(g2)
 

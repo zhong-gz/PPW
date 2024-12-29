@@ -3,7 +3,6 @@ sys.path.insert(0, sys.path[0]+"/../") # add parent directory to path
 import numpy as np
 from functions import est_varepsilon,data_distribution_map1,data_distribution_map2,remove_outliers_iqr,linear_data_generation
 from datetime import datetime
-from functions import CustomLogisticRegression as LogisticRegression
 import random
 from sklearn.metrics import mean_squared_error
 import copy

@@ -1,6 +1,7 @@
 import numpy as np
 from numpy.linalg import lstsq
 from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import Ridge
 import time
 import torch
 
@@ -25,11 +26,11 @@ class two_stage_algo:
         
         model_x = LinearRegression(fit_intercept=False)
         model_x.fit(repeat_theta, self.X_shift)
-        self.mu_x = model_x.coef_.T
+        self.mu_x = model_x.coef_.T*0.1
 
         model_y = LinearRegression(fit_intercept=False)
         model_y.fit(repeat_theta, self.y_shift)
-        self.mu_y = model_y.coef_.T
+        self.mu_y = model_y.coef_.T*0.1
 
         # theta_t_theta = repeat_theta.T @ repeat_theta
         # theta_theta_inv = np.linalg.inv(theta_t_theta + 0.0001*np.eye(theta_t_theta.shape[0]))
@@ -84,30 +85,37 @@ class two_stage_algo:
         # theta = np.random.randn(d)
         learning_rate = 0.01
         num_iterations = 1000
-        max_grad_norm = 10*d
+        max_grad_norm = d
 
         XTY = (X.T@y).reshape(-1)
         y_muy = torch.sum(y[:, None] * self.mu_y, axis=0)
         # y_muy = np.sum(y[:, np.newaxis] * self.mu_y, axis=0)
         for j in range(num_iterations):
+            # gradient = (y_muy+ theta @self.mu_y * self.mu_y -torch.sum(X* theta, axis=0).reshape(-1, 1) * self.mu_y \
+            #             + self.mu_x.mT@theta@theta*self.mu_y ).reshape(-1)\
+            #             - XTY - torch.sum(theta @ self.mu_y*X, axis=0) + X @ theta @ X - torch.sum(self.mu_x.mT@theta@theta*X, axis=0)\
+            #             + torch.sum(self.mu_x.mT @ theta * y, axis=0) + theta @ self.mu_y*self.mu_x.mT @ theta  \
+            #             - torch.sum(theta*self.mu_x.mT @ theta *X, axis=0) + self.mu_x.mT@theta@theta*self.mu_x.mT@theta 
+            
             gradient = (y_muy+ theta @self.mu_y * self.mu_y * m -torch.sum(X* theta, axis=0).reshape(-1, 1) * self.mu_y \
                         + self.mu_x.mT@theta@theta*self.mu_y * m).reshape(-1)\
                         - XTY - torch.sum(theta @ self.mu_y*X, axis=0) + X @ theta @ X - torch.sum(self.mu_x.mT@theta@theta*X, axis=0)\
                         + torch.sum(self.mu_x.mT @ theta * y, axis=0) + theta @ self.mu_y*self.mu_x.mT @ theta *m \
                         - torch.sum(theta*self.mu_x.mT @ theta *X, axis=0) + self.mu_x.mT@theta@theta*self.mu_x.mT@theta * m
+            
             gradient = 2 * gradient / m
             grad_norm = torch.norm(gradient)
             if grad_norm > max_grad_norm:
                 gradient = (gradient / grad_norm) * max_grad_norm
 
-            if torch.isnan(gradient).any():
-                print("Nan in the gradient")
             theta -= learning_rate * gradient
             cost = self.compute_cost(X.cpu().numpy(), y.cpu().numpy(), theta.cpu().numpy())
             cost_history.append(cost)
             if (j > 2) and (abs(cost_history[-1] - cost_history[-2]) < 1e-3):
                 return theta.cpu().numpy(), cost_history
-
+        # theta_norm = torch.norm(theta)
+        # if theta_norm > max_grad_norm*0.2:
+        #         theta = (theta / theta_norm) * max_grad_norm
         return theta.cpu().numpy(), cost_history
         #     gradient = (y_muy+ theta @self.mu_y * self.mu_y * m - np.sum(X * theta, axis=0).reshape(-1, 1) * self.mu_y + self.mu_x.T@theta.T@theta*self.mu_y * m).reshape(-1)\
         #               - XTY - np.sum(theta@self.mu_y*X, axis=0) + X @ theta @ X - np.sum(self.mu_x.T@theta.T@theta*X, axis=0)\
