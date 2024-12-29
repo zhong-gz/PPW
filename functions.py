@@ -8,8 +8,8 @@ from sklearn.preprocessing import StandardScaler,MinMaxScaler
 # D(w) = X - mu * w
 def data_distribution_map1(X,y, mu = 0, model = None, strat_features = None):
     if model is not None:
-        X_strat = X + mu * model.coef_ + np.random.normal(0, 0.01, size=model.coef_.shape)
-        y_strat = y + mu * X @ (model.coef_.T**2) + np.random.normal(0, 0.01, size=y.shape)
+        X_strat = X + mu * model.coef_ + np.random.normal(0, 0.1, size=model.coef_.shape)
+        y_strat = y + mu * X @ (model.coef_.T**2) + np.random.normal(0, 0.1, size=y.shape)
         if np.any(y_strat > 1.5):
             # y_strat = np.clip(y_strat, -10, 10)
             scaler = MinMaxScaler()
