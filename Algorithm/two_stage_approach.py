@@ -12,8 +12,8 @@ class two_stage_algo:
         self.coef_ = None
         self.theta = None
         self.tol = tol
-        self.mu_x = None
-        self.mu_y = None
+        self.mu_x = np.zeros((X_base.shape[1],X_base.shape[1]))
+        self.mu_y = np.zeros((X_base.shape[1],1))
         self.X_shift = None # np.zeros_like(X_base)
         self.y_shift = None
         self.theta_list = np.zeros_like(np.c_[np.ones((X_base.shape[0], 1)), X_base])
@@ -21,15 +21,15 @@ class two_stage_algo:
 
     def calculate_performative_effect(self):
         n = len(self.y_base)
-        repeat_theta = self.theta_list
+        repeat_theta = self.theta_list 
         
         model_x = LinearRegression() #fit_intercept=False
         model_x.fit(repeat_theta, self.X_shift)
-        self.mu_x = model_x.coef_.T
+        self.mu_x = 0.5 * model_x.coef_.T + 0.5 * self.mu_x
 
         model_y = LinearRegression() #fit_intercept=False
         model_y.fit(repeat_theta, self.y_shift)
-        self.mu_y = model_y.coef_.T
+        self.mu_y = 0.5 * model_y.coef_.T + 0.5 * self.mu_y
 
         # theta_t_theta = repeat_theta.T @ repeat_theta
         # theta_theta_inv = np.linalg.inv(theta_t_theta + 0.0001*np.eye(theta_t_theta.shape[0]))
@@ -95,7 +95,7 @@ class two_stage_algo:
             #             - XTY - torch.sum(theta @ self.mu_y*X, axis=0) + X @ theta @ X - torch.sum(self.mu_x.mT@theta@theta*X, axis=0)\
             #             + torch.sum(self.mu_x.mT @ theta * y, axis=0) + theta @ self.mu_y*self.mu_x.mT @ theta  \
             #             - torch.sum(theta*self.mu_x.mT @ theta *X, axis=0) + self.mu_x.mT@theta@theta*self.mu_x.mT@theta 
-            
+
             gradient = (y_muy+ theta @self.mu_y * self.mu_y * m -torch.sum(X* theta, axis=0).reshape(-1, 1) * self.mu_y \
                         + self.mu_x.mT@theta@theta*self.mu_y * m).reshape(-1)\
                         - XTY - torch.sum(theta @ self.mu_y*X, axis=0) + X @ theta @ X - torch.sum(self.mu_x.mT@theta@theta*X, axis=0)\
@@ -103,7 +103,7 @@ class two_stage_algo:
                         - torch.sum(theta*self.mu_x.mT @ theta *X, axis=0) + self.mu_x.mT@theta@theta*self.mu_x.mT@theta * m
 
             # gradient = X.T@(X@theta - y.reshape(-1))
-            
+
             gradient = 2 * gradient / m
             grad_norm = torch.norm(gradient)
             if grad_norm > max_grad_norm:

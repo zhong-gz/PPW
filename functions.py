@@ -33,10 +33,10 @@ def data_distribution_map2(X,y, mu = 0, model = None):
     hat_y = model.predict(X)
     mean_hat_y = np.mean(hat_y)
     y_strat = y - mu*(hat_y-mean_hat_y) + np.random.normal(0, 0.1, size=y.shape)
-    if np.any(y_strat > 1.5):
+    if np.any(y_strat > 2):
         # y_strat = np.clip(y_strat, -10, 10)
         scaler = MinMaxScaler()
-        y_strat = scaler.fit_transform(y_strat.reshape(-1, 1))*1.5
+        y_strat = scaler.fit_transform(y_strat.reshape(-1, 1))*2
 
     # y_strat = np.clip(y - mu*(hat_y-mean_hat_y), a_min=0, a_max=1.2) + np.random.normal(0, 0.1, size=y.shape)
     # hat_y = model.predict(X)
