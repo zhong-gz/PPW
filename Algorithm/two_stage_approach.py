@@ -25,11 +25,11 @@ class two_stage_algo:
         
         model_x = LinearRegression() #fit_intercept=False
         model_x.fit(repeat_theta, self.X_shift)
-        self.mu_x = 0.1 * model_x.coef_.T + 0.9 * self.mu_x
+        self.mu_x = 0.2 * model_x.coef_.T + 0.8 * self.mu_x
 
         model_y = LinearRegression() #fit_intercept=False
         model_y.fit(repeat_theta, self.y_shift)
-        self.mu_y = 0.1 * model_y.coef_.T + 0.9 * self.mu_y
+        self.mu_y = 0.2 * model_y.coef_.T + 0.8 * self.mu_y
 
         # theta_t_theta = repeat_theta.T @ repeat_theta
         # theta_theta_inv = np.linalg.inv(theta_t_theta + 0.0001*np.eye(theta_t_theta.shape[0]))
