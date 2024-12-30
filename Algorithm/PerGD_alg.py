@@ -19,11 +19,10 @@ class PerGD:
     def train(self,X,y_ture):
         X_b = np.c_[np.ones((X.shape[0], 1)), X]
         d = X_b.shape[1]
-        
+        Y = np.copy(y_ture)
         if len(self.thetas) == 0:
             self.theta = np.random.rand(d)
             self.thetas.append(self.theta.copy())
-        Y = np.copy(y_ture)
         if len(self.thetas) < 2:
             # model = Ridge(alpha = 0, fit_intercept=False)
             # model.fit(X_b, Y)

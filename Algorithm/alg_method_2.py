@@ -2,7 +2,7 @@ import sys
 sys.path.insert(0, sys.path[0]+"/../") # add parent directory to path
 import numpy as np
 from sklearn.linear_model import Ridge
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error,mean_absolute_error,r2_score
 from functions import est_varepsilon,data_distribution_map1,data_distribution_map2,remove_outliers_iqr,linear_data_generation
 import copy
 from datetime import datetime
@@ -57,7 +57,8 @@ def method_2(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,kerneltype = 'l
 
                 # evaluate initial loss on the current distribution
                 hat_y = ridge_model.predict(X_strat)
-                mse = mean_squared_error(y_strat, hat_y)
+                # mse = mean_squared_error(y_strat, hat_y)
+                mse = mean_absolute_error(y_strat, hat_y)
                 mse_list_start[i,k,t] = mse
 
                 # # learn on induced distribution
@@ -67,7 +68,8 @@ def method_2(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,kerneltype = 'l
                 
                 # evaluate final loss on the current distribution
                 hat_y_new = ridge_model_new.predict(X_strat)
-                mse = mean_squared_error(y_strat, hat_y_new)
+                # mse = mean_squared_error(y_strat, hat_y_new)
+                mse = mean_absolute_error(y_strat, hat_y_new)
                 mse_list_end[i,k,t] = mse
 
                 # keep track of statistics
