@@ -32,43 +32,43 @@ print('Sample dimension : ',d)
 print('-'*50)
 strat_features = None
 
-# # method 1
-# model_gaps_avg,model_gaps_std,mse_list_start_avg,mse_list_start_std,mse_list_end_avg,mse_list_end_std,method_name = \
-#     method_1(X,y,num_iters,d_list,map = map,num_experiments = num_experiments,seed_value = seed_value)
-# file_name_npy = f"{folder_path}{method_name}.npz"
-# print(file_name_npy)
-# np.savez(file_name_npy, model_gaps_avg = model_gaps_avg, model_gaps_std = model_gaps_std,\
-#             mse_list_start_avg = mse_list_start_avg, mse_list_start_std = mse_list_start_std,\
-#             mse_list_end_avg = mse_list_end_avg, mse_list_end_std = mse_list_end_std)
-# print(f"Data saved to {file_name_npy}")
+# method 1
+model_gaps_avg,model_gaps_std,mse_list_start_avg,mse_list_start_std,mse_list_end_avg,mse_list_end_std,method_name = \
+    method_1(X,y,num_iters,d_list,map = map,num_experiments = num_experiments,seed_value = seed_value)
+file_name_npy = f"{folder_path}{method_name}.npz"
+print(file_name_npy)
+np.savez(file_name_npy, model_gaps_avg = model_gaps_avg, model_gaps_std = model_gaps_std,\
+            mse_list_start_avg = mse_list_start_avg, mse_list_start_std = mse_list_start_std,\
+            mse_list_end_avg = mse_list_end_avg, mse_list_end_std = mse_list_end_std)
+print(f"Data saved to {file_name_npy}")
 
-# # method 2
-# model_gaps_avg,model_gaps_std,mse_list_start_avg,mse_list_start_std,mse_list_end_avg,mse_list_end_std,method_name = \
-#     method_2(X,y,num_iters,d_list,map = map,num_experiments = num_experiments,seed_value = seed_value)
-# file_name_npy = f"{folder_path}{method_name}.npz"
-# print(file_name_npy)
-# np.savez(file_name_npy, model_gaps_avg = model_gaps_avg, model_gaps_std = model_gaps_std,\
-#             mse_list_start_avg = mse_list_start_avg, mse_list_start_std = mse_list_start_std,\
-#             mse_list_end_avg = mse_list_end_avg, mse_list_end_std = mse_list_end_std)
-# print(f"Data saved to {file_name_npy}")
+# method 2
+model_gaps_avg,model_gaps_std,mse_list_start_avg,mse_list_start_std,mse_list_end_avg,mse_list_end_std,method_name = \
+    method_2(X,y,num_iters,d_list,map = map,num_experiments = num_experiments,seed_value = seed_value)
+file_name_npy = f"{folder_path}{method_name}.npz"
+print(file_name_npy)
+np.savez(file_name_npy, model_gaps_avg = model_gaps_avg, model_gaps_std = model_gaps_std,\
+            mse_list_start_avg = mse_list_start_avg, mse_list_start_std = mse_list_start_std,\
+            mse_list_end_avg = mse_list_end_avg, mse_list_end_std = mse_list_end_std)
+print(f"Data saved to {file_name_npy}")
 
-# # RRM
-# model_gaps_avg,model_gaps_std,mse_list_start_avg,mse_list_start_std,mse_list_end_avg,mse_list_end_std,method_name = \
-#     RRM(X,y,num_iters,d_list,map = map,num_experiments = num_experiments,seed_value = seed_value)
-# file_name_npy = f"{folder_path}{method_name}.npz"
-# np.savez(file_name_npy, model_gaps_avg = model_gaps_avg, model_gaps_std = model_gaps_std,\
-#             mse_list_start_avg = mse_list_start_avg, mse_list_start_std = mse_list_start_std,\
-#             mse_list_end_avg = mse_list_end_avg, mse_list_end_std = mse_list_end_std)
-# print(f"Data saved to {file_name_npy}")
+# RRM
+model_gaps_avg,model_gaps_std,mse_list_start_avg,mse_list_start_std,mse_list_end_avg,mse_list_end_std,method_name = \
+    RRM(X,y,num_iters,d_list,map = map,num_experiments = num_experiments,seed_value = seed_value)
+file_name_npy = f"{folder_path}{method_name}.npz"
+np.savez(file_name_npy, model_gaps_avg = model_gaps_avg, model_gaps_std = model_gaps_std,\
+            mse_list_start_avg = mse_list_start_avg, mse_list_start_std = mse_list_start_std,\
+            mse_list_end_avg = mse_list_end_avg, mse_list_end_std = mse_list_end_std)
+print(f"Data saved to {file_name_npy}")
 
-# # RGD
-# model_gaps_avg,model_gaps_std,mse_list_start_avg,mse_list_start_std,mse_list_end_avg,mse_list_end_std,method_name = \
-#     RGD(X,y,num_iters,d_list,map = map,num_experiments = num_experiments,seed_value = seed_value)
-# file_name_npy = f"{folder_path}{method_name}.npz"
-# np.savez(file_name_npy, model_gaps_avg = model_gaps_avg, model_gaps_std = model_gaps_std,\
-#             mse_list_start_avg = mse_list_start_avg, mse_list_start_std = mse_list_start_std,\
-#             mse_list_end_avg = mse_list_end_avg, mse_list_end_std = mse_list_end_std)
-# print(f"Data saved to {file_name_npy}")
+# RGD
+model_gaps_avg,model_gaps_std,mse_list_start_avg,mse_list_start_std,mse_list_end_avg,mse_list_end_std,method_name = \
+    RGD(X,y,num_iters,d_list,map = map,num_experiments = num_experiments,seed_value = seed_value)
+file_name_npy = f"{folder_path}{method_name}.npz"
+np.savez(file_name_npy, model_gaps_avg = model_gaps_avg, model_gaps_std = model_gaps_std,\
+            mse_list_start_avg = mse_list_start_avg, mse_list_start_std = mse_list_start_std,\
+            mse_list_end_avg = mse_list_end_avg, mse_list_end_std = mse_list_end_std)
+print(f"Data saved to {file_name_npy}")
 
 # # ppnn
 # model_gaps_avg,model_gaps_std,mse_list_start_avg,mse_list_start_std,mse_list_end_avg,mse_list_end_std,method_name = \

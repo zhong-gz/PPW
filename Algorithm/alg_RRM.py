@@ -49,7 +49,7 @@ def RRM(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,strat_features = np.
                 # evaluate initial loss on the current distribution
                 pred_label_old = RR.predict(X_strat)
                 # mse = mean_squared_error(y_strat, pred_label_old)
-                mse = mean_absolute_error(y_strat, pred_label_old)
+                mse = np.sqrt(mean_absolute_error(y_strat, pred_label_old))
                 mse_list_start[i,k,t] = mse
 
                 # learn on induced distribution
@@ -60,7 +60,7 @@ def RRM(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,strat_features = np.
                 # evaluate final loss on the current distribution
                 pred_label = RR_new.predict(X_strat)
                 # mse = mean_squared_error(y_strat, pred_label)
-                mse = mean_absolute_error(y_strat, pred_label)
+                mse = np.sqrt(mean_absolute_error(y_strat, pred_label))
                 mse_list_end[i,k,t] = mse
                 
                 RR = copy.deepcopy(RR_new)

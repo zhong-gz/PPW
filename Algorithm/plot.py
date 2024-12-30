@@ -11,6 +11,13 @@ import pandas as pd
 # problems parameters
 num_iters = 100
 d_list = [10,1000,10000]
+def format_number(number):
+    formatted_number = f"{number:.3e}"
+    coefficient, exponent = formatted_number.split('e')
+    coefficient = str(float(coefficient))
+    exponent = exponent.lstrip('+0') if exponent[0] != '-' else '-' + exponent[1:].lstrip('0')
+    formatted_string = f"{coefficient}*10^{{{exponent}}}"
+    return formatted_string
 
 def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/'):
     num_d  = len(d_list)
@@ -29,7 +36,7 @@ def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/'):
         data.close()
 
     colors = ['b', 'g', 'r', 'c', 'm', 'k', 'y', 'orange','purple']
-    markers = ['o', 's', '^', 'D', 'v', 'p', '*', 'x','3']
+    markers = ['o', 'D', '^', 's', 'v', 'p', '*', 'x','3']
     linestyles = ['-', '--', '-.', ':', '-', '--', '-.', ':','-']
 
     for c in range(num_d):
@@ -47,7 +54,7 @@ def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/'):
                 max_element = max(max_element,np.max(np.maximum.reduce(arrays)))
                 min_element = min(min_element,np.min(np.minimum.reduce(arrays)))
         plt.xlabel('Iteration', fontsize = 18)
-        plt.ylabel('MAE', fontsize = 18)
+        plt.ylabel('RMSE', fontsize = 18)
         plt.tick_params(labelsize=18)
         # plt.ylim(0, 10)
         plt.yscale('log')
@@ -70,7 +77,7 @@ def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/'):
             max_element = max(max_element,np.max(np.maximum.reduce(mse_list_start_avg[c])))
             min_element = min(min_element,np.min(np.minimum.reduce(mse_list_start_avg[c])))
         plt.xlabel('Iteration', fontsize = 18)
-        plt.ylabel('MAE', fontsize = 18)
+        plt.ylabel('RMSE', fontsize = 18)
         plt.tick_params(labelsize=18)
         # plt.ylim(0, 10)
         plt.yscale('log')
@@ -93,7 +100,7 @@ def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/'):
             max_element = max(max_element,np.max(np.maximum.reduce(mse_list_start_avg[c])))
             min_element = min(min_element,np.min(np.minimum.reduce(mse_list_start_avg[c])))
         plt.xlabel('Iteration', fontsize = 18)
-        plt.ylabel('MAE', fontsize = 18)
+        plt.ylabel('RMSE', fontsize = 18)
         plt.tick_params(labelsize=18)
         # plt.ylim(0, 10)
         plt.yscale('log')
@@ -154,7 +161,8 @@ def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/'):
         model_gaps_avg = inner_dict.get('model_gaps_avg')
         means = np.mean(model_gaps_avg[:,5:], axis=1)
         stds = np.std(model_gaps_avg[:,5:], axis=1)
-        data = [f"{np.round(mean, decimals=3)} $\\pm$ {np.round(std, decimals=3)}" for mean, std in zip(means, stds)]
+        # data = [f"{format_number(np.round(mean, decimals=3))} $\\pm$ {format_number(np.round(std, decimals=3))}" for mean, std in zip(means, stds)]
+        data = [f"{format_number(mean)} $\\pm$ {format_number(std)}" for mean, std in zip(means, stds)]
         df[methods_name] = data
     df.insert(0, ' ', descriptions)
     # df.rename(index={0: 'Mean and Standard diviation of Model Gap after 5 steps'}, inplace=True)
@@ -172,7 +180,8 @@ def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/'):
         mse_list_start_avg = inner_dict.get('mse_list_start_avg')
         means = np.mean(mse_list_start_avg[:,5:], axis=1)
         stds = np.std(mse_list_start_avg[:,5:], axis=1)
-        data = [f"{np.round(mean, decimals=3)} $\\pm$ {np.round(std, decimals=3)}" for mean, std in zip(means, stds)]
+        # data = [f"{format_number(np.round(mean, decimals=3))} $\\pm$ {format_number(np.round(std, decimals=3))}" for mean, std in zip(means, stds)]
+        data = [f"{format_number(mean)} $\\pm$ {format_number(std)}" for mean, std in zip(means, stds)]
         df[methods_name] = data
     df.insert(0, ' ', descriptions)
     # df.rename(index={0: 'Mean and Standard diviation of Accuracy after 5 steps'}, inplace=True)

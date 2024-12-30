@@ -1,13 +1,23 @@
-import numpy as np
+def format_number(number):
+    # 使用科学记数法格式化数字，保留三位小数
+    formatted_number = f"{number:.3e}"
+    
+    # 拆分成系数和指数部分
+    coefficient, exponent = formatted_number.split('e')
+    
+    # 去掉系数中的多余的0
+    coefficient = str(float(coefficient))
+    
+    # 处理指数部分，去掉前导的正号
+    exponent = exponent.lstrip('+0') if exponent[0] != '-' else '-' + exponent[1:].lstrip('0')
+    
+    # 构造最终的字符串形式
+    formatted_string = f"{coefficient}*10^{{{exponent}}}"
+    
+    return formatted_string
 
-# 创建一个向量
-vector = np.array([1, 4, 9, 16, 25])
+# 测试示例
+numbers = [12345, 0.0001251]
 
-# 检查是否所有元素都是非负的
-if np.all(vector >= 0):
-    # 将向量的每个元素开根号
-    sqrt_vector = np.sqrt(vector)
-    print("原始向量:", vector)
-    print("开根号后的向量:", sqrt_vector)
-else:
-    print("向量中包含负数，无法进行开根号操作。")
+for number in numbers:
+    print(format_number(number))

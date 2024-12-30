@@ -12,8 +12,8 @@ class two_stage_algo:
         self.coef_ = None
         self.theta = None
         self.tol = tol
-        self.mu_x = np.zeros((X_base.shape[1],X_base.shape[1]))
-        self.mu_y = np.zeros((X_base.shape[1],1))
+        self.mu_x = np.zeros((X_base.shape[1]+1,X_base.shape[1]+1))
+        self.mu_y = np.zeros((X_base.shape[1]+1,1))
         self.X_shift = None # np.zeros_like(X_base)
         self.y_shift = None
         self.theta_list = np.zeros_like(np.c_[np.ones((X_base.shape[0], 1)), X_base])
@@ -25,11 +25,11 @@ class two_stage_algo:
         
         model_x = LinearRegression() #fit_intercept=False
         model_x.fit(repeat_theta, self.X_shift)
-        self.mu_x = 0.5 * model_x.coef_.T + 0.5 * self.mu_x
+        self.mu_x = 0.1 * model_x.coef_.T + 0.9 * self.mu_x
 
         model_y = LinearRegression() #fit_intercept=False
         model_y.fit(repeat_theta, self.y_shift)
-        self.mu_y = 0.5 * model_y.coef_.T + 0.5 * self.mu_y
+        self.mu_y = 0.1 * model_y.coef_.T + 0.9 * self.mu_y
 
         # theta_t_theta = repeat_theta.T @ repeat_theta
         # theta_theta_inv = np.linalg.inv(theta_t_theta + 0.0001*np.eye(theta_t_theta.shape[0]))
@@ -113,10 +113,14 @@ class two_stage_algo:
             cost = self.compute_cost(X.cpu().numpy(), y.cpu().numpy(), theta.cpu().numpy())
             cost_history.append(cost)
             if (j > 2) and (abs(cost_history[-1] - cost_history[-2]) < 1e-3):
+                self.mu_x = self.mu_x.cpu().numpy()
+                self.mu_y = self.mu_y.cpu().numpy()
                 return theta.cpu().numpy(), cost_history
         # theta_norm = torch.norm(theta)
         # if theta_norm > max_grad_norm*0.2:
         #         theta = (theta / theta_norm) * max_grad_norm
+        self.mu_x = self.mu_x.cpu().numpy()
+        self.mu_y = self.mu_y.cpu().numpy()
         return theta.cpu().numpy(), cost_history
         #     gradient = (y_muy+ theta @self.mu_y * self.mu_y * m - np.sum(X * theta, axis=0).reshape(-1, 1) * self.mu_y + self.mu_x.T@theta.T@theta*self.mu_y * m).reshape(-1)\
         #               - XTY - np.sum(theta@self.mu_y*X, axis=0) + X @ theta @ X - np.sum(self.mu_x.T@theta.T@theta*X, axis=0)\
