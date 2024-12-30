@@ -48,12 +48,12 @@ class two_stage_algo:
             self.X_shift = np.concatenate((self.X_shift, X), axis=0)
             self.y_shift = np.concatenate((self.y_shift, y), axis=0)
 
-        if self.theta_list.shape[0]/n > (X.shape[1]+1):
-            self.calculate_performative_effect()
+        # if self.theta_list.shape[0]/n > (X.shape[1]+5):
+        self.calculate_performative_effect()
 
         theta_final, cost_history = self.gradient_descent(self.X_base, self.y_base)
+        self.theta = np.copy(theta_final) 
 
-        self.theta = np.copy(theta_final)
         self.coef_ = np.copy(theta_final[1:])[:, np.newaxis].T
         self.theta_list = np.concatenate((self.theta_list, np.tile(theta_final,(n, 1))), axis=0)
         return theta_final
