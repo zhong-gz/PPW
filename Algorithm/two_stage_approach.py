@@ -107,7 +107,7 @@ class two_stage_algo:
                 gradient = (gradient / grad_norm) * max_grad_norm
 
             theta -= learning_rate * gradient
-            theta.clamp_(0, clip_value)
+            theta.clamp_(-clip_value*0.5, clip_value)
             cost = self.compute_cost(X.cpu().numpy(), y.cpu().numpy(), theta.cpu().numpy())
             cost_history.append(cost)
             if (j > 2) and (abs(cost_history[-1] - cost_history[-2]) < 1e-3):

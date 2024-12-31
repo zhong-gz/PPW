@@ -24,7 +24,7 @@ opt_theta = c * a0 * (1 - a1) / (c * (1 - a1) ** 2 + loss_reg)
 fixed_theta = c * a0 / (c * (1 - a1) + loss_reg)
 
 def clip_coord(z):
-    R = 10
+    R = 0.8
     if z > R:
         return R
     elif z < -R:

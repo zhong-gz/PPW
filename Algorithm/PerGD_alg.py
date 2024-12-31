@@ -31,7 +31,7 @@ class PerGD:
             self.betas.append(approx_beta(X_b, Y))
         else:
             g2, grad_beta = grad2(X_b, Y, self.betas, self.thetas)
-            grad = grad1(X_b, Y, self.theta) + 0.01*g2
+            grad = grad1(X_b, Y, self.theta) + g2
             self.theta = clip(self.theta - self.lr * grad)
 
             self.thetas.append(self.theta)
