@@ -48,8 +48,8 @@ class two_stage_algo:
             self.X_shift = np.concatenate((self.X_shift, X), axis=0)
             self.y_shift = np.concatenate((self.y_shift, y), axis=0)
 
-        if self.theta_list.shape[0]/n > (X.shape[1]+5):
-            self.calculate_performative_effect()
+        # if self.theta_list.shape[0]/n > (X.shape[1]+5):
+        self.calculate_performative_effect()
 
         theta_final, cost_history = self.gradient_descent(self.X_base, self.y_base)
         self.theta = np.copy(theta_final) 
@@ -86,6 +86,7 @@ class two_stage_algo:
         learning_rate = 0.1
         num_iterations = 1000
         max_grad_norm = d
+        clip_value = 1
 
         XTY = (X.T@y).reshape(-1)
         y_muy = torch.sum(y[:, None] * self.mu_y, axis=0)
@@ -95,7 +96,8 @@ class two_stage_algo:
                         + self.mu_x.mT@theta@theta*self.mu_y * m).reshape(-1)\
                         - XTY - torch.sum(theta @ self.mu_y*X, axis=0) + X @ theta @ X - torch.sum(self.mu_x.mT@theta@theta*X, axis=0)\
                         + torch.sum(self.mu_x.mT @ theta * y, axis=0) + theta @ self.mu_y*self.mu_x.mT @ theta *m \
-                        - torch.sum(theta*self.mu_x.mT @ theta *X, axis=0) + self.mu_x.mT@theta@theta*self.mu_x.mT@theta * m
+                        - torch.sum(theta*self.mu_x.mT @ theta *X, axis=0) + self.mu_x.mT@theta@theta*self.mu_x.mT@theta * m\
+                        + theta
 
             # gradient = X.T@(X@theta - y.reshape(-1))
 
@@ -105,6 +107,7 @@ class two_stage_algo:
                 gradient = (gradient / grad_norm) * max_grad_norm
 
             theta -= learning_rate * gradient
+            theta.clamp_(0, clip_value)
             cost = self.compute_cost(X.cpu().numpy(), y.cpu().numpy(), theta.cpu().numpy())
             cost_history.append(cost)
             if (j > 2) and (abs(cost_history[-1] - cost_history[-2]) < 1e-3):
