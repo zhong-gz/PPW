@@ -23,18 +23,18 @@ class two_stage_algo:
         n = len(self.y_base)
         repeat_theta = self.theta_list
         
-        model_x = LinearRegression() #fit_intercept=False
-        model_x.fit(repeat_theta, self.X_shift)
-        self.mu_x = model_x.coef_.T # 0.3 * model_x.coef_.T + 0.7 * self.mu_x
+        # model_x = LinearRegression() #fit_intercept=False
+        # model_x.fit(repeat_theta, self.X_shift)
+        # self.mu_x = model_x.coef_.T # 0.3 * model_x.coef_.T + 0.7 * self.mu_x
 
-        model_y = LinearRegression() #fit_intercept=False
-        model_y.fit(repeat_theta, self.y_shift)
-        self.mu_y = model_y.coef_.T #0.3 * model_y.coef_.T + 0.7 * self.mu_y
+        # model_y = LinearRegression() #fit_intercept=False
+        # model_y.fit(repeat_theta, self.y_shift)
+        # self.mu_y = model_y.coef_.T #0.3 * model_y.coef_.T + 0.7 * self.mu_y
 
-        # theta_t_theta = repeat_theta.T @ repeat_theta
-        # theta_theta_inv = np.linalg.inv(theta_t_theta + 0.0001*np.eye(theta_t_theta.shape[0]))
-        # self.mu_x = theta_theta_inv @ repeat_theta.T @ self.X_shift
-        # self.mu_y = theta_theta_inv @ repeat_theta.T @ self.y_shift 
+        theta_t_theta = repeat_theta.T @ repeat_theta
+        theta_theta_inv = np.linalg.inv(theta_t_theta + 0.01*np.eye(theta_t_theta.shape[0]))
+        self.mu_x = theta_theta_inv @ repeat_theta.T @ self.X_shift
+        self.mu_y = theta_theta_inv @ repeat_theta.T @ self.y_shift 
 
     def train(self,X,y_ture):
         y = np.copy(y_ture)
@@ -48,8 +48,8 @@ class two_stage_algo:
             self.X_shift = np.concatenate((self.X_shift, X), axis=0)
             self.y_shift = np.concatenate((self.y_shift, y), axis=0)
 
-        # if self.theta_list.shape[0]/n > (X.shape[1]+5):
-        self.calculate_performative_effect()
+        if self.theta_list.shape[0]/n > (X.shape[1]+5):
+            self.calculate_performative_effect()
 
         theta_final, cost_history = self.gradient_descent(self.X_base, self.y_base)
         self.theta = np.copy(theta_final) 
