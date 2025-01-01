@@ -41,4 +41,4 @@ class PerGD:
     def predict(self,X):
         X_b = np.c_[np.ones((X.shape[0], 1)), X]
         predictions = np.dot(X_b, self.theta)
-        return predictions
+        return predictions.reshape(-1, 1)
