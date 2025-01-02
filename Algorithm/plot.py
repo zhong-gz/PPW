@@ -25,7 +25,7 @@ def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/'):
     # methods = ['PPW-AVG','PPW-EMA','RRM_Linear_Regression','RGD_Linear_Regression','RRM with Neural Networks','Two-Stage Approach','PerGD']
     # methods = ['PPW-AVG','PPW-EMA','RRM_Linear_Regression','RGD_Linear_Regression','PerGD']
     # methods = ['RGD_Linear_Regression']
-    methods = ['PPW-AVG','PPW-EMA','RRM_Linear_Regression','RGD_Linear_Regression','Two-Stage Approach','PerGD'] #
+    methods = ['PPW-AVG','PPW-EMA','RRM_Linear_Regression','RGD_Linear_Regression','Two-Stage Approach','PerGD','DFO'] #
 
     for methods_name in methods:
         data = np.load(folder_path+methods_name + '.npz')
@@ -35,9 +35,9 @@ def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/'):
     
         data.close()
 
-    colors = ['b', 'g', 'r', 'c', 'm', 'k', 'y', 'orange','purple']
-    markers = ['o', 'D', '^', 's', 'v', 'p', '*', 'x','3']
-    linestyles = ['-', '--', '-.', ':', '-', '--', '-.', ':','-']
+    colors = ['b', 'g', 'r', 'c', 'm', 'k', 'y', 'orange','purple','aqua','azure', 'beige', 'bisque']
+    markers = ['o', 'D', '^', 's', 'v', 'p', '*', 'x','3','4','8','h','+']
+    linestyles = ['-', '--', '-.', ':', '-', '--', '-.', ':','-', '--', '-.', ':']
 
     for c in range(num_d):
         fig = plt.figure(figsize=(15,6))
