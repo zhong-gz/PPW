@@ -1,23 +1,28 @@
-def format_number(number):
-    # 使用科学记数法格式化数字，保留三位小数
-    formatted_number = f"{number:.3e}"
-    
-    # 拆分成系数和指数部分
-    coefficient, exponent = formatted_number.split('e')
-    
-    # 去掉系数中的多余的0
-    coefficient = str(float(coefficient))
-    
-    # 处理指数部分，去掉前导的正号
-    exponent = exponent.lstrip('+0') if exponent[0] != '-' else '-' + exponent[1:].lstrip('0')
-    
-    # 构造最终的字符串形式
-    formatted_string = f"{coefficient}*10^{{{exponent}}}"
-    
-    return formatted_string
+import matplotlib.pyplot as plt
+import numpy as np
 
-# 测试示例
-numbers = [12345, 0.0001251]
+# 定义x的范围
+x = np.linspace(0, 5, 400)
 
-for number in numbers:
-    print(format_number(number))
+# 计算y的值
+y = 0.5 ** x
+
+# 创建图形
+plt.figure(figsize=(10, 6))
+
+# 绘制函数图像
+plt.plot(x, y, label=r'$y = 0.5^x$')
+
+# 添加标题和标签
+plt.title('Graph of $y = 0.5^x$')
+plt.xlabel('$x$')
+plt.ylabel('$y$')
+
+# 添加网格
+plt.grid(True)
+
+# 添加图例
+plt.legend()
+
+# 显示图像
+plt.show()

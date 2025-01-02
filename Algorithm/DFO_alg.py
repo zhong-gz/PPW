@@ -32,19 +32,18 @@ class DFO_GD:
 
         if self.outer_iter == 0 and self.inner_iter == 0:
             # step size 相关的参数
-            self.delta0 = d ** (1/6) * 50 #100 # 这里的50非常重要，决定了收敛的CPU time
+            self.delta0 = d ** (1/6) * 100 #100 # 这里的50非常重要，决定了收敛的CPU time
             self.beta = 1/6
-            self.eta0 = d ** (-2/3) * 0.1 #0.3
+            self.eta0 = d ** (-2/3) * 0.3 #0.3
             self.alpha = -2/3
             self.theta, self.sample_z = self.initialization(X_b,y)
             self.pert_theta = np.copy(self.theta)
             self.coef_ = self.theta[1:].reshape(-1,1).T
         
         if self.inner_iter == 0:
-            self.outer_iter += 1
             temp = self.tau0 * np.log(self.outer_iter + 1)
             self.tau_k = max(1, int(temp))
-            self.new_uk = self.sample_unit_sphere(d)  # direction
+            self.new_uk = self.sample_unit_sphere(d) # direction
             self.delta_k = self.step_size('delta')
             # self.inner_iter = 1
             
@@ -57,8 +56,10 @@ class DFO_GD:
             # grd = self.problem.dim / delta_k * self.problem.expect_loss(pert_theta) * uk  #如果用真正的grd是可以收敛的
 
             # update theta
-            self.theta = self.theta - self.step_size('eta') * (self.forgetting_factor ** (self.tau_k - self.inner_iter)) * grd *0.1
-            self.pert_theta = np.clip(self.theta + self.delta_k * self.new_uk * 0.01,-1.5,1.5)
+            rate = 0.021
+            lr = (self.forgetting_factor ** (((self.tau_k - self.inner_iter)*0.2)+5))
+            self.theta = self.theta - self.step_size('eta') * lr * grd *rate
+            self.pert_theta = np.clip(self.theta + self.delta_k * self.new_uk * rate,-1.5,1.5)
             self.inner_iter += 1
 
         if self.inner_iter == self.tau_k:
