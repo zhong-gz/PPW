@@ -41,7 +41,7 @@ class DFO_GD:
             self.coef_ = self.theta[1:].reshape(-1,1).T
         
         if self.inner_iter == 0:
-            temp = self.tau0 * np.log(self.outer_iter + 1)
+            temp = self.tau0 * np.log(self.outer_iter + 1)+2
             self.tau_k = max(1, int(temp))
             self.new_uk = self.sample_unit_sphere(d) # direction
             self.delta_k = self.step_size('delta')
@@ -53,14 +53,14 @@ class DFO_GD:
             # new_sample = self.problem.sample_from_stationary_dist(pert_theta)
             self.sample_count += 1
 
-            grd = d / self.delta_k * ((self.ell_loss(self.pert_theta, X_b,y)/n)/d) * (self.new_uk + np.random.normal(0, 0.05, d))
+            grd = d / self.delta_k * ((self.ell_loss(self.pert_theta, X_b,y)/n)/d) * (self.new_uk )
             # grd = self.problem.dim / delta_k * self.problem.expect_loss(pert_theta) * uk  #如果用真正的grd是可以收敛的
 
             # update theta
             rate = 0.01
-            lr = (self.forgetting_factor ** (((self.tau_k - self.inner_iter)*0.2)+2))
-            self.theta = self.theta - self.step_size('eta') * lr * grd *rate
-            self.pert_theta = np.clip(self.theta + self.delta_k * (self.new_uk+ np.random.normal(0, 0.05, d)) * rate,-1.5,1.5)
+            lr = (self.forgetting_factor ** (((self.tau_k - self.inner_iter)*0.3)))
+            self.theta = self.theta - self.step_size('eta') * lr * grd *0.05
+            self.pert_theta = np.clip(self.theta + self.delta_k * self.new_uk*0.01,0,1)
             self.inner_iter += 1
 
         if self.inner_iter == self.tau_k:
