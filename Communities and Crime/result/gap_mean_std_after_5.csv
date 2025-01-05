@@ -1,9 +1,9 @@
 ,d = 2,d = 4,d = 8,d = 16
-PPW-AVG,$2.012 \times 10^{-3} \pm 5.85 \times 10^{-3}$,$7.985 \times 10^{-3} \pm 2.41 \times 10^{-2}$,$3.223 \times 10^{-3} \pm 9.119 \times 10^{-3}$,$5.114 \times 10^{-3} \pm 1.239 \times 10^{-2}$
-PPW-EMA,$2.798 \times 10^{-3} \pm 1.167 \times 10^{-2}$,$8.191 \times 10^{-3} \pm 3.019 \times 10^{-2}$,$3.076 \times 10^{-3} \pm 1.11 \times 10^{-2}$,$7.426 \times 10^{-3} \pm 1.543 \times 10^{-2}$
-RRM_Linear_Regression,$1.979 \times 10^{1} \pm 3.617 \times 10^{}$,$8.181 \times 10^{} \pm 1.077 \times 10^{}$,$6.218 \times 10^{} \pm 1.021 \times 10^{-1}$,$6.3 \times 10^{} \pm 8.231 \times 10^{-2}$
-RGD_Linear_Regression,$2.614 \times 10^{-2} \pm 1.033 \times 10^{-2}$,$2.614 \times 10^{-2} \pm 1.034 \times 10^{-2}$,$2.613 \times 10^{-2} \pm 1.034 \times 10^{-2}$,$2.613 \times 10^{-2} \pm 1.035 \times 10^{-2}$
-RRM with Neural Networks,$6.41 \times 10^{} \pm 6.573 \times 10^{-1}$,$6.339 \times 10^{} \pm 6.247 \times 10^{-1}$,$6.467 \times 10^{} \pm 5.8 \times 10^{-1}$,$6.201 \times 10^{} \pm 7.361 \times 10^{-1}$
-Two-Stage Approach,$7.831 \times 10^{} \pm 7.393 \times 10^{-1}$,$7.782 \times 10^{} \pm 1.005 \times 10^{}$,$7.792 \times 10^{} \pm 7.146 \times 10^{-1}$,$7.895 \times 10^{} \pm 9.743 \times 10^{-1}$
-PerGD,$7.05 \times 10^{} \pm 3.376 \times 10^{}$,$8.699 \times 10^{} \pm 3.984 \times 10^{}$,$8.742 \times 10^{} \pm 3.885 \times 10^{}$,$7.974 \times 10^{} \pm 3.711 \times 10^{}$
-DFO,$8.05 \times 10^{-1} \pm 1.352 \times 10^{}$,$8.044 \times 10^{-1} \pm 1.351 \times 10^{}$,$8.045 \times 10^{-1} \pm 1.351 \times 10^{}$,$8.043 \times 10^{-1} \pm 1.35 \times 10^{}$
+PPW-AVG,0.002 $\pm$ 0.006,0.008 $\pm$ 0.024,0.003 $\pm$ 0.009,0.005 $\pm$ 0.012
+PPW-EMA,0.003 $\pm$ 0.012,0.008 $\pm$ 0.03,0.003 $\pm$ 0.011,0.007 $\pm$ 0.015
+RRM_Linear_Regression,19.795 $\pm$ 3.617,8.181 $\pm$ 1.077,6.218 $\pm$ 0.102,6.3 $\pm$ 0.082
+RGD_Linear_Regression,0.026 $\pm$ 0.01,0.026 $\pm$ 0.01,0.026 $\pm$ 0.01,0.026 $\pm$ 0.01
+RRM with Neural Networks,6.41 $\pm$ 0.657,6.339 $\pm$ 0.625,6.467 $\pm$ 0.58,6.201 $\pm$ 0.736
+Two-Stage Approach,7.831 $\pm$ 0.739,7.782 $\pm$ 1.005,7.792 $\pm$ 0.715,7.895 $\pm$ 0.974
+PerGD,7.05 $\pm$ 3.376,8.699 $\pm$ 3.984,8.742 $\pm$ 3.885,7.974 $\pm$ 3.711
+DFO,0.805 $\pm$ 1.352,0.804 $\pm$ 1.351,0.804 $\pm$ 1.351,0.804 $\pm$ 1.35

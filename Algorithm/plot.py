@@ -22,10 +22,10 @@ def format_number(number):
 def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/'):
     num_d  = len(d_list)
     data_dict = {}
-    methods = ['PPW-AVG','PPW-EMA','RRM_Linear_Regression','RGD_Linear_Regression','RRM with Neural Networks','Two-Stage Approach','PerGD','DFO']
+    # methods = ['PPW-AVG','PPW-EMA','RRM_Linear_Regression','RGD_Linear_Regression','RRM with Neural Networks','Two-Stage Approach','PerGD','DFO']
     # methods = ['PPW-AVG','PPW-EMA','RRM_Linear_Regression','RGD_Linear_Regression','PerGD']
     # methods = ['RGD_Linear_Regression']
-    # methods = ['PPW-AVG','PPW-EMA','RRM_Linear_Regression','RGD_Linear_Regression','Two-Stage Approach','PerGD','DFO'] #
+    methods = ['PPW-AVG','PPW-EMA','RRM_Linear_Regression','RGD_Linear_Regression','Two-Stage Approach','PerGD','DFO'] #
 
     for methods_name in methods:
         data = np.load(folder_path+methods_name + '.npz')
@@ -161,7 +161,7 @@ def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/'):
         model_gaps_avg = inner_dict.get('model_gaps_avg')
         means = np.mean(model_gaps_avg[:,5:], axis=1)
         stds = np.std(model_gaps_avg[:,5:], axis=1)
-        # data = [f"{format_number(np.round(mean, decimals=3))} $\\pm$ {format_number(np.round(std, decimals=3))}" for mean, std in zip(means, stds)]
+        # data = [f"{np.round(mean, decimals=3)} $\\pm$ {np.round(std, decimals=3)}" for mean, std in zip(means, stds)]
         data = [f"${format_number(mean)} \\pm {format_number(std)}$" for mean, std in zip(means, stds)]
         df[methods_name] = data
     df.insert(0, ' ', descriptions)
@@ -180,7 +180,7 @@ def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/'):
         mse_list_start_avg = inner_dict.get('mse_list_start_avg')
         means = np.mean(mse_list_start_avg[:,5:], axis=1)
         stds = np.std(mse_list_start_avg[:,5:], axis=1)
-        # data = [f"{format_number(np.round(mean, decimals=3))} $\\pm$ {format_number(np.round(std, decimals=3))}" for mean, std in zip(means, stds)]
+        # data = [f"{np.round(mean, decimals=3)} $\\pm$ {np.round(std, decimals=3)}" for mean, std in zip(means, stds)]
         data = [f"${format_number(mean)} \\pm {format_number(std)}$" for mean, std in zip(means, stds)]
         df[methods_name] = data
     df.insert(0, ' ', descriptions)
