@@ -19,10 +19,10 @@ def format_number(number):
     formatted_string = f"{coefficient} \\times 10^{{{exponent}}}"
     return formatted_string
 
-def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/'):
+def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/',methods = []):
     num_d  = len(d_list)
     data_dict = {}
-    methods = ['PPW-AVG','PPW-EMA','RRM_Linear_Regression','RGD_Linear_Regression','RRM with Neural Networks','Two-Stage Approach','PerGD','DFO']
+    # methods = ['PPW-AVG','PPW-EMA','RRM_Linear_Regression','RGD_Linear_Regression','RRM with Neural Networks','Two-Stage Approach','PerGD','DFO']
     # methods = ['PPW-AVG','PPW-EMA','RRM_Linear_Regression','RGD_Linear_Regression','PerGD']
     # methods = ['RGD_Linear_Regression']
     # methods = ['PPW-AVG','PPW-EMA','RRM_Linear_Regression','RGD_Linear_Regression','Two-Stage Approach','PerGD','DFO'] #

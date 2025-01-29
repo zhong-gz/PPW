@@ -8,12 +8,15 @@ def data_distribution_map(mu,X,y,model):
     # 将数组 a 归一化到 [0, 1]
     hat_y = model.predict(X)
     mean_hat_y = np.mean(hat_y)
-    # scaler = MinMaxScaler()
+    scaler = MinMaxScaler()
     # y_transformed = scaler.fit_transform(y - mu*(hat_y-mean_hat_y)) + np.random.normal(0, 0.1, size=y.shape)
     # y_transformed = y - mu*(hat_y-mean_hat_y) + np.random.normal(0, 0.1, size=y.shape)
-    # y_transformed = y - mu*(hat_y-0.5*mean_hat_y)
-    y_transformed = 1.67 * X + mu*hat_y
+    y_transformed = y - mu*(hat_y-0.5*mean_hat_y)
+    # y_transformed = 1.67 * X + mu*hat_y
     x_transformed = X #- mu*(hat_y-0.5*mean_hat_y)
+
+    y_transformed = scaler.fit_transform(y_transformed)
+    x_transformed = scaler.fit_transform(x_transformed)
     return x_transformed,y_transformed
 
 # 生成线性回归数据集
@@ -26,7 +29,7 @@ num_iters = 50
 # # scaler = MinMaxScaler()
 # y = 1.67 + 1.67 * X
 
-mu = 1
+mu = 5
 
 # X = np.random.randn(200, 1) + 1.67
 # y =  1.67*X
@@ -38,9 +41,9 @@ mu = 1
 for t in range(num_iters):
     X = np.random.randn(200, 1) + 1.67   # 生成100个随机数作为自变量
     # X_b = np.c_[np.ones((X.shape[0], 1)), X]
-    # scaler = MinMaxScaler()
+    scaler = MinMaxScaler()
     y = 1.67 * X #+ 0.1*np.random.randn(200, 1)  # 生成因变量，添加一些噪声
-    # y = scaler.fit_transform(y)
+    y = scaler.fit_transform(y)
     # percentage_to_shuffle = 0.2
     # num_elements_to_shuffle = int(len(y) * percentage_to_shuffle)
     # indices = np.random.choice(len(y), num_elements_to_shuffle, replace=False)
@@ -58,7 +61,7 @@ for t in range(num_iters):
         # print('mse start:',mse_start)
 
     # 创建线性回归模型
-    model = Ridge(alpha = 0, fit_intercept=False) 
+    model = Ridge(alpha = 0)#, fit_intercept=False) 
     model.fit(x_new, y_new)  # 拟合模型
 
     # hat_y = model.predict(X)

@@ -38,6 +38,8 @@ y = initial['ViolentCrimesPerPop'].values.reshape(-1, 1)
 initial = initial.drop('ViolentCrimesPerPop', axis=1)
 X = initial.values
 
+methods = ['PPW','RRM_Linear_Regression','RGD_Linear_Regression','RRM with Neural Networks','Two-Stage Approach','PerGD','DFO']
+
 # # method 1
 # model_gaps_avg,model_gaps_std,mse_list_start_avg,mse_list_start_std,mse_list_end_avg,mse_list_end_std,method_name = \
 #     method_1(X,y,num_iters,d_list,map = map,num_experiments = num_experiments,seed_value = seed_value)
@@ -112,4 +114,4 @@ X = initial.values
 #             mse_list_end_avg = mse_list_end_avg, mse_list_end_std = mse_list_end_std)
 # print(f"Data saved to {file_name_npy}")
 
-plot_fig(num_iters,d_list,folder_path)
+plot_fig(num_iters,d_list,folder_path,methods)

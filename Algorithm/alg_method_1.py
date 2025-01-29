@@ -76,7 +76,7 @@ def method_1(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,\
                 varepsilon_star,norm_w_w = est_varepsilon(X_old,y_old,X_strat,y_strat,model_list[i][k],norm_w_w)
                 varepsilon.append(varepsilon_star)
                 varepsilon_no_outlier = remove_outliers_iqr(varepsilon)
-                varepsilon_temp = np.mean(varepsilon_no_outlier) #max((0.1*f)/n,np.mean(varepsilon_no_outlier))
+                varepsilon_temp = np.max(varepsilon_no_outlier) #max((0.1*f)/n,np.mean(varepsilon_no_outlier))
                 # varepsilon_temp = np.max(varepsilon)
 
                 model_gaps[i,k,t] = np.linalg.norm(ridge_model_new.coef_-ridge_model.coef_)

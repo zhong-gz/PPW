@@ -15,6 +15,8 @@ from Algorithm.plot import plot_fig
 from Algorithm.alg_DFO import DFO
 from functions import linear_data_generation
 
+methods = ['PPW','RRM_Linear_Regression','RGD_Linear_Regression','Two-Stage Approach','PerGD','DFO']
+
 # problems parameters
 seed_value = 42
 num_iters = 100
@@ -107,4 +109,4 @@ strat_features = None
 #             mse_list_end_avg = mse_list_end_avg, mse_list_end_std = mse_list_end_std)
 # print(f"Data saved to {file_name_npy}")
 
-plot_fig(num_iters,d_list,folder_path)
+plot_fig(num_iters,d_list,folder_path,methods)
