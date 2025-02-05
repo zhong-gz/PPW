@@ -35,6 +35,14 @@ def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/',met
     
         data.close()
 
+    if 'DFO' in data_dict:
+        # 创建新的键值对
+        data_dict[r'$' +'\mathrm{DFO(\lambda)}'+ r'$'] = data_dict['DFO']
+        # 删除旧的键值对
+        del data_dict['DFO']
+
+    methods = methods[:-1] + [r'$' +'\mathrm{DFO(\lambda)}'+ r'$']
+
     colors = ['b', 'g', 'r', 'c', 'm', 'k', 'y', 'orange','purple','aqua','azure', 'beige', 'bisque']
     markers = ['o', 'D', '^', 's', 'v', 'p', '*', 'x','3','4','8','h','+']
     linestyles = ['-', '--', '-.', ':', '-', '--', '-.', ':','-', '--', '-.', ':']
@@ -53,14 +61,14 @@ def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/',met
                 arrays = [mse_list_start_avg,mse_list_end_avg]
                 max_element = max(max_element,np.max(np.maximum.reduce(arrays)))
                 min_element = min(min_element,np.min(np.minimum.reduce(arrays)))
-        plt.xlabel('Iteration', fontsize = 18)
-        plt.ylabel('RMSE', fontsize = 18)
+        plt.xlabel('Iteration', fontsize = 20)
+        plt.ylabel('RMSE', fontsize = 20)
         plt.tick_params(labelsize=18)
         # plt.ylim(0, 10)
         plt.yscale('log')
         # plt.ylim(min(0.5,min_element), max_element)
-        plt.legend(loc='upper right')
-        # plt.title('Accuracy, d={}'.format(d_list[c]), fontsize = 18)
+        plt.legend(loc='upper right',fontsize = 24)
+        # plt.title('Accuracy, d={}'.format(d_list[c]), fontsize = 20)
         file_name = f'mse_d = {d_list[c]}.pdf'
         plt.tight_layout()
         plt.savefig(folder_path+file_name, transparent=True, backend='pdf')
@@ -76,14 +84,14 @@ def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/',met
             plot_mse(mse_list_start_avg[c],mse_list_start_std[c],colors[i],markers[i],linestyles[i],methods_name)
             max_element = max(max_element,np.max(np.maximum.reduce(mse_list_start_avg[c])))
             min_element = min(min_element,np.min(np.minimum.reduce(mse_list_start_avg[c])))
-        plt.xlabel('Iteration', fontsize = 18)
-        plt.ylabel('RMSE', fontsize = 18)
+        plt.xlabel('Iteration', fontsize = 20)
+        plt.ylabel('RMSE', fontsize = 20)
         plt.tick_params(labelsize=18)
         # plt.ylim(0, 10)
         plt.yscale('log')
         # plt.ylim(min(0.5,min_element), max_element)
-        plt.legend(loc='upper right')
-        # plt.title('Accuracy after data distribution shift, d={}'.format(d_list[c]), fontsize = 18)
+        plt.legend(loc='upper right',fontsize = 24)
+        # plt.title('Accuracy after data distribution shift, d={}'.format(d_list[c]), fontsize = 20)
         file_name = f'mse_d = {d_list[c]}_start.pdf'
         plt.tight_layout()
         plt.savefig(folder_path+file_name, transparent=True, backend='pdf')
@@ -99,14 +107,14 @@ def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/',met
             plot_mse(mse_list_start_avg[c],mse_list_start_std[c],colors[i],markers[i],linestyles[i],methods_name,std = 2)
             max_element = max(max_element,np.max(np.maximum.reduce(mse_list_start_avg[c])))
             min_element = min(min_element,np.min(np.minimum.reduce(mse_list_start_avg[c])))
-        plt.xlabel('Iteration', fontsize = 18)
-        plt.ylabel('RMSE', fontsize = 18)
+        plt.xlabel('Iteration', fontsize = 20)
+        plt.ylabel('RMSE', fontsize = 20)
         plt.tick_params(labelsize=18)
         # plt.ylim(0, 10)
         plt.yscale('log')
         # plt.ylim(min(0.5,min_element), max_element)
-        plt.legend(loc='upper right')
-        # plt.title('Accuracy after data distribution shift, d={}'.format(d_list[c]), fontsize = 18)
+        plt.legend(loc='upper right',fontsize = 24)
+        # plt.title('Accuracy after data distribution shift, d={}'.format(d_list[c]), fontsize = 20)
         file_name = f'mse_d = {d_list[c]}_start_no_std.pdf'
         plt.tight_layout()
         plt.savefig(folder_path+file_name, transparent=True, backend='pdf')
@@ -118,13 +126,13 @@ def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/',met
             model_gaps_avg = inner_dict.get('model_gaps_avg')
             model_gaps_std = inner_dict.get('model_gaps_std')
             plot_model_gap(model_gaps_avg[c],model_gaps_std[c],colors[i],markers[i],linestyles[i],methods_name)
-        plt.xlabel('Iteration', fontsize = 18)
-        plt.ylabel(r'$\|\theta_t - \theta_{t-1}\|$', fontsize = 18)
+        plt.xlabel('Iteration', fontsize = 20)
+        plt.ylabel(r'$\|\theta_t - \theta_{t-1}\|$', fontsize = 20)
         plt.tick_params(labelsize=18)
-        plt.legend(loc='upper right')
+        plt.legend(loc='upper right',fontsize = 24)
         # plt.ylim(0, 10)
         plt.yscale('log')
-        # plt.title('Model Consistency, d={}'.format(d_list[c]), fontsize = 18)
+        # plt.title('Model Consistency, d={}'.format(d_list[c]), fontsize = 20)
         file_name = f'Model_gap_d = {d_list[c]}.pdf'
         plt.tight_layout()
         plt.savefig(folder_path+file_name, transparent=True, backend='pdf')
@@ -136,13 +144,13 @@ def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/',met
             model_gaps_avg = inner_dict.get('model_gaps_avg')
             model_gaps_std = inner_dict.get('model_gaps_std')
             plot_model_gap(model_gaps_avg[c],model_gaps_std[c],colors[i],markers[i],linestyles[i],methods_name,std = 2)
-        plt.xlabel('Iteration', fontsize = 18)
-        plt.ylabel(r'$\|\theta_t - \theta_{t-1}\|$', fontsize = 18)
+        plt.xlabel('Iteration', fontsize = 20)
+        plt.ylabel(r'$\|\theta_t - \theta_{t-1}\|$', fontsize = 20)
         plt.tick_params(labelsize=18)
-        plt.legend(loc='upper right')
+        plt.legend(loc='upper right',fontsize = 24)
         # plt.ylim(0, 10)
         plt.yscale('log')
-        # plt.title('Model Consistency, d={}'.format(d_list[c]), fontsize = 18)
+        # plt.title('Model Consistency, d={}'.format(d_list[c]), fontsize = 20)
         file_name = f'Model_gap_d = {d_list[c]}_no_std.pdf'
         plt.tight_layout()
         plt.savefig(folder_path+file_name, transparent=True, backend='pdf')
