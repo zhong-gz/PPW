@@ -41,11 +41,17 @@ def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/',met
         # 删除旧的键值对
         del data_dict['DFO']
 
-    methods = methods[:-1] + [r'$' +'\mathrm{DFO(\lambda)}'+ r'$']
+    methods = methods[:-2] + [r'$' +'\mathrm{DFO(\lambda)}'+ r'$'] + [methods[-1]]
 
-    colors = ['b', 'g', 'r', 'c', 'm', 'k', 'y', 'orange','purple','aqua','azure', 'beige', 'bisque']
-    markers = ['o', 'D', '^', 's', 'v', 'p', '*', 'x','3','4','8','h','+']
-    linestyles = ['-', '--', '-.', ':', '-', '--', '-.', ':','-', '--', '-.', ':']
+    if len(methods) == 7:
+        colors = ['y', 'g', 'r', 'c', 'm', 'k', 'b']
+        markers = ['*', 'D', '^', 's', 'v', 'p', 'o']
+        linestyles = ['-.', '--', '-.', ':', '-', '--', '-']
+    else:
+        colors = ['y', 'g', 'r', 'c', 'm', 'b']
+        markers = ['*', 'D', '^', 's', 'v', 'o']
+        linestyles = ['-.', '--', '-.', ':', '-', '-']
+
 
     for c in range(num_d):
         fig = plt.figure(figsize=(15,6))

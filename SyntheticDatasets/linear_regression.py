@@ -15,7 +15,7 @@ from Algorithm.plot import plot_fig
 from Algorithm.alg_DFO import DFO
 from functions import linear_data_generation
 
-methods = ['PPW','RRM Linear Regression','RGD Linear Regression','Two-Stage Approach','PerfGD','DFO']
+methods = ['RRM Linear Regression','RGD Linear Regression','Two-Stage Approach','PerfGD','DFO','PPW']
 
 # problems parameters
 seed_value = 42

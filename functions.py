@@ -56,6 +56,13 @@ def linear_data_generation(n = 100,n_features = 20):
     # y = scaler.fit_transform(y.reshape(-1, 1))
     return X,y
 
+def linear_data_generation_sensitive(n = 100,n_features = 20,true_coefficients = None):
+    X = np.random.rand(n, n_features)
+    y = X @ true_coefficients + np.random.randn(n) * 0.1
+    scaler = MinMaxScaler()
+    y = scaler.fit_transform(y.reshape(-1, 1))
+    return X,y
+
 def est_varepsilon(X,y,X_new,y_new,w_arr,norm_w_w):
     ridge_model = w_arr[-1]
     

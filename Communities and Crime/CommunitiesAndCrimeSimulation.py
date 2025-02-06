@@ -38,7 +38,7 @@ y = initial['ViolentCrimesPerPop'].values.reshape(-1, 1)
 initial = initial.drop('ViolentCrimesPerPop', axis=1)
 X = initial.values
 
-methods = ['PPW','RRM Linear Regression','RGD Linear Regression','Two-Stage Approach','PerfGD','RRM Neural Networks','DFO']
+methods = ['RRM Linear Regression','RGD Linear Regression','Two-Stage Approach','PerfGD','RRM Neural Networks','DFO','PPW']
 
 # # method 1
 # model_gaps_avg,model_gaps_std,mse_list_start_avg,mse_list_start_std,mse_list_end_avg,mse_list_end_std,method_name = \
