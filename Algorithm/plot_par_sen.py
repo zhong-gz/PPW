@@ -12,6 +12,10 @@ import pandas as pd
 num_iters = 100
 d_list = [10,1000,10000]
 
+fontsize1 = 16
+fontsize2 = 14
+fontsize3 = 16
+
 def plot_fig_par(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/',alphas=[],latex_text = r"$\alpha$"):
     num_d  = len(d_list)
     data_dict = {}
@@ -32,7 +36,7 @@ def plot_fig_par(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/'
     linestyles = ['-', '--', '-.', ':', '-', '--', '-.', ':','-']
 
     for c in range(num_d):
-        fig = plt.figure(figsize=(7.5,4.5))
+        fig = plt.figure(figsize=(7.5,3.5))
         ax = fig.gca()
         offset = 0.8
         max_element = 0
@@ -45,19 +49,19 @@ def plot_fig_par(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/'
                 arrays = [mse_list_start_avg,mse_list_end_avg]
                 max_element = max(max_element,np.max(np.maximum.reduce(arrays)))
                 min_element = min(min_element,np.min(np.minimum.reduce(arrays)))
-        plt.xlabel('Iteration', fontsize = 20)
-        plt.ylabel('RMSE', fontsize = 20)
-        plt.tick_params(labelsize=18)
-        # plt.ylim(0.5, 0.9)
+        plt.xlabel('Iteration', fontsize = fontsize1)
+        plt.ylabel('RMSE', fontsize = fontsize1)
+        plt.tick_params(labelsize=fontsize2)
+        plt.ylim(0.18, 1.4) 
         plt.yscale('log')
         # plt.ylim(min(0.5,min_element), max_element)
-        plt.legend(loc='upper right', fontsize = 24)
+        plt.legend(loc='upper right', fontsize = 21)
         file_name = f'mse_d = {d_list[c]}.pdf'
         plt.tight_layout()
         plt.savefig(folder_path+file_name, transparent=True, backend='pdf')
     
     for c in range(num_d):
-        fig = plt.figure(figsize=(7.5,4.5))
+        fig = plt.figure(figsize=(7.5,3.5))
         max_element = 0
         min_element = 100
         for i, alpha in enumerate(alphas):
@@ -67,19 +71,19 @@ def plot_fig_par(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/'
             plot_mse(mse_list_start_avg[c],mse_list_start_std[c],colors[i],markers[i],linestyles[i],f'{latex_text} = {alpha}',linewidth = linewidth)
             max_element = max(max_element,np.max(np.maximum.reduce(mse_list_start_avg[c])))
             min_element = min(min_element,np.min(np.minimum.reduce(mse_list_start_avg[c])))
-        plt.xlabel('Iteration', fontsize = 20)
-        plt.ylabel('RMSE', fontsize = 20)
-        plt.tick_params(labelsize=18)
-        # plt.ylim(0.5, 0.9)
+        plt.xlabel('Iteration', fontsize = fontsize1)
+        plt.ylabel('RMSE', fontsize = fontsize1)
+        plt.tick_params(labelsize=fontsize2)
+        plt.ylim(0.18, 1.4) 
         plt.yscale('log')
         # plt.ylim(min(0.5,min_element), max_element)
-        plt.legend(loc='upper right', fontsize = 24)
+        plt.legend(loc='upper right', fontsize = fontsize3)
         file_name = f'mse_d = {d_list[c]}_start.pdf'
         plt.tight_layout()
         plt.savefig(folder_path+file_name, transparent=True, backend='pdf')
 
     for c in range(num_d):
-        fig = plt.figure(figsize=(7.5,4.5))
+        fig = plt.figure(figsize=(7.5,3.5))
         max_element = 0
         min_element = 100
         for i, alpha in enumerate(alphas):
@@ -89,46 +93,46 @@ def plot_fig_par(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/'
             plot_mse(mse_list_start_avg[c],mse_list_start_std[c],colors[i],markers[i],linestyles[i],f'{latex_text} = {alpha}',std = 2,linewidth = linewidth)
             max_element = max(max_element,np.max(np.maximum.reduce(mse_list_start_avg[c])))
             min_element = min(min_element,np.min(np.minimum.reduce(mse_list_start_avg[c])))
-        plt.xlabel('Iteration', fontsize = 20)
-        plt.ylabel('RMSE', fontsize = 20)
-        plt.tick_params(labelsize=18)
-        # plt.ylim(0.5, 0.9)
+        plt.xlabel('Iteration', fontsize = fontsize1)
+        plt.ylabel('RMSE', fontsize = fontsize1)
+        plt.tick_params(labelsize=fontsize2)
+        plt.ylim(0.18, 1.4) 
         plt.yscale('log')
         # plt.ylim(min(0.5,min_element), max_element)
-        plt.legend(loc='upper right', fontsize = 24)
+        plt.legend(loc='upper right', fontsize = fontsize3)
         file_name = f'mse_d = {d_list[c]}_start_no_std.pdf'
         plt.tight_layout()
         plt.savefig(folder_path+file_name, transparent=True, backend='pdf')
 
     for c in range(num_d):
-        fig = plt.figure(figsize=(7.5,4.5))
+        fig = plt.figure(figsize=(7.5,3.5))
         for i, alpha in enumerate(alphas):
             inner_dict = data_dict[alpha]
             model_gaps_avg = inner_dict.get('model_gaps_avg')
             model_gaps_std = inner_dict.get('model_gaps_std')
             plot_model_gap(model_gaps_avg[c],model_gaps_std[c],colors[i],markers[i],linestyles[i],f'{latex_text} = {alpha}',linewidth = linewidth)
-        plt.xlabel('Iteration', fontsize = 20)
-        plt.ylabel(r'$\|\theta_t - \theta_{t-1}\|$', fontsize = 20)
-        plt.tick_params(labelsize=18)
-        plt.legend(loc='upper right',fontsize = 24)
-        # plt.ylim(0, 10)
+        plt.xlabel('Iteration', fontsize = fontsize1)
+        plt.ylabel(r'$\|\theta_t - \theta_{t-1}\|$', fontsize = fontsize1)
+        plt.tick_params(labelsize=fontsize2)
+        plt.legend(loc='upper right',fontsize = fontsize3)
+        plt.ylim(1e-14, 10) 
         plt.yscale('log')
         file_name = f'Model_gap_d = {d_list[c]}.pdf'
         plt.tight_layout()
         plt.savefig(folder_path+file_name, transparent=True, backend='pdf')
 
     for c in range(num_d):
-        fig = plt.figure(figsize=(7.5,4.5))
+        fig = plt.figure(figsize=(7.5,3.5))
         for i, alpha in enumerate(alphas):
             inner_dict = data_dict[alpha]
             model_gaps_avg = inner_dict.get('model_gaps_avg')
             model_gaps_std = inner_dict.get('model_gaps_std')
             plot_model_gap(model_gaps_avg[c],model_gaps_std[c],colors[i],markers[i],linestyles[i],f'{latex_text} = {alpha}',std = 2,linewidth = linewidth)
-        plt.xlabel('Iteration', fontsize = 20)
-        plt.ylabel(r'$\|\theta_t - \theta_{t-1}\|$', fontsize = 20)
-        plt.tick_params(labelsize=18)
-        plt.legend(loc='upper right',fontsize = 24)
-        # plt.ylim(0, 10)
+        plt.xlabel('Iteration', fontsize = fontsize1)
+        plt.ylabel(r'$\|\theta_t - \theta_{t-1}\|$', fontsize = fontsize1)
+        plt.tick_params(labelsize=fontsize2)
+        plt.legend(loc='upper right',fontsize = fontsize3)
+        plt.ylim(1e-14, 10) 
         plt.yscale('log')
         file_name = f'Model_gap_d = {d_list[c]}_no_std.pdf'
         plt.tight_layout()
