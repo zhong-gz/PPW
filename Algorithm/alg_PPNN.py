@@ -2,7 +2,7 @@ import sys
 sys.path.insert(0, sys.path[0]+"/../") # add parent directory to path
 import numpy as np
 from sklearn.metrics import mean_squared_error
-from functions import est_varepsilon,data_distribution_map1,data_distribution_map2,remove_outliers_iqr,linear_data_generation
+from functions import est_varepsilon,data_distribution_map1,data_distribution_map2,data_distribution_map3,remove_outliers_iqr,linear_data_generation
 from datetime import datetime
 import random
 from Algorithm.PPNN import PerPreNN
@@ -11,7 +11,7 @@ import copy
 def PPNN(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,strat_features = np.array([1, 6, 8])-1,\
         num_experiments = 10,seed_value = 42):
     
-    method_name = 'RRM with Neural Networks'
+    method_name = 'RRM Neural Networks'
     num_d  = len(d_list)
     n = X.shape[0]
     d = X.shape[1]
@@ -40,6 +40,8 @@ def PPNN(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,strat_features = np
                     
                 if map == 2:
                     X_strat,y_strat = data_distribution_map2(X, y,mu = d, model = model)
+                if map == 3:
+                    X_strat,y_strat = data_distribution_map3(X, y,mu = d, model = model)
 
                 # evaluate initial loss on the current distribution
                 pred_label = model.predict(X_strat)

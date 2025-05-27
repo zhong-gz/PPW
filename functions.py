@@ -21,12 +21,6 @@ def data_distribution_map1(X,y, mu = 0, model = None, strat_features = None):
 
 # D(w) in crime rate prediction
 def data_distribution_map2(X,y, mu = 0, model = None):
-    # scaler = StandardScaler()
-    # y_strat = np.zeros_like(y)
-    # hat_y = model.predict(X)
-    # scaled_hat_y = scaler.fit_transform(hat_y)
-    # mean_scaled_hat_y = np.mean(scaled_hat_y)
-    # y_strat = y - mu*(scaled_hat_y-mean_scaled_hat_y) + np.random.normal(0, 0.1, size=y.shape)
 
     scaler = MinMaxScaler()
     y_strat = np.zeros_like(y)
@@ -37,14 +31,23 @@ def data_distribution_map2(X,y, mu = 0, model = None):
         # y_strat = np.clip(y_strat, -10, 10)
         scaler = MinMaxScaler()
         y_strat = scaler.fit_transform(y_strat.reshape(-1, 1))*2
-
-    # y_strat = np.clip(y - mu*(hat_y-mean_hat_y), a_min=0, a_max=1.2) + np.random.normal(0, 0.1, size=y.shape)
-    # hat_y = model.predict(X)
-    # scaler = StandardScaler()
-    # scaled_hat_y = scaler.fit_transform(hat_y)
-    # y_strat = (1 / (1 + np.exp(-(y - mu*(hat_y-scaled_hat_y))))) + np.random.normal(0, 0.1, size=y.shape)
     
     return X,y_strat
+
+def data_distribution_map3(X,y, mu = 0, model = None, strat_features = None):
+    if model is not None:
+        hat_y = model.predict(X)
+        max_hat_y = np.max(hat_y)
+        X_strat = X.copy()
+        X_strat[:, 1] = X[:, 1] + mu * (max_hat_y-hat_y).reshape(-1)**2 + np.random.normal(0, 0.1, size=hat_y.shape).reshape(-1)
+        y_strat = y + mu * (max_hat_y-hat_y)**0.5 + np.random.normal(0, 0.1, size=y.shape)
+        # if np.any(y_strat > 2):
+        #     scaler = MinMaxScaler()
+        #     y_strat = scaler.fit_transform(y_strat.reshape(-1, 1))*2
+    else:
+        X_strat = X.copy()
+        y_strat = y.copy()
+    return X_strat,y_strat
 
 def linear_data_generation(n = 100,n_features = 20):
     X = np.random.rand(n, n_features)
