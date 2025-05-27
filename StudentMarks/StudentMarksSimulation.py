@@ -30,9 +30,9 @@ folder_path = 'StudentMarks/result/'
 initial=pd.read_csv('StudentMarks/Student_Marks.csv')
 y = initial[["Marks"]].values
 scaler = MinMaxScaler()
-y = scaler.fit_transform(y)*1.5
+y = scaler.fit_transform(y)*2
 X = initial[["number_courses","time_study"]].values
-X = scaler.fit_transform(X)*1.5
+X = scaler.fit_transform(X)*2
 
 methods = ['RRM Linear Regression','RGD Linear Regression','Two-Stage Approach','PerfGD','RRM Neural Networks','DFO','PPW']
 

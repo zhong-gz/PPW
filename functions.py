@@ -39,11 +39,11 @@ def data_distribution_map3(X,y, mu = 0, model = None, strat_features = None):
         hat_y = model.predict(X)
         max_hat_y = np.max(hat_y)
         X_strat = X.copy()
-        X_strat[:, 1] = X[:, 1] + mu * (max_hat_y-hat_y).reshape(-1)**2 + np.random.normal(0, 0.1, size=hat_y.shape).reshape(-1)
+        X_strat[:, 1] = X[:, 1] + mu * (max_hat_y-hat_y).reshape(-1)**2  + np.random.normal(0, 0.1, size=hat_y.shape).reshape(-1)
         y_strat = y + mu * (max_hat_y-hat_y)**0.5 + np.random.normal(0, 0.1, size=y.shape)
-        # if np.any(y_strat > 2):
-        #     scaler = MinMaxScaler()
-        #     y_strat = scaler.fit_transform(y_strat.reshape(-1, 1))*2
+        # scaler = MinMaxScaler()
+        # y_strat = scaler.fit_transform(y_strat)*2
+        # X_strat = scaler.fit_transform(X_strat)*2
     else:
         X_strat = X.copy()
         y_strat = y.copy()
