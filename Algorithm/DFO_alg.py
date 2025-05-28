@@ -51,7 +51,7 @@ class DFO_GD:
             # update theta
             rate = 0.01
             lr = (self.forgetting_factor ** (((self.tau_k - self.inner_iter))))
-            self.theta = np.clip(self.theta - self.step_size('eta') * lr * grd * 0.1,-0.05,1) 
+            self.theta = np.clip(self.theta - self.step_size('eta') * lr * grd*10,-0.05,1) 
             self.pert_theta = self.theta + self.delta_k * self.new_uk * 0.02 
             self.inner_iter += 1
 

@@ -52,15 +52,24 @@ def data_distribution_map3(X,y, mu = 0, model = None, strat_features = None):
 def data_distribution_map4(X,y, mu = 0, model = None, strat_features = None):
     if model is not None:
         hat_y = model.predict(X)
+        mean_hat_y = np.mean(hat_y)
         rev = hat_y.flatten()*X[:, 3]
         avg_rev = np.mean(rev)
         X_strat = X.copy()
-        X_strat[:, 0] = X[:, 0] + mu * (rev-avg_rev).reshape(-1)  + np.random.normal(0, 0.1, size=rev.shape).reshape(-1)
-        X_strat[:, 3] = X[:, 3] + mu * (rev-avg_rev).reshape(-1)  + np.random.normal(0, 0.1, size=rev.shape).reshape(-1)
-        y_strat = y - mu * (rev-avg_rev).reshape(-1,1) + np.random.normal(0, 0.1, size=rev.shape).reshape(-1,1)
+        X_strat[:, 0] = X[:, 0] + mu * (hat_y-mean_hat_y).reshape(-1)  + np.random.normal(0, 0.1, size=rev.shape).reshape(-1)
+        X_strat[:, 3] = X[:, 3] + mu * (hat_y-mean_hat_y).reshape(-1)  + np.random.normal(0, 0.1, size=rev.shape).reshape(-1)
+        y_strat = y - mu * (hat_y-mean_hat_y).reshape(-1,1) + np.random.normal(0, 0.1, size=rev.shape).reshape(-1,1)
+        # X_strat[:, 0] = X[:, 0] + mu * (rev-avg_rev).reshape(-1)  + np.random.normal(0, 0.1, size=rev.shape).reshape(-1)
+        # X_strat[:, 3] = X[:, 3] + mu * (rev-avg_rev).reshape(-1)  + np.random.normal(0, 0.1, size=rev.shape).reshape(-1)
+        # y_strat = y - mu * (rev-avg_rev).reshape(-1,1) + np.random.normal(0, 0.1, size=rev.shape).reshape(-1,1)
         # scaler = MinMaxScaler()
         # y_strat = scaler.fit_transform(y_strat)*2
         # X_strat = scaler.fit_transform(X_strat)*2
+        if np.any(y_strat > 2):
+            # y_strat = np.clip(y_strat, -10, 10)
+            scaler = MinMaxScaler()
+            # X_strat = scaler.fit_transform(X_strat)*1
+            y_strat = scaler.fit_transform(y_strat.reshape(-1, 1))*2
     else:
         X_strat = X.copy()
         y_strat = y.copy()
