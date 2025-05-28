@@ -49,6 +49,24 @@ def data_distribution_map3(X,y, mu = 0, model = None, strat_features = None):
         y_strat = y.copy()
     return X_strat,y_strat
 
+def data_distribution_map4(X,y, mu = 0, model = None, strat_features = None):
+    if model is not None:
+        hat_y = model.predict(X)
+        mean_hat_y = np.mean(hat_y)
+        rev = mean_hat_y*X[:, 3]
+        avg_rev = np.mean(rev)
+        X_strat = X.copy()
+        X_strat[:, 0] = X[:, 0] + mu * (rev-avg_rev).reshape(-1)  + np.random.normal(0, 0.1, size=hat_y.shape).reshape(-1)
+        X_strat[:, 3] = X[:, 3] + mu * (rev-avg_rev).reshape(-1)  + np.random.normal(0, 0.1, size=hat_y.shape).reshape(-1)
+        y_strat = y - mu * (rev-avg_rev).reshape(-1) + np.random.normal(0, 0.1, size=y.shape)
+        # scaler = MinMaxScaler()
+        # y_strat = scaler.fit_transform(y_strat)*2
+        # X_strat = scaler.fit_transform(X_strat)*2
+    else:
+        X_strat = X.copy()
+        y_strat = y.copy()
+    return X_strat,y_strat
+
 def linear_data_generation(n = 100,n_features = 20):
     X = np.random.rand(n, n_features)
     true_coefficients = [0.8, 0.5, 0.5, 0.3, 0.6, 0.3, 0.6, 0.2, 0.2, 0.4, 0.4, 0.3, 0.1, 0.0, 0.0, 0.3, 0.5, 0.7, 0.5, 0.9]

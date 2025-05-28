@@ -3,7 +3,7 @@ sys.path.insert(0, sys.path[0]+"/../") # add parent directory to path
 import numpy as np
 from sklearn.linear_model import Ridge
 from sklearn.metrics import mean_squared_error,mean_absolute_error,r2_score
-from functions import est_varepsilon,data_distribution_map1,data_distribution_map2,remove_outliers_iqr,linear_data_generation,data_distribution_map3
+from functions import est_varepsilon,data_distribution_map1,data_distribution_map2,data_distribution_map4,remove_outliers_iqr,linear_data_generation,data_distribution_map3
 import copy
 from datetime import datetime
 import random
@@ -52,6 +52,8 @@ def method_1(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,\
                     X_strat,y_strat = data_distribution_map2(X, y,mu = d, model = ridge_model)
                     
                 if map == 3:
+                    X_strat,y_strat = data_distribution_map3(X, y,mu = d, model = ridge_model)
+                if map == 4:
                     X_strat,y_strat = data_distribution_map3(X, y,mu = d, model = ridge_model)
                     
                 # evaluate initial loss on the current distribution

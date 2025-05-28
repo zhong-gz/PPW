@@ -1,7 +1,7 @@
 import sys
 sys.path.insert(0, sys.path[0]+"/../") # add parent directory to path
 import numpy as np
-from functions import est_varepsilon,data_distribution_map1,data_distribution_map2,data_distribution_map3,remove_outliers_iqr,linear_data_generation
+from functions import est_varepsilon,data_distribution_map1,data_distribution_map2,data_distribution_map3,data_distribution_map4,linear_data_generation
 from datetime import datetime
 import random
 from sklearn.metrics import mean_squared_error,r2_score,mean_absolute_error
@@ -73,6 +73,8 @@ def RGD(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,strat_features = np.
                     X_strat,y_strat = data_distribution_map2(X, y,mu = d, model = RR)
                 if map == 3:
                     X_strat,y_strat = data_distribution_map3(X, y,mu = d, model = RR)
+                if map == 4:
+                    X_strat,y_strat = data_distribution_map4(X, y,mu = d, model = RR)
 
                 # evaluate initial loss on the current distribution
                 pred_label_old = RR.predict(X_strat)
