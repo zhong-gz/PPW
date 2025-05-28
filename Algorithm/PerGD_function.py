@@ -51,8 +51,18 @@ def performative_loss(theta, reg = loss_reg):
 opt_loss = performative_loss(opt_theta)
 fixed_loss = performative_loss(fixed_theta)
 
-def grad1(X, Y, theta, reg = loss_reg):
-    return np.mean([(theta * x - y) * x for x, y in zip(X, Y)]) + reg * theta
+def grad1(X, Y, theta, reg=loss_reg):
+    # 计算所有样本的预测误差
+    error = np.dot(X, theta) - Y.reshape(-1)
+    
+    # 计算梯度的第一部分（数据项）
+    data_grad = np.mean(X * error[:, np.newaxis], axis=0)
+    
+    # 计算梯度的第二部分（正则化项）
+    reg_grad = reg * theta
+    
+    # 返回总梯度
+    return data_grad + reg_grad
 
 def approx_beta(X, Y, reg = fit_reg):
     mean_xy = np.mean(X * Y)
@@ -71,4 +81,12 @@ def grad2(X, Y, betas, thetas):
     theta = thetas[-1]
     grad_beta = approx_grad_beta(betas, thetas)
     
-    return -grad_beta * np.mean([(theta * x - y) * x for x, y in zip(X, Y)]), grad_beta
+    # 向量化计算预测误差
+    error = np.dot(X, theta) - Y.reshape(-1)
+    
+    # 向量化计算梯度的第二部分
+    data_grad = np.mean(X * error[:, np.newaxis], axis=0)
+    
+    # 计算最终梯度
+    return -grad_beta * data_grad, grad_beta
+

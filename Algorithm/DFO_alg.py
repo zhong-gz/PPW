@@ -64,7 +64,7 @@ class DFO_GD:
 
 
     def ell_loss(self, pert_theta, X,y):
-        return np.linalg.norm(np.dot(X, pert_theta) - y) ** 2
+        return np.linalg.norm(np.dot(X, pert_theta) - y.reshape(-1)) ** 2
 
     def predict(self, X):
         X_b = np.c_[np.ones((X.shape[0], 1)), X]

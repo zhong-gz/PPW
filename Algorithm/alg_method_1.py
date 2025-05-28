@@ -54,7 +54,7 @@ def method_1(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,\
                 if map == 3:
                     X_strat,y_strat = data_distribution_map3(X, y,mu = d, model = ridge_model)
                 if map == 4:
-                    X_strat,y_strat = data_distribution_map3(X, y,mu = d, model = ridge_model)
+                    X_strat,y_strat = data_distribution_map4(X, y,mu = d, model = ridge_model)
                     
                 # evaluate initial loss on the current distribution
                 hat_y = ridge_model.predict(X_strat)
