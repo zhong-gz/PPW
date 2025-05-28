@@ -156,7 +156,7 @@ def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/',met
         model_gaps_avg = inner_dict.get('model_gaps_avg')
         means = np.mean(model_gaps_avg[:,5:], axis=1)
         stds = np.std(model_gaps_avg[:,5:], axis=1)
-        data = [f"{np.round(mean, decimals=3)} $\\pm$ {np.round(std, decimals=3)}" for mean, std in zip(means, stds)]
+        data = [f"{np.round(mean, decimals=5)} $\\pm$ {np.round(std, decimals=5)}" for mean, std in zip(means, stds)]
         df[methods_name] = data
     df.insert(0, ' ', descriptions)
     df_1 = df.T
