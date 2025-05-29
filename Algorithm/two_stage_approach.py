@@ -74,7 +74,7 @@ class two_stage_algo:
         d = X.shape[1]
         theta = torch.randn(d, dtype=torch.float32, device=self.device)
         learning_rate = 0.1
-        num_iterations = 1000
+        num_iterations = 100
         max_grad_norm = d
         clip_value = 1
 
