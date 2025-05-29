@@ -5,7 +5,7 @@ from Algorithm.PerGD_function import clip,beta,loss,performative_loss,grad1,appr
 from sklearn.linear_model import LogisticRegression, Ridge
 
 class PerGD:
-    def __init__(self,H = 2, lr = 0.01):
+    def __init__(self,H = 2, lr = 0.001):
         self.H  = H
         self.lr = lr 
         self.grad_fs = deque()

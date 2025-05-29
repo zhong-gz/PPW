@@ -47,12 +47,12 @@ class DFO_GD:
         if self.inner_iter < self.tau_k:
             self.sample_count += 1
 
-            grd = d / self.delta_k * ((self.ell_loss(self.pert_theta, X_b,y)/n)/d) * (self.new_uk )
+            grd = d / self.delta_k * ((self.ell_loss(self.pert_theta, X_b,y))/d) * (self.new_uk )
             # update theta
-            rate = 0.01
+            rate = 100
             lr = (self.forgetting_factor ** (((self.tau_k - self.inner_iter))))
-            self.theta = np.clip(self.theta - self.step_size('eta') * lr * grd*10,-0.05,1) 
-            self.pert_theta = self.theta + self.delta_k * self.new_uk * 0.02 
+            self.theta = np.clip(self.theta - self.step_size('eta') * lr * grd,-0.05,1) 
+            self.pert_theta = self.theta + self.delta_k * self.new_uk * 0.02
             self.inner_iter += 1
 
         if self.inner_iter == self.tau_k:
