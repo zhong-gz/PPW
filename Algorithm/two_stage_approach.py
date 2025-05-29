@@ -6,7 +6,7 @@ import time
 import torch
 
 class two_stage_algo:
-    def __init__(self,X_base,y_base,tol = 1e-6):
+    def __init__(self,X_base,y_base,tol = 1e-3):
         self.X_base = np.copy(np.c_[np.ones((X_base.shape[0], 1)), X_base] )
         self.y_base = np.copy(y_base)
         self.coef_ = None
@@ -73,8 +73,8 @@ class two_stage_algo:
         cost_history = []
         d = X.shape[1]
         theta = torch.randn(d, dtype=torch.float32, device=self.device)
-        learning_rate = 0.1
-        num_iterations = 100
+        learning_rate = 0.01
+        num_iterations = 1000
         max_grad_norm = d
         clip_value = 1
 

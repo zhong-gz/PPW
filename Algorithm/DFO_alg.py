@@ -41,7 +41,7 @@ class DFO_GD:
         if self.inner_iter == 0:
             temp = self.tau0 * np.log(self.outer_iter + 1)+2
             self.tau_k = max(1, int(temp))
-            self.new_uk = self.sample_unit_sphere(d) # direction
+            self.new_uk = self.sample_unit_sphere(d)*0.93 # direction
             self.delta_k = self.step_size('delta')
             
         if self.inner_iter < self.tau_k:
