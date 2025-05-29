@@ -56,12 +56,17 @@ class two_stage_algo:
 
     def compute_cost(self,X, y, theta):
         m = len(y)
-        mu_y = self.mu_y.cpu().numpy()
-        mu_x = self.mu_x.cpu().numpy()
-        theta_mu_y = np.repeat(theta @ mu_y, m, axis=0).reshape(-1, 1)
-        theta_mu_x = np.tile(theta @ mu_x, (m, 1))
-        cost = np.linalg.norm(y+theta_mu_y - ((X + theta_mu_x) @ theta).reshape(-1, 1))
-        return cost
+        theta_mu_y = (theta @ self.mu_y).repeat(m, 1)
+        theta_mu_x = (theta @ self.mu_x).repeat(m, 1)
+        cost = torch.norm(y + theta_mu_y - ((X + theta_mu_x) @ theta).unsqueeze(1))
+        return cost.item()
+        # m = len(y)
+        # mu_y = self.mu_y.cpu().numpy()
+        # mu_x = self.mu_x.cpu().numpy()
+        # theta_mu_y = np.repeat(theta @ mu_y, m, axis=0).reshape(-1, 1)
+        # theta_mu_x = np.tile(theta @ mu_x, (m, 1))
+        # cost = np.linalg.norm(y+theta_mu_y - ((X + theta_mu_x) @ theta).reshape(-1, 1))
+        # return cost
 
     def gradient_descent(self,X, y):
         X = torch.tensor(X, dtype=torch.float32).to(self.device)
@@ -95,7 +100,8 @@ class two_stage_algo:
 
             theta -= learning_rate * gradient
             theta.clamp_(-clip_value*0.5, clip_value)
-            cost = self.compute_cost(X.cpu().numpy(), y.cpu().numpy(), theta.cpu().numpy())
+            cost = self.compute_cost(X, y, theta)
+            # cost = self.compute_cost(X.cpu().numpy(), y.cpu().numpy(), theta.cpu().numpy())
             cost_history.append(cost)
             if (j > 2) and (abs(cost_history[-1] - cost_history[-2]) < 1e-3):
                 self.mu_x = self.mu_x.cpu().numpy()
