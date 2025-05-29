@@ -6,6 +6,8 @@ import random
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import Ridge
+from sklearn.preprocessing import OrdinalEncoder
+from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import StandardScaler,MinMaxScaler
 from Algorithm.plot import plot_fig
@@ -41,13 +43,30 @@ df['Unit Price'] = df['Unit Price'].str.replace(',', '')
 df['Unit Cost'] = pd.to_numeric( df['Unit Cost'] )
 df['Unit Price'] =pd.to_numeric(df['Unit Price'] )
 numerical_features = df.select_dtypes(include=['int', 'float']).columns
+categorical_features = df.select_dtypes(include=['object']).columns
 numerical_data = df[numerical_features]
+categorical_data = df[categorical_features]
+df['OrderDate'] = pd.to_datetime(df['OrderDate'])
+df['OrderDate_Year'] = df['OrderDate'].dt.year
+df['OrderDate_Month'] = df['OrderDate'].dt.month
+df['OrderDate_Day'] = df['OrderDate'].dt.day
+df = df.drop(columns = 'OrderDate')
+features_with_multiple_categories  = ['Sales Channel' , 'WarehouseCode']
+encoder = LabelEncoder()
+for feature in features_with_multiple_categories:
+    df[feature] = encoder.fit_transform(categorical_data[feature])
+X = df.drop(columns = 'Unit Price').values
+y = df['Unit Price'].values.reshape(-1, 1)
+# X[:,11] Unit cost
+# X[:,9] Order Quantity
 
-X = numerical_data.drop(columns = 'Unit Price').values
-y = numerical_data['Unit Price'].values.reshape(-1, 1)
 scaler = MinMaxScaler()
-y = scaler.fit_transform(y)*1.1
-X = scaler.fit_transform(X)*1.1 #avoid gradient disappear in gradient methods
+y = scaler.fit_transform(y)*1
+X = scaler.fit_transform(X)*1 #avoid gradient disappear in gradient methods
+
+# split_idx = int(len(X) * 0.02)
+# X = X[:split_idx]
+# y = y[:split_idx]
 
 methods = ['RRM Linear Regression','RGD Linear Regression','Two-Stage Approach','PerfGD','RRM Neural Networks','DFO','PPW']
 
