@@ -3,11 +3,11 @@ import sys
 
 # 在这里填写你要运行的Python文件路径！
 files_to_run = [
-    # "SyntheticDatasets/linear_regression.py",        
+    "SyntheticDatasets/linear_regression.py",        
     "Communities and Crime/CommunitiesAndCrimeSimulation.py",  
     "Communities and Crime/par_sensetivie.py",                 
     "StudentMarks/StudentMarksSimulation.py",
-    "StoreDemand/StoreDemand.py",
+    "RegionalSalesData/RegionalSalesData.py",
 ]
 
 if __name__ == "__main__":
