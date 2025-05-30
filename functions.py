@@ -76,9 +76,9 @@ def data_distribution_map5(X,y, mu = 0, model = None, strat_features = None):
         X_strat[:, 9] = X[:, 9] - mu * (hat_y-mean_hat_y).reshape(-1)  + np.random.normal(0, 0.1, size=rev.shape).reshape(-1)
         X_strat[:, 11] = X[:, 11] + mu * (hat_y-mean_hat_y).reshape(-1)  + np.random.normal(0, 0.1, size=rev.shape).reshape(-1)
         y_strat = y - mu * (hat_y-mean_hat_y).reshape(-1,1) + np.random.normal(0, 0.1, size=rev.shape).reshape(-1,1)
-        # if np.any(y_strat > 2):
+        # if np.any(y_strat > 0.9):
         #     scaler = MinMaxScaler()
-        #     y_strat = scaler.fit_transform(y_strat.reshape(-1, 1))*2
+        #     y_strat = scaler.fit_transform(y_strat.reshape(-1, 1))*0.9
     else:
         X_strat = X.copy()
         y_strat = y.copy()
