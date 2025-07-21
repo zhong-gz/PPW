@@ -41,7 +41,7 @@ def RGD(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,strat_features = np.
     method_name = 'RGD Linear Regression'
     num_d  = len(d_list)
     n = X.shape[0]
-    d = X.shape[1]
+    dim = X.shape[1]
 
     print('RGD Linear Regression')
     num_d  = len(d_list)
@@ -66,7 +66,7 @@ def RGD(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,strat_features = np.
             for t in range(num_iters):
                 # adjust distribution to current theta
                 if map == 1:
-                    X,y = linear_data_generation(n = n)
+                    X,y = linear_data_generation(n = n,n_features=dim)
                     X_strat,y_strat = data_distribution_map1(X, y,mu = d, model = RR, strat_features = strat_features)
                 
                 if map == 2:

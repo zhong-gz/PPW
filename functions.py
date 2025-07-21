@@ -86,7 +86,10 @@ def data_distribution_map5(X,y, mu = 0, model = None, strat_features = None):
 
 def linear_data_generation(n = 100,n_features = 20):
     X = np.random.rand(n, n_features)
-    true_coefficients = [0.8, 0.5, 0.5, 0.3, 0.6, 0.3, 0.6, 0.2, 0.2, 0.4, 0.4, 0.3, 0.1, 0.0, 0.0, 0.3, 0.5, 0.7, 0.5, 0.9]
+    if n_features == 20:
+        true_coefficients = [0.8, 0.5, 0.5, 0.3, 0.6, 0.3, 0.6, 0.2, 0.2, 0.4, 0.4, 0.3, 0.1, 0.0, 0.0, 0.3, 0.5, 0.7, 0.5, 0.9]
+    else:
+        true_coefficients = np.random.rand(n_features)
     y = X @ true_coefficients + np.random.randn(n) * 0.1
     scaler = MinMaxScaler()
     y = scaler.fit_transform(y.reshape(-1, 1))
