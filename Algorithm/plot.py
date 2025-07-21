@@ -35,7 +35,7 @@ def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/',met
         data_dict[r'$' +'\mathrm{DFO(\lambda)}'+ r'$'] = data_dict['DFO']
         del data_dict['DFO']
 
-    methods = methods[:-2] + [r'$' +'\mathrm{DFO(\lambda)}'+ r'$'] + [methods[-1]]
+        methods = methods[:-2] + [r'$' +'\mathrm{DFO(\lambda)}'+ r'$'] + [methods[-1]]
 
     if len(methods) == 7:
         colors = ['y', 'g', 'r', 'c', 'k', 'm', 'b']
