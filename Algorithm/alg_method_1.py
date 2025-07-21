@@ -3,14 +3,14 @@ sys.path.insert(0, sys.path[0]+"/../") # add parent directory to path
 import numpy as np
 from sklearn.linear_model import Ridge
 from sklearn.metrics import mean_squared_error,mean_absolute_error,r2_score
-from functions import est_varepsilon,data_distribution_map1,data_distribution_map2,data_distribution_map4,data_distribution_map5,remove_outliers_iqr,linear_data_generation,data_distribution_map3
+from functions import linear_data_generation2,est_varepsilon,data_distribution_map1,data_distribution_map2,data_distribution_map4,data_distribution_map5,remove_outliers_iqr,linear_data_generation,data_distribution_map3
 import copy
 from datetime import datetime
 import random
 import time
 
 def method_1(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,\
-             strat_features = None,num_experiments = 10,seed_value = 42,alpha_1 = 2.1):
+             strat_features = None,num_experiments = 10,seed_value = 42,alpha_1 = 2.1,true_coefficients=[0.8, 0.5]):
 
     # X = np.c_[np.ones((X.shape[0], 1)), X]
     method_name = 'PPW'
@@ -58,7 +58,9 @@ def method_1(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,\
                     X_strat,y_strat = data_distribution_map4(X, y,mu = d, model = ridge_model)
                 if map == 5:
                     X_strat,y_strat = data_distribution_map5(X, y,mu = d, model = ridge_model)
-                    
+                if map == 6:
+                    X,y = linear_data_generation2(n = n,n_features=dim,true_coefficients = true_coefficients)
+                    X_strat,y_strat = data_distribution_map1(X, y,mu = d, model = ridge_model, strat_features = strat_features)
                 # evaluate initial loss on the current distribution
                 hat_y = ridge_model.predict(X_strat)
                 mse = np.sqrt(mean_squared_error(y_strat, hat_y))

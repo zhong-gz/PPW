@@ -97,6 +97,15 @@ def linear_data_generation(n = 100,n_features = 20):
     # y = scaler.fit_transform(y.reshape(-1, 1))
     return X,y
 
+def linear_data_generation2(n = 100,n_features = 20,true_coefficients=[0.8, 0.5]):
+    X = np.random.rand(n, n_features)
+    y = X @ true_coefficients + np.random.randn(n) * 0.1
+    scaler = MinMaxScaler()
+    y = scaler.fit_transform(y.reshape(-1, 1))
+    # scaler = MinMaxScaler()
+    # y = scaler.fit_transform(y.reshape(-1, 1))
+    return X,y
+
 def linear_data_generation_sensitive(n = 100,n_features = 20,true_coefficients = None):
     X = np.random.rand(n, n_features)
     y = X @ true_coefficients + np.random.randn(n) * 0.1
@@ -212,3 +221,4 @@ class CustomLogisticRegression(LogisticRegression):
     
     def sigmoid(self,z):
         return 1 / (1 + np.exp(-z))
+    
