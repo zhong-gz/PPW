@@ -23,6 +23,8 @@ d_list = [2,4,8,16]
 num_experiments = 10
 map = 1
 folder_path = 'SyntheticDatasets/result/'
+folder_path = 'SyntheticDatasets/result_uniform/'
+folder_path = 'SyntheticDatasets/result_laplace/'
 
 np.random.seed(seed_value)
 random.seed(seed_value)
