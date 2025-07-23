@@ -25,7 +25,13 @@ num_experiments = 10
 map = 3
 np.random.seed(seed_value)
 random.seed(seed_value)
+
+# selecting the noise level, result2 for std = 0.2, and change the std in 'function.py'-'def data_distribution_map3'
 folder_path = 'StudentMarks/result/'
+# folder_path = 'StudentMarks/result2/'
+# folder_path = 'StudentMarks/result3/'
+# folder_path = 'StudentMarks/result4/'
+# folder_path = 'StudentMarks/result5/'
 
 initial=pd.read_csv('StudentMarks/Student_Marks.csv')
 y = initial[["Marks"]].values
