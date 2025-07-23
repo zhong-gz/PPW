@@ -10,13 +10,19 @@ def data_distribution_map1(X,y, mu = 0, model = None, strat_features = None):
     if model is not None:
         normal_noise_x = np.random.normal(0, 0.1, size=model.coef_.shape)
         normal_noise_y = np.random.normal(0, 0.1, size=y.shape)
+        X_strat = X + mu * model.coef_ + normal_noise_x
+        y_strat = y + mu * X @ (model.coef_.T**2) + normal_noise_y
 
-        uniform_noise_x = np.random.uniform(low=-0.5, high=0.5, size=X.shape)
-        uniform_noise_y = np.random.uniform(low=-0.5, high=0.5, size=y.shape)
+        # uniform_noise_x = np.random.uniform(low=-0.5, high=0.5, size=X.shape)
+        # uniform_noise_y = np.random.uniform(low=-0.5, high=0.5, size=y.shape)
+        # X_strat = X + mu * model.coef_ + uniform_noise_x
+        # y_strat = y + mu * X @ (model.coef_.T**2) + uniform_noise_y
 
-        laplace_noise_x = np.random.laplace(loc=0, scale=1, size=X.shape)
-        laplace_noise_y = np.random.laplace(loc=0, scale=1, size=y.shape)
-        
+        # laplace_noise_x = np.random.laplace(loc=0, scale=1, size=X.shape)
+        # laplace_noise_y = np.random.laplace(loc=0, scale=1, size=y.shape)
+        # X_strat = X + mu * model.coef_ + laplace_noise_x
+        # y_strat = y + mu * X @ (model.coef_.T**2) + laplace_noise_y
+
         X_strat = X + mu * model.coef_ + normal_noise_x
         y_strat = y + mu * X @ (model.coef_.T**2) + normal_noise_y
         if np.any(y_strat > 2):
