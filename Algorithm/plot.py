@@ -41,6 +41,10 @@ def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/',met
         colors = ['y', 'g', 'r', 'c', 'k', 'm', 'b']
         markers = ['*', 'D', '^', 's', 'p','v', 'o']
         linestyles = ['-.', '--', '-.', ':', '--','-', '-']
+    elif len(methods)==4:
+        colors = ['y', 'k', 'm', 'b']
+        markers = ['*', 'p','v', 'o']
+        linestyles = ['-.', '--','-', '-']
     else:
         colors = ['y', 'g', 'r', 'c', 'm', 'b']
         markers = ['*', 'D', '^', 's', 'v', 'o']
