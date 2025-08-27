@@ -98,6 +98,22 @@ def data_distribution_map5(X,y, mu = 0, model = None, strat_features = None):
         y_strat = y.copy()
     return X_strat,y_strat
 
+def data_distribution_map7(X,y, mu = 0, model = None, strat_features = None):
+    if model is not None:
+        hat_y = model.predict(X)
+        mean_hat_y = np.mean(hat_y)
+        X_strat = X.copy()
+        X_strat[:, 0] = X[:, 0] + mu * ((hat_y-mean_hat_y).reshape(-1,1).flatten())  + np.random.normal(0, 0.1, size=hat_y.shape).reshape(-1)
+        X_strat[:, 1] = X[:, 1] + mu * ((hat_y-mean_hat_y).reshape(-1,1).flatten())  + np.random.normal(0, 0.1, size=hat_y.shape).reshape(-1)
+        y_strat = y - mu * ((hat_y-mean_hat_y).reshape(-1,1)) + np.random.normal(0, 0.1, size=hat_y.shape)
+        if np.any(y_strat > 1.1):
+            scaler = MinMaxScaler()
+            y_strat = scaler.fit_transform(y_strat.reshape(-1, 1))*1.1
+    else:
+        X_strat = X.copy()
+        y_strat = y.copy()
+    return X_strat,y_strat
+
 def linear_data_generation(n = 100,n_features = 20):
     X = np.random.rand(n, n_features)
     if n_features == 20:
@@ -134,7 +150,7 @@ def est_varepsilon(X,y,X_new,y_new,w_arr,norm_w_w):
     n = X.shape[0]
     y_pred = ridge_model.predict(X)
     gradient = - (X.T.dot(y - y_pred)) # + 2*ridge_model.alpha * ridge_model.coef_.T
-    mean_value = gradient #/n
+    mean_value = gradient # /n
 
     # gradient of x_new
     n_new = X_new.shape[0]

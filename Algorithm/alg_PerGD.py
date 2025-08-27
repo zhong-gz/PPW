@@ -2,7 +2,7 @@ import sys
 sys.path.insert(0, sys.path[0]+"/../") # add parent directory to path
 import numpy as np
 from sklearn.metrics import mean_squared_error,r2_score,mean_absolute_error
-from functions import linear_data_generation2,data_distribution_map1,data_distribution_map2,data_distribution_map3,data_distribution_map4,data_distribution_map5,linear_data_generation
+from functions import linear_data_generation2,data_distribution_map7,data_distribution_map1,data_distribution_map2,data_distribution_map3,data_distribution_map4,data_distribution_map5,linear_data_generation
 from datetime import datetime
 import random
 from Algorithm.PerGD_alg import PerGD
@@ -48,6 +48,8 @@ def PerformativeGD(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,strat_fea
                 if map == 6:
                     X,y = linear_data_generation2(n = n,n_features=dim,true_coefficients = true_coefficients)
                     X_strat,y_strat = data_distribution_map1(X, y,mu = d, model = model, strat_features = strat_features)
+                if map == 7:
+                    X_strat,y_strat = data_distribution_map7(X, y,mu = d, model = model)
                 # evaluate initial loss on the current distribution
                 pred_label = model.predict(X_strat)
                 mse = np.sqrt(mean_squared_error(y_strat, pred_label))

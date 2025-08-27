@@ -3,7 +3,7 @@ sys.path.insert(0, sys.path[0]+"/../") # add parent directory to path
 import numpy as np
 from sklearn.linear_model import Ridge
 from sklearn.metrics import mean_squared_error,r2_score,mean_absolute_error
-from functions import linear_data_generation2,data_distribution_map1,data_distribution_map2,data_distribution_map3,data_distribution_map4,data_distribution_map5,linear_data_generation
+from functions import linear_data_generation2,data_distribution_map1,data_distribution_map2,data_distribution_map3,data_distribution_map4,data_distribution_map5,data_distribution_map7,linear_data_generation
 from datetime import datetime
 import random
 # from functions import CustomLogisticRegression as LogisticRegression
@@ -18,7 +18,7 @@ def RRM(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,strat_features = np.
     dim = X.shape[1]
 
     print('RRM Linear Regression')
-    RR = Ridge(alpha = 0)
+    RR = Ridge(alpha = 0.000001)
     RR.fit(X, y)
 
     RR_int = RR
@@ -51,13 +51,15 @@ def RRM(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,strat_features = np.
                 if map == 6:
                     X,y = linear_data_generation2(n = n,n_features=dim,true_coefficients = true_coefficients)
                     X_strat,y_strat = data_distribution_map1(X, y,mu = d, model = RR, strat_features = strat_features)
+                if map == 7:
+                    X_strat,y_strat = data_distribution_map7(X, y,mu = d, model = RR)
                 # evaluate initial loss on the current distribution
                 pred_label_old = RR.predict(X_strat)
                 mse = np.sqrt(mean_absolute_error(y_strat, pred_label_old))
                 mse_list_start[i,k,t] = mse
 
                 # learn on induced distribution
-                RR_new = Ridge(alpha = 0) 
+                RR_new = Ridge(alpha = 0.000001) 
                 RR_new.fit(X_strat, y_strat)
                 model_gaps[i,k,t] = np.linalg.norm(RR_new.coef_-RR.coef_)
 
