@@ -79,13 +79,14 @@ def method_1(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,\
                 mse_list_end[i,k,t] = mse
 
                 # keep track of statistics
-                model_list[i][k].append(ridge_model_new)
-                varepsilon_star,norm_w_w = est_varepsilon(X_old,y_old,X_strat,y_strat,model_list[i][k],norm_w_w)
-                varepsilon.append(varepsilon_star)
-                varepsilon_no_outlier = remove_outliers_iqr(varepsilon)
-                varepsilon_temp = np.max(varepsilon_no_outlier) 
-
                 model_gaps[i,k,t] = np.linalg.norm(ridge_model_new.coef_-ridge_model.coef_)
+                
+                model_list[i][k].append(ridge_model_new)
+                if model_gaps[i,k,t] > 1e-1:
+                    varepsilon_star,norm_w_w = est_varepsilon(X_old,y_old,X_strat,y_strat,model_list[i][k],norm_w_w)
+                    varepsilon.append(varepsilon_star)
+                    varepsilon_no_outlier = remove_outliers_iqr(varepsilon)
+                    varepsilon_temp = np.max(varepsilon_no_outlier) 
 
                 X_old = np.copy(X_strat)
                 y_old = np.copy(y_strat)
