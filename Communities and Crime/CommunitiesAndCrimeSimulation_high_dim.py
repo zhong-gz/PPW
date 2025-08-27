@@ -21,7 +21,7 @@ from Algorithm.alg_PerGD import PerformativeGD
 seed_value = 42
 num_iters = 100
 d_list = [2,4,8,16] 
-num_experiments = 10
+num_experiments = 1
 map = 2
 np.random.seed(seed_value)
 random.seed(seed_value)
@@ -38,7 +38,7 @@ n_new_features = 10000
 B = np.random.randn(n_new_features, X.shape[1])
 X = np.dot(X, B.T)
 
-methods = ['RRM Linear Regression','RGD Linear Regression','PerfGD','RRM Neural Networks','DFO','PPW'] #,'Two-Stage Approach'
+methods = ['RRM Linear Regression','RRM Neural Networks','DFO','PPW'] #,'Two-Stage Approach' 'RGD Linear Regression','PerfGD',
 
 # # method 1
 # model_gaps_avg,model_gaps_std,mse_list_start_avg,mse_list_start_std,mse_list_end_avg,mse_list_end_std,method_name = \
@@ -50,14 +50,14 @@ methods = ['RRM Linear Regression','RGD Linear Regression','PerfGD','RRM Neural 
 #             mse_list_end_avg = mse_list_end_avg, mse_list_end_std = mse_list_end_std)
 # print(f"Data saved to {file_name_npy}")
 
-# RRM
-model_gaps_avg,model_gaps_std,mse_list_start_avg,mse_list_start_std,mse_list_end_avg,mse_list_end_std,method_name = \
-    RRM(X,y,num_iters,d_list,map = map,num_experiments = num_experiments,seed_value = seed_value)
-file_name_npy = f"{folder_path}{method_name}.npz"
-np.savez(file_name_npy, model_gaps_avg = model_gaps_avg, model_gaps_std = model_gaps_std,\
-            mse_list_start_avg = mse_list_start_avg, mse_list_start_std = mse_list_start_std,\
-            mse_list_end_avg = mse_list_end_avg, mse_list_end_std = mse_list_end_std)
-print(f"Data saved to {file_name_npy}")
+# # RRM
+# model_gaps_avg,model_gaps_std,mse_list_start_avg,mse_list_start_std,mse_list_end_avg,mse_list_end_std,method_name = \
+#     RRM(X,y,num_iters,d_list,map = map,num_experiments = num_experiments,seed_value = seed_value)
+# file_name_npy = f"{folder_path}{method_name}.npz"
+# np.savez(file_name_npy, model_gaps_avg = model_gaps_avg, model_gaps_std = model_gaps_std,\
+#             mse_list_start_avg = mse_list_start_avg, mse_list_start_std = mse_list_start_std,\
+#             mse_list_end_avg = mse_list_end_avg, mse_list_end_std = mse_list_end_std)
+# print(f"Data saved to {file_name_npy}")
 
 # # RGD
 # model_gaps_avg,model_gaps_std,mse_list_start_avg,mse_list_start_std,mse_list_end_avg,mse_list_end_std,method_name = \
