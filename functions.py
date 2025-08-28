@@ -33,7 +33,7 @@ def data_distribution_map1(X,y, mu = 0, model = None, strat_features = None):
     return X_strat,y_strat
 
 # D(w) in crime rate prediction
-def data_distribution_map2(X,y, mu = 0, model = None):
+def data_distribution_map2(X,y, mu = 0, model = None,n=None):
 
     scaler = MinMaxScaler()
     y_strat = np.zeros_like(y)
@@ -44,6 +44,10 @@ def data_distribution_map2(X,y, mu = 0, model = None):
         # y_strat = np.clip(y_strat, -10, 10)
         scaler = MinMaxScaler()
         y_strat = scaler.fit_transform(y_strat.reshape(-1, 1))*2
+    if n is not None:
+        random_indices = np.random.choice(X.shape[0], size=n, replace=False)
+        X = X[random_indices, :]
+        y_strat = y_strat[random_indices, :]
     return X,y_strat
 
 def data_distribution_map3(X,y, mu = 0, model = None, strat_features = None):

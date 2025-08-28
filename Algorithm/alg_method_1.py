@@ -50,7 +50,7 @@ def method_1(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,\
                     X_strat,y_strat = data_distribution_map1(X, y,mu = d, model = ridge_model, strat_features = strat_features)
                     
                 if map == 2:
-                    X_strat,y_strat = data_distribution_map2(X, y,mu = d, model = ridge_model)
+                    X_strat,y_strat = data_distribution_map2(X, y,mu = d, model = ridge_model,n=n)
                     
                 if map == 3:
                     X_strat,y_strat = data_distribution_map3(X, y,mu = d, model = ridge_model)
@@ -82,11 +82,11 @@ def method_1(X,y,num_iters = 25,d_list = [10,1000,10000],map = 1,\
                 model_gaps[i,k,t] = np.linalg.norm(ridge_model_new.coef_-ridge_model.coef_)
                 
                 model_list[i][k].append(ridge_model_new)
-                if model_gaps[i,k,t] > 1e-1:
-                    varepsilon_star,norm_w_w = est_varepsilon(X_old,y_old,X_strat,y_strat,model_list[i][k],norm_w_w)
-                    varepsilon.append(varepsilon_star)
-                    varepsilon_no_outlier = remove_outliers_iqr(varepsilon)
-                    varepsilon_temp = np.max(varepsilon_no_outlier) 
+                # if model_gaps[i,k,t] > 1e-1:
+                varepsilon_star,norm_w_w = est_varepsilon(X_old,y_old,X_strat,y_strat,model_list[i][k],norm_w_w)
+                varepsilon.append(varepsilon_star)
+                varepsilon_no_outlier = remove_outliers_iqr(varepsilon)
+                varepsilon_temp = np.max(varepsilon_no_outlier) 
 
                 X_old = np.copy(X_strat)
                 y_old = np.copy(y_strat)

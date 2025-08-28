@@ -16,7 +16,8 @@ fontsize1 = 16
 fontsize2 = 14
 fontsize3 = 16
 
-def plot_fig_par(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/',alphas=[],latex_text = r"$\alpha$"):
+def plot_fig_par(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/',alphas=[],latex_text = r"$\alpha$",
+                 rmse_min = 0.18, rmse_max = 1.4, gap_min = 1e-14, gap_max = 10):
     num_d  = len(d_list)
     data_dict = {}
 
@@ -50,7 +51,7 @@ def plot_fig_par(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/'
         plt.xlabel('Iteration', fontsize = fontsize1)
         plt.ylabel('RMSE', fontsize = fontsize1)
         plt.tick_params(labelsize=fontsize2)
-        plt.ylim(0.18, 1.4) 
+        plt.ylim(rmse_min, rmse_max) # plt.ylim(0.18, 1.4) 
         plt.yscale('log')
         plt.legend(loc='upper right', fontsize = 21)
         file_name = f'mse_d = {d_list[c]}.pdf'
@@ -71,7 +72,7 @@ def plot_fig_par(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/'
         plt.xlabel('Iteration', fontsize = fontsize1)
         plt.ylabel('RMSE', fontsize = fontsize1)
         plt.tick_params(labelsize=fontsize2)
-        plt.ylim(0.18, 1.4) 
+        plt.ylim(rmse_min, rmse_max) 
         plt.yscale('log')
         plt.legend(loc='upper right', fontsize = fontsize3)
         file_name = f'mse_d = {d_list[c]}_start.pdf'
@@ -92,7 +93,7 @@ def plot_fig_par(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/'
         plt.xlabel('Iteration', fontsize = fontsize1)
         plt.ylabel('RMSE', fontsize = fontsize1)
         plt.tick_params(labelsize=fontsize2)
-        plt.ylim(0.18, 1.4) 
+        plt.ylim(rmse_min, rmse_max) 
         plt.yscale('log')
         plt.legend(loc='upper right', fontsize = fontsize3)
         file_name = f'mse_d = {d_list[c]}_start_no_std.pdf'
@@ -110,7 +111,7 @@ def plot_fig_par(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/'
         plt.ylabel(r'$\|\theta_t - \theta_{t-1}\|$', fontsize = fontsize1)
         plt.tick_params(labelsize=fontsize2)
         plt.legend(loc='upper right',fontsize = fontsize3)
-        plt.ylim(1e-14, 10) 
+        plt.ylim(gap_min, gap_max) 
         plt.yscale('log')
         file_name = f'Model_gap_d = {d_list[c]}.pdf'
         plt.tight_layout()
@@ -127,7 +128,7 @@ def plot_fig_par(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/'
         plt.ylabel(r'$\|\theta_t - \theta_{t-1}\|$', fontsize = fontsize1)
         plt.tick_params(labelsize=fontsize2)
         plt.legend(loc='upper right',fontsize = fontsize3)
-        plt.ylim(1e-14, 10) 
+        plt.ylim(gap_min, gap_max) 
         plt.yscale('log')
         file_name = f'Model_gap_d = {d_list[c]}_no_std.pdf'
         plt.tight_layout()
