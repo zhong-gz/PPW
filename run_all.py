@@ -8,6 +8,7 @@ files_to_run = [
     "Communities and Crime/par_sensetivie.py",                 
     "StudentMarks/StudentMarksSimulation.py",
     "RegionalSalesData/RegionalSalesData.py",
+    "SyntheticDatasetsSmall/linear_regression_small_sample.py"
 ]
 
 if __name__ == "__main__":
