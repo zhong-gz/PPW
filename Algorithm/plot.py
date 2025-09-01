@@ -142,6 +142,7 @@ def plot_fig(num_iters = 25,d_list = [10,1000,10000],folder_path = 'result/',met
         plt.tick_params(labelsize=18)
         plt.legend(loc='upper right',fontsize = 24)
         plt.yscale('log')
+        # plt.ylim(1e-50,1)
         file_name = f'Model_gap_d = {d_list[c]}_no_std.pdf'
         plt.tight_layout()
         plt.savefig(folder_path+file_name, transparent=True, backend='pdf')
